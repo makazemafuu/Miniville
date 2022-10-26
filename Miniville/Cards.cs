@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Miniville
 {
@@ -17,13 +18,29 @@ namespace Miniville
             Purple
         }
 
-        int activationValue; // = Dice.face
-        string name;
-        int type;
-        int cost;
+        private int activationValue; // = Dice.face
+        public int ActivationValue { get; }
+
+        private string name;
+        public string Name { get; }
+
+        private int type;
+        public int Type { get; }
+
+        private int cost;
+        public int Cost { get; }
 
         // string not used in this class
-        string effectDescription;
+        private string effectDescription;
+        public string EffectDescription { get; }
+
+        public Cards(int ActivationValue, string Name, int Type, int Cost)
+        {
+            this.activationValue = ActivationValue;
+            this.name = Name;
+            this.type = Type;
+            this.cost = Cost;
+        }
 
         public void ActiveEffect()
         {
