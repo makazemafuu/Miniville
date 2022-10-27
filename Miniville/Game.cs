@@ -13,13 +13,13 @@ namespace Miniville
         bool TrueEnding = true;
         int playerRound = 0;
         Bank bank;
-      //  Dice dice;
+        Dice dice;
         Random random = new Random();
         public Game(int nbJoueurReel, int nbJoueurMax)
         {
             listPlayer = new List<Player>();
             bank = new Bank();
-        //    dice = new Dice();
+            dice = new Dice();
 
 
             for (int i = 0; i < nbJoueurReel; i++)
@@ -67,13 +67,13 @@ namespace Miniville
 
                 if (nbDesChoice == 1)
                 {
-                   // ScoreDesTotal = dice.Roll();
+                    ScoreDesTotal = dice.Roll();
                     Console.WriteLine("Les dés ont fait un score de {0}", ScoreDesTotal);
                 }
                 else
                 {
-                  //  ScoreDes1 = dice.Roll();
-                  //  scoreDes2 = dice.Roll();
+                    ScoreDes1 = dice.Roll();
+                    scoreDes2 = dice.Roll();
                     ScoreDesTotal = ScoreDes1 + scoreDes2;
                     Console.WriteLine("Les dés ont fait un score de {0} + {1} = {3} ", ScoreDes1, scoreDes2, ScoreDesTotal);
                 }
@@ -103,13 +103,13 @@ namespace Miniville
                         }
                         if (nbDesChoice == 1)
                         {
-                          //  ScoreDesTotal = dice.Roll();
+                            ScoreDesTotal = dice.Roll();
                             Console.WriteLine("Les dés ont fait un score de {0}", ScoreDesTotal);
                         }
                         else
                         {
-                        //    ScoreDes1 = dice.Roll();
-                          //  scoreDes2 = dice.Roll();
+                            ScoreDes1 = dice.Roll();
+                            scoreDes2 = dice.Roll();
                             ScoreDesTotal = ScoreDes1 + scoreDes2;
                             Console.WriteLine("Les dés ont fait un score de {0} + {1} = {3} ", ScoreDes1, scoreDes2, ScoreDesTotal);
                         }
@@ -121,7 +121,7 @@ namespace Miniville
                 {
                     foreach (var Cards in listPlayer[i].CardsAvailable)
                     {
-                        if (Cards.Value.PileCards.Peek().ActivationValue == ScoreDesTotal)
+                        if (Cards.Value.PileCards.Peek().ActivationValue.Item1 == ScoreDesTotal || Cards.Value.PileCards.Peek().ActivationValue.Item2 == ScoreDesTotal)
                         {
                             if (Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Blue) Cards.Value.PileCards.Peek().ActiveEffect();
                             else if ((Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Purple || Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Green) && PlayerRound == i) Cards.Value.PileCards.Peek().ActiveEffect();
@@ -156,13 +156,13 @@ namespace Miniville
                 int ScoreDesTotal, ScoreDes1 = 0, scoreDes2 = 0;
                 if (nbDesChoice == 1)
                 {
-                   // ScoreDesTotal = dice.Roll();
-                   // Console.WriteLine("Les dés ont fait un score de {0}", ScoreDesTotal);
+                    ScoreDesTotal = dice.Roll();
+                    Console.WriteLine("Les dés ont fait un score de {0}", ScoreDesTotal);
                 }
                 else
                 {
-                    //ScoreDes1 = dice.Roll();
-                    //scoreDes2 = dice.Roll();
+                    ScoreDes1 = dice.Roll();
+                    scoreDes2 = dice.Roll();
                     ScoreDesTotal = ScoreDes1 + scoreDes2;
                     Console.WriteLine("Les dés ont fait un score de {0} + {1} = {3} ", ScoreDes1, scoreDes2, ScoreDesTotal);
                 }
@@ -176,13 +176,13 @@ namespace Miniville
                         nbDesChoice = random.Next(1, 3);
                         if (nbDesChoice == 1)
                         {
-                           // ScoreDesTotal = dice.Roll();
-                          //  Console.WriteLine("Les dés ont fait un score de {0}", ScoreDesTotal);
+                            ScoreDesTotal = dice.Roll();
+                            Console.WriteLine("Les dés ont fait un score de {0}", ScoreDesTotal);
                         }
                         else
                         {
-                           // ScoreDes1 = dice.Roll();
-                           // scoreDes2 = dice.Roll();
+                            ScoreDes1 = dice.Roll();
+                            scoreDes2 = dice.Roll();
                             ScoreDesTotal = ScoreDes1 + scoreDes2;
                             Console.WriteLine("Les dés ont fait un score de {0} + {1} = {3} ", ScoreDes1, scoreDes2, ScoreDesTotal);
                         }
@@ -194,7 +194,7 @@ namespace Miniville
                 {
                     foreach (var Cards in listPlayer[i].CardsAvailable)
                     {
-                        if (Cards.Value.PileCards.Peek().ActivationValue == 0/*ScoreDesTotal*/)
+                        if (Cards.Value.PileCards.Peek().ActivationValue.Item1 == ScoreDesTotal || Cards.Value.PileCards.Peek().ActivationValue.Item2 == ScoreDesTotal)
                         {
                             if (Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Blue) Cards.Value.PileCards.Peek().ActiveEffect();
                             else if ((Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Purple || Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Green) && PlayerRound == i) Cards.Value.PileCards.Peek().ActiveEffect();
