@@ -11,7 +11,7 @@ namespace Miniville
         private string namePlayer;
         private bool isAI;
 
-        private void Shop(Card cartToBuy)
+        private void Shop(Cards cartToBuy)
         {
             // on lui donne la carte à acheter en argument
 
