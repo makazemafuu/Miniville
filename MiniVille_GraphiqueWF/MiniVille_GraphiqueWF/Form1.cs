@@ -307,11 +307,218 @@ namespace MiniVille_GraphiqueWF
             BoardSizeHeight = this.ClientSize.Height;
             BoardSizeWidth = this.ClientSize.Width - 250; // La taille du menu à gauche = 250
             //game = new Game();
-            //AddMenu(); //Le menu à droite
+            AddMenu(); //Le menu à droite
             //Board_Display();
             //LabelCardEffect();
         }
 
+        private void Board_Display()
+        {
+
+        }
+
+        #region Menu à droite
+        private void AddMenu()
+        {
+            PictureBox MenuBackGround = new PictureBox
+            {
+                Size = new Size(this.ClientSize.Width - BoardSizeWidth, BoardSizeHeight),
+                BackColor = Color.CornflowerBlue,
+                Location = new Point(BoardSizeWidth, 0),
+                Name = "MenuDroite",
+                Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right)
+            };
+
+            Button NewGame = new Button
+            {
+                Size = new Size(MenuBackGround.Width - 50, 50),
+                BackColor = Color.LightSteelBlue,
+                Location = new Point(25, 25),
+                Anchor = (AnchorStyles.Top | AnchorStyles.Right),
+                Text = " NOUVELLE PARTIE "
+            };
+            NewGame.Click += new EventHandler(buttonNewGame_Click);
+            NewGame.MouseEnter += new EventHandler(Menu_Game_Button_OnEnter);
+            NewGame.MouseLeave += new EventHandler(Menu_Game_Button_OnLeave);
+            Button ChangeMode = new Button
+            {
+                Size = new Size(MenuBackGround.Width - 50, 50),
+                BackColor = Color.LightSteelBlue,
+                Anchor = (AnchorStyles.Top | AnchorStyles.Right),
+                Location = new Point(25, NewGame.Location.Y + 60),
+                Text = "Retour choix nb \nJoueurs",
+            };
+            ChangeMode.Click += new EventHandler(buttonChangeMode_Click);
+            ChangeMode.MouseEnter += new EventHandler(Menu_Game_Button_OnEnter);
+            ChangeMode.MouseLeave += new EventHandler(Menu_Game_Button_OnLeave);
+            Button LeaveButton = new Button
+            {
+                Size = new Size(MenuBackGround.Width - 50, 50),
+                BackColor = Color.LightSteelBlue,
+                Anchor = (AnchorStyles.Top | AnchorStyles.Right),
+                Location = new Point(25, ChangeMode.Location.Y + 60),
+                Text = " QUITTER "
+            };
+            LeaveButton.Click += new EventHandler(buttonLeave_Click);
+            LeaveButton.MouseEnter += new EventHandler(Menu_Game_Button_OnEnter);
+            LeaveButton.MouseLeave += new EventHandler(Menu_Game_Button_OnLeave);
+            Button LancerDe = new Button
+            {
+                Size = new Size(MenuBackGround.Width - 50, 50),
+                BackColor = Color.LightSteelBlue,
+                Location = new Point(25, MenuBackGround.Height - 175),
+                Anchor = (AnchorStyles.Right | AnchorStyles.Bottom),
+                Text = " LANCER LE DE ",
+                Name = "BoutonLancer"
+            };
+            LancerDe.Click += new EventHandler(buttonLancer_Click);
+            LancerDe.MouseEnter += new EventHandler(Menu_Game_Button_OnEnter);
+            LancerDe.MouseLeave += new EventHandler(Menu_Game_Button_OnLeave);
+            LancerDe.EnabledChanged += new EventHandler(Menu_Game_Button_EnabledChanged);
+            CheckBox CheckBoxDe = new CheckBox
+            {
+                AutoCheck = true,
+                Size = new Size(200, 50),
+                Location = new Point(25, LancerDe.Location.Y + 50),
+                Anchor = (AnchorStyles.Right | AnchorStyles.Bottom),
+                Text = "Cocher pour lancer deux dés"
+            };
+            CheckBoxDe.CheckedChanged += new EventHandler(CheckBox_CheckedChanged);
+            Button FinDuTour = new Button
+            {
+                Size = new Size(MenuBackGround.Width - 50, 50),
+                BackColor = Color.LightSteelBlue,
+                Location = new Point(25, CheckBoxDe.Location.Y + 50),
+                Anchor = (AnchorStyles.Right | AnchorStyles.Bottom),
+                Text = "FIN DU TOUR",
+                Name = "BoutonPasserTour",
+                Enabled = false
+            };
+            FinDuTour.Click += new EventHandler(buttonFinTour_Click);
+            FinDuTour.MouseEnter += new EventHandler(Menu_Game_Button_OnEnter);
+            FinDuTour.MouseLeave += new EventHandler(Menu_Game_Button_OnLeave);
+            FinDuTour.EnabledChanged += new EventHandler(Menu_Game_Button_EnabledChanged);
+            Tourjoueur = new Label
+            {
+                Size = new Size(400, 20),
+                Location = new Point(0, 300),
+                Anchor = AnchorStyles.Right,
+                //Text = "C'est le tour du joueur " + game.tourJoueur,
+            };
+            MoneyJoueur1 = new Label
+            {
+                Size = new Size(400, 20),
+                Location = new Point(0, 320),
+                Anchor = AnchorStyles.Right,
+                //Text = "Pièces joueur 1 : " + game.player1.Pieces,
+            };
+            MoneyJoueur2 = new Label
+            {
+                Size = new Size(400, 20),
+                Location = new Point(0, 340),
+                Anchor = AnchorStyles.Right,
+                //Text = "Pièces joueur 2 : " + game.player2.Pieces,
+            };
+            MenuBackGround.Controls.Add(MoneyJoueur1);
+            MenuBackGround.Controls.Add(MoneyJoueur2);
+            MenuBackGround.Controls.Add(Tourjoueur);
+            MenuBackGround.Controls.Add(CheckBoxDe);
+            MenuBackGround.Controls.Add(LancerDe);
+            MenuBackGround.Controls.Add(FinDuTour);
+            MenuBackGround.Controls.Add(NewGame);
+            MenuBackGround.Controls.Add(ChangeMode);
+            MenuBackGround.Controls.Add(LeaveButton);
+            this.Controls.Add(MenuBackGround);
+        }
+        private void CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            //if (game.NombreDe == 1)
+            //{
+            //    game.NombreDe = 2;
+            //    this.Controls.Find("BoutonLancer", true).FirstOrDefault().Text = " LANCER LES DES ";
+            //}
+            //else
+            //{
+            //    game.NombreDe = 1;
+            //    this.Controls.Find("BoutonLancer", true).FirstOrDefault().Text = " LANCER LE DE ";
+            //}
+        }
+        private void buttonChangeMode_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Changer de mode recommencera une nouvelle partie es-tu sur?", "Change MODE", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                Controls.Clear();
+                nbPlayerChoice();
+            }
+        }
+        private void buttonNewGame_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Veux-tu lancer une nouvelle partie ?", "Nouvelle partie", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                List<PictureBox> temp = Controls.OfType<PictureBox>().ToList();
+                for (int i = 0; i < temp.Count; i++)
+                {
+                    if (temp[i].Name != "MenuDroite") Controls.Remove(temp[i]);
+                }
+                //game = new Game();
+                //Board_Display();
+                //LabelCardEffect();
+            }
+        }
+        private async void buttonLancer_Click(object sender, EventArgs e)
+        {
+            //if (game.NombreDe == 1)
+            //{
+            //    game.scoreDes = game.Lancer(1);
+            //    DiceAnim(game.scoreDes, 0);
+            //}
+            //else
+            //{
+            //    int firstDe = game.Lancer(1), secondDe = game.Lancer(1);
+            //    game.scoreDes = firstDe + secondDe;
+            //    DiceAnim(firstDe, secondDe);
+            //}
+            //game.DieThrowed = true;
+            DiceAnim(random.Next(1, 6), 0);   //A enlever lors du merge avec le dice de fait
+            await Task.Delay(2000);
+            //game.Update(game.scoreDes);
+            //UpdateLabels();
+            Button thisButton = (Button)sender;
+            this.Controls.Find("BoutonPasserTour", true).FirstOrDefault().Enabled = true;
+            thisButton.Enabled = false;
+        }
+        private void buttonFinTour_Click(object sender, EventArgs e)
+        {
+            //game.DieThrowed = false;
+            MessageBox.Show("Fin tour");
+            //NextJoueurTour();
+            //TourIA();
+            this.Controls.Find("BoutonPasserTour", true).FirstOrDefault().Enabled = false;
+        }
+        private void Menu_Game_Button_OnEnter(object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            button.BackColor = Color.DarkBlue;
+            button.ForeColor = Color.White;
+            button.Size = new Size(button.Width + 14, button.Height + 14);
+            button.Location = new Point(button.Location.X - 7, button.Location.Y - 7);
+        }
+        private void Menu_Game_Button_OnLeave(object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            button.BackColor = Color.LightSteelBlue;
+            button.ForeColor = Color.Black;
+            button.Size = new Size(button.Width - 14, button.Height - 14);
+            button.Location = new Point(button.Location.X + 7, button.Location.Y + 7);
+        }
+        private void Menu_Game_Button_EnabledChanged(object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            button.BackColor = button.Enabled == false ? Color.LightSlateGray : Color.LightSteelBlue;
+        }
+        #endregion
         #endregion
         #region Animation
         private void DiceAnim(int DiceScore1, int DiceScore2 = 0)
@@ -423,6 +630,16 @@ namespace MiniVille_GraphiqueWF
             });
             Time.Start();
         }
+        private void Spawn_Cards(int height, int width) // A changer
+        {
+            PictureBox picture = new PictureBox
+            {
+                Text = "text",
+            };
+            this.Controls.Add(picture);
+        }
         #endregion
+
+
     }
 }
