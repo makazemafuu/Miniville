@@ -21,7 +21,9 @@ namespace MiniVille_GraphiqueWF
         public Form1()
         {
             InitializeComponent();
-            StartMenu();
+            //StartMenu();
+
+            StartGame();
         }
 
         #region Start Menu
@@ -298,7 +300,6 @@ namespace MiniVille_GraphiqueWF
             Button_Enter_Anim(FourPlayers);
         }
         #endregion
-
         #region Core Game
         private async void StartGame()
         {
@@ -308,15 +309,25 @@ namespace MiniVille_GraphiqueWF
             BoardSizeWidth = this.ClientSize.Width - 250; // La taille du menu à gauche = 250
             //game = new Game();
             AddMenu(); //Le menu à droite
-            //Board_Display();
+            Board_Display();
             //LabelCardEffect();
         }
-
-        private void Board_Display()
+        private async void Board_Display()
         {
-
+            for(int p = 0; p < 6; p++)
+            {
+                int k = 0;
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        // Marge de 20 entre les cartes  ==>  ( x/2 * nb carte sur ligne/colonne ) + x * ( % nb carte sur ligne/colonne) avec x la taille + la marge
+                        Spawn_Cards(BoardSizeHeight / 2 - (60 * 3) + 120 * (i % 3), BoardSizeWidth / 2 - (50 * 5) + 100 * (j % 5), (k++% 15) + 1);
+                        await Task.Delay(100);
+                    }
+                }
+            } 
         }
-
         #region Menu à droite
         private void AddMenu()
         {
@@ -463,7 +474,7 @@ namespace MiniVille_GraphiqueWF
                     if (temp[i].Name != "MenuDroite") Controls.Remove(temp[i]);
                 }
                 //game = new Game();
-                //Board_Display();
+                Board_Display();
                 //LabelCardEffect();
             }
         }
@@ -630,16 +641,45 @@ namespace MiniVille_GraphiqueWF
             });
             Time.Start();
         }
-        private void Spawn_Cards(int height, int width) // A changer
+        private void Spawn_Cards(int height, int width, int CarteNom = 0) // A changer
         {
             PictureBox picture = new PictureBox
             {
-                Text = "text",
+                Size = new Size(80, 100),
+                BackColor = Color.Transparent,
+                Location = new Point(BoardSizeWidth / 2 - 40, BoardSizeHeight - 100), // width/2 et height * 1
+                Anchor = AnchorStyles.None,
+                
             };
+            if (CarteNom != 0)
+            {
+                picture.ImageLocation = "Images/Carte" + CarteNom.ToString() + ".png";
+                picture.SizeMode = PictureBoxSizeMode.StretchImage;
+            }
+            
             this.Controls.Add(picture);
+            picture.BringToFront();
+
+            Timer Time = new Timer();
+
+            int directionY = height - picture.Location.X, directionX = width - picture.Location.Y;
+
+            Time.Interval = 3;
+            float totalTime = 15, elapsedTime = 0;
+            Time.Tick += new EventHandler((sender, e) =>
+            {
+                if (elapsedTime > totalTime)
+                {
+                    Time.Stop();
+                }
+                else
+                {
+                    picture.Location = new Point(picture.Location.X + directionX / 6, picture.Location.Y + directionY / 6);
+                }
+                elapsedTime += Time.Interval;
+            });
+            Time.Start();
         }
         #endregion
-
-
     }
 }
