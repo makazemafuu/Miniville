@@ -11,6 +11,11 @@ namespace Miniville
     public class Monument : Cards
     {
         private bool isActive = false;
+        public bool IsActive
+        {
+            get { return isActive; }
+            set { isActive = value; }
+        }
 
         public Monument(int ActivationValue, string Name, int Type, int Cost) : base(ActivationValue, Name, Type, Cost)
         {
