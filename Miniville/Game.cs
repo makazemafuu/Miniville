@@ -8,6 +8,7 @@ namespace Miniville
 {
     class Game
     {
+<<<<<<< Updated upstream
         List<Player> listPlayer;
         bool isGameOver = false;
         bool TrueEnding = true;
@@ -15,6 +16,15 @@ namespace Miniville
         Bank bank;
         Dice dice;
         Random random = new Random();
+=======
+        private List<Player> listPlayer;
+        private bool isGameOver = false;
+        private bool TrueEnding = true;
+        private int playerRound = 0;
+        private Bank bank;
+      //  Dice dice;
+        private Random random = new Random();
+>>>>>>> Stashed changes
         public Game(int nbJoueurReel, int nbJoueurMax)
         {
             listPlayer = new List<Player>();
