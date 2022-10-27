@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Media;
 
 namespace MiniVille_GraphiqueWF
 {
@@ -22,10 +23,9 @@ namespace MiniVille_GraphiqueWF
         {
             InitializeComponent();
             //StartMenu();
-
-            StartGame();
+           StartGame();
+          
         }
-
         #region Start Menu
         void StartMenu()
         {
@@ -308,25 +308,72 @@ namespace MiniVille_GraphiqueWF
             BoardSizeHeight = this.ClientSize.Height;
             BoardSizeWidth = this.ClientSize.Width - 250; // La taille du menu à gauche = 250
             //game = new Game();
+            ZoomCardStart(); //Les cartes en gros quand on Hover
             AddMenu(); //Le menu à droite
             Board_Display();
-            //LabelCardEffect();
         }
         private async void Board_Display()
         {
-            for(int p = 0; p < 6; p++)
+            // Affichage des cartes du boards avec animation
+            int k = 0;
+            for (int i = 0; i < 3; i++) //3 lignes
             {
-                int k = 0;
-                for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 5; j++) //5 colonnes
                 {
-                    for (int j = 0; j < 5; j++)
-                    {
-                        // Marge de 20 entre les cartes  ==>  ( x/2 * nb carte sur ligne/colonne ) + x * ( % nb carte sur ligne/colonne) avec x la taille + la marge
-                        Spawn_Cards(BoardSizeHeight / 2 - (60 * 3) + 120 * (i % 3), BoardSizeWidth / 2 - (50 * 5) + 100 * (j % 5), (k++% 15) + 1);
-                        await Task.Delay(100);
-                    }
+                    // Marge de 20 entre les cartes  ==>  ( x/2 * nb carte sur ligne/colonne ) + x * ( % nb carte sur ligne/colonne) avec x la taille + la marge    : ici 20 de marge
+                    Spawn_Cards(BoardSizeHeight / 2 - (60 * 3) + 120 * (i % 3), BoardSizeWidth / 2 - (50 * 5) + 100 * (j % 5), (k++ % 15) + 1, true);
+                    await Task.Delay(100);
                 }
-            } 
+            }
+            //Affichage des 2 premières cartes Boulangerie et Champs de blé + les 4 monuments 
+            Spawn_Cards(BoardSizeHeight - 110,5,1, true,1); //Champs
+            Spawn_Cards(BoardSizeHeight - 110, 5, 1, true, -1); // joueur 2 dernier arg en -1
+            await Task.Delay(100);
+            Spawn_Cards(BoardSizeHeight - 110, 100, 3, true, 1); //Boulang
+            Spawn_Cards(BoardSizeHeight - 110, 100, 3, true, -1); 
+            //Les Monuments
+            for (int i = 0; i < 4; i++)
+            {
+                await Task.Delay(100);
+                Spawn_Cards(BoardSizeHeight - 220, 5 + i * 30, 16+i, true, 1);
+                Spawn_Cards(BoardSizeHeight - 220, 5 + i * 30, 16 + i, true, -1); 
+            }
+        }
+        private void ZoomCardStart()
+        {
+            for(int i = 1; i < 16; i++)
+            {
+                PictureBox picturebox = new PictureBox
+                {
+                    ImageLocation = "Images/Carte" + i + ".png",
+                    Visible = false,
+                    Size = new Size(400, 600),
+                    Name = "ZoomCarte" + i,
+                    SizeMode = PictureBoxSizeMode.StretchImage
+                };
+                this.Controls.Add(picturebox);
+            }
+            for(int i = 1; i < 5; i++)
+            {
+                PictureBox pictureMonument = new PictureBox
+                {
+                    ImageLocation = "Images/Monu" + i + ".png",
+                    Visible = false,
+                    Name = "ZoomMonu" + i,
+                    Size = new Size(400, 600),
+                    SizeMode = PictureBoxSizeMode.StretchImage
+                };
+                PictureBox pictureMonumentLocked = new PictureBox
+                {
+                    ImageLocation = "Images/Monu" + i + "Locked.png",
+                    Visible = false,
+                    Name = "ZoomMonu" + i+"Locked",
+                    Size = new Size(400, 600),
+                    SizeMode = PictureBoxSizeMode.StretchImage
+                };
+                this.Controls.Add(pictureMonument);
+                this.Controls.Add(pictureMonumentLocked);
+            }
         }
         #region Menu à droite
         private void AddMenu()
@@ -475,7 +522,7 @@ namespace MiniVille_GraphiqueWF
                 }
                 //game = new Game();
                 Board_Display();
-                //LabelCardEffect();
+                ZoomCardStart();
             }
         }
         private async void buttonLancer_Click(object sender, EventArgs e)
@@ -493,12 +540,19 @@ namespace MiniVille_GraphiqueWF
             //}
             //game.DieThrowed = true;
             DiceAnim(random.Next(1, 6), 0);   //A enlever lors du merge avec le dice de fait
+            var reader = new NAudio.Wave.Mp3FileReader("Test.mp3");
+            var waveOut = new NAudio.Wave.WaveOutEvent();
+            waveOut.Init(reader);
+            waveOut.Play();
             await Task.Delay(2000);
             //game.Update(game.scoreDes);
             //UpdateLabels();
+
             Button thisButton = (Button)sender;
             this.Controls.Find("BoutonPasserTour", true).FirstOrDefault().Enabled = true;
             thisButton.Enabled = false;
+
+
         }
         private void buttonFinTour_Click(object sender, EventArgs e)
         {
@@ -641,22 +695,68 @@ namespace MiniVille_GraphiqueWF
             });
             Time.Start();
         }
-        private void Spawn_Cards(int height, int width, int CarteNom = 0) // A changer
+        private void Carte_OnHover(object sender, EventArgs e)
+        {
+            PictureBox thisPicture = (PictureBox)sender;
+            thisPicture.Size = new Size(thisPicture.Width + 20 , thisPicture.Height + 20);
+            thisPicture.Location = new Point(thisPicture.Location.X - 10, thisPicture.Location.Y - 10); //déplacement en diagonale donc la moitié de l'aggrandissement
+            var ZoomPicture = this.Controls.Find("Zoom" + thisPicture.Name, true).FirstOrDefault();
+            if(ZoomPicture != null)
+            {
+                ZoomPicture.Visible = true;
+                ZoomPicture.Location = new Point(thisPicture.Location.X + thisPicture.Width + 10, (this.Height - ZoomPicture.Height) / 2);
+                ZoomPicture.BringToFront();
+            }
+            
+        }
+        private void Carte_OnLeave(object sender, EventArgs e)
+        {
+            PictureBox thisPicture = (PictureBox)sender;
+            thisPicture.Size = new Size(thisPicture.Width - 20, thisPicture.Height - 20);
+            thisPicture.Location = new Point(thisPicture.Location.X + 10, thisPicture.Location.Y + 10);
+            var ZoomPicture = this.Controls.Find("Zoom" + thisPicture.Name, true).FirstOrDefault();
+            if (ZoomPicture != null)
+            {
+                ZoomPicture.Visible = false;
+                ZoomPicture.SendToBack();
+            }
+        }
+        private void Spawn_Cards(int height, int width, int CarteNom = 0, bool Afficher = false, int Sens = 0) // A changer
         {
             PictureBox picture = new PictureBox
             {
                 Size = new Size(80, 100),
                 BackColor = Color.Transparent,
                 Location = new Point(BoardSizeWidth / 2 - 40, BoardSizeHeight - 100), // width/2 et height * 1
-                Anchor = AnchorStyles.None,
-                
+                Anchor = AnchorStyles.None
             };
-            if (CarteNom != 0)
+            if (CarteNom != 0 )
             {
-                picture.ImageLocation = "Images/Carte" + CarteNom.ToString() + ".png";
-                picture.SizeMode = PictureBoxSizeMode.StretchImage;
+                if(CarteNom < 16)
+                {
+                    picture.ImageLocation = "Images/Carte" + CarteNom + ".png";
+                    picture.SizeMode = PictureBoxSizeMode.StretchImage;
+                    picture.Name = "Carte" + CarteNom;
+                }
+                else
+                {
+                    picture.ImageLocation = "Images/Monu" + (CarteNom % 15) + "Locked.png";
+                    picture.SizeMode = PictureBoxSizeMode.StretchImage;
+                    picture.Name = "Monu" + (CarteNom%15) +"Locked";
+                }
             }
-            
+            if(Sens == 1)
+            {
+                picture.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            }
+            if(Sens == -1)
+            {
+                picture.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+                height = BoardSizeHeight - picture.Height - height;
+                width = BoardSizeWidth - picture.Width - width;
+            }
+            picture.MouseEnter += new EventHandler(Carte_OnHover);
+            picture.MouseLeave += new EventHandler(Carte_OnLeave);
             this.Controls.Add(picture);
             picture.BringToFront();
 
@@ -671,6 +771,7 @@ namespace MiniVille_GraphiqueWF
                 if (elapsedTime > totalTime)
                 {
                     Time.Stop();
+                    if(!Afficher) Controls.Remove(picture);
                 }
                 else
                 {
