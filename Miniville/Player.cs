@@ -10,8 +10,15 @@ namespace Miniville
     {
         private string namePlayer;
         private bool isAI;
+        public bool IsAI { get { return isAI; } }
+        public string NamePlayer { get { return namePlayer; } }
+        public Player(string namePlayer, bool isAI)
+        {
+            this.namePlayer = namePlayer;
+            this.isAI = isAI;
+        }
 
-        private void Shop(Cards cartToBuy)
+        public void Shop(int cartToBuy)
         {
             // on lui donne la carte à acheter en argument
 
@@ -27,12 +34,12 @@ namespace Miniville
 
         }
 
-        private void DisplayChoice()
+        public void DisplayChoice()
         {
             //
         }
 
-        private void PlayerChoice()
+        public void PlayerChoice()
         {
             //
         }

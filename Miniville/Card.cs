@@ -9,14 +9,14 @@ using System.Xml.Serialization;
 
 namespace Miniville
 {
-    public class Cards
+    public class Card
     {
-        enum Color
+        public enum Colorcard
         {
-            Blue,
-            Green,
-            Red,
-            Purple
+            Blue = 1,
+            Green = 2,
+            Red = 3,
+            Purple = 4
         }
 
         private int activationValue; // = Dice.face
@@ -35,7 +35,7 @@ namespace Miniville
         private string effectDescription;
         public string EffectDescription { get; set; }
 
-        public Cards(int ActivationValue, string Name, int Type, int Cost)
+        public Card(int ActivationValue, string Name, int Type, int Cost)
         {
             this.activationValue = ActivationValue;
             this.name = Name;
