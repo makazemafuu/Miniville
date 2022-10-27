@@ -10,35 +10,15 @@ namespace Miniville
 {
     public class Monument : Cards
     {
-        bool isActive = false;
+        private bool isActive = false;
 
         public Monument(int ActivationValue, string Name, int Type, int Cost) : base(ActivationValue, Name, Type, Cost)
         {
 
         }
-
         public void PassiveEffect()
         {
-            while (!isActive)
-            {
-                if (ActivationValue == 4)
-                {
-
-                }
-                if (ActivationValue == 10)
-                {
-
-                }
-                if (ActivationValue == 16)
-                {
-
-                }
-                if (ActivationValue == 22)
-                {
-
-                }
-                isActive = true;
-            }
+            // Display passive effect of the Monument cards.
         }
     }
 }

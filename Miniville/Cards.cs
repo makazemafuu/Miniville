@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -49,28 +50,49 @@ namespace Miniville
                 name = "Champs de Blé";
                 type = 1;
                 cost = 1;
-                // Bank.coinsAvailable += 1;
+
+                int coinsExchange = Math.Min(1, Bank.coinsAvailable);
+                Bank.coinsAvailable -= coinsExchange;
+                Player.coinsAvailable += coinsExchange;
+
+                // obtenez 1 pièce par la banque
             }
             else if (activationValue == 2)
             {
                 if (name == "Ferme" && type == 1 && cost == 1)
                 {
-                    // Bank.coinsAvailable += 1;
+                    int coinsExchange = Math.Min(1, Bank.coinsAvailable);
+                    Bank.coinsAvailable -= coinsExchange;
+                    Player.coinsAvailable += coinsExchange;
+
+                    // obtenez 1 pièce par la banque
                 }
                 else if (name == "Boulangerie" && type == 2 && cost == 1)
                 {
-                    // Bank.coinsAvailable += 1;
+                    int coinsExchange = Math.Min(1, Bank.coinsAvailable);
+                    Bank.coinsAvailable -= coinsExchange;
+                    Player.coinsAvailable += coinsExchange;
+
+                    // obtenez 1 pièce par la banque
                 }
             }
             else if (activationValue == 3)
             {
                 if (name == "Boulangerie" && type == 2 && cost == 1)
                 {
-                    // Bank.coinsAvailable += 1;
+                    int coinsExchange = Math.Min(1, Bank.coinsAvailable);
+                    Bank.coinsAvailable -= coinsExchange;
+                    Player.coinsAvailable += coinsExchange;
+
+                    // obtenez 1 pièce par la banque
                 }
                 else if (name == "Café" && type == 3 && cost == 2)
                 {
-                    // Player.coinsAvailable += 2;
+                    int coinsExchange = Math.Min(2, Bank.coinsAvailable);
+                    Player.coinsAvailable -= coinsExchange;
+                    Player.coinsAvailable += coinsExchange;
+
+                    // obtenez 2 pièces par un autre joueur
                 }
             }
             else if (activationValue == 4)
@@ -78,20 +100,34 @@ namespace Miniville
                 name = "Supérette";
                 type = 2;
                 cost = 2;
-                // Bank.coinsAvailable += 3;
+
+                int coinsExchange = Math.Min(3, Bank.coinsAvailable);
+                Bank.coinsAvailable -= coinsExchange;
+                Player.coinsAvailable += coinsExchange;
+
+                // obtenez 3 pièces par la banque
             }
             else if (activationValue == 5)
             {
                 name = "Forêt";
                 type = 1;
                 cost = 3;
-                // Bank.coinsAvailable += 1;
+
+                int coinsExchange = Math.Min(1, Bank.coinsAvailable);
+                Bank.coinsAvailable -= coinsExchange;
+                Player.coinsAvailable += coinsExchange;
+
+                // obtenez 1 pièces par la banque
             }
             else if (activationValue == 6)
             {
                 if (name == "Stade" && type == 4 && cost == 6)
                 {
-                    // Player.coinsAvailable += 2;
+                    int coinsExchange = Math.Min(5, Bank.coinsAvailable);
+                    Player.coinsAvailable -= coinsExchange;
+                    Player.coinsAvailable += coinsExchange;
+
+                    // obtenez 5 pièces par un autre joueur
                 }
                 else if (name == "Centre d'Affaires" && type == 4 && cost == 8)
                 {
@@ -99,7 +135,11 @@ namespace Miniville
                 }
                 else if (name == "Chaîne de Télévision" && type == 4 && cost == 7)
                 {
-                    // Player.coinsAvailable += 5;
+                    int coinsExchange = Math.Min(5, Bank.coinsAvailable);
+                    Bank.coinsAvailable -= coinsExchange;
+                    Player.coinsAvailable += coinsExchange;
+
+                    // obtenez 5 pièces par la banque
                 }
             }
             else if (activationValue == 7)
@@ -107,24 +147,54 @@ namespace Miniville
                 name = "Fromagerie";
                 type = 2;
                 cost = 5;
-                // Bank.coinsAvailable += 3 pièces pour chaque établissements "Ferme" que vous possédez;
+
+                foreach (var item in Player.cardsAvailable)
+                {
+                    if (item.Value == "Ferme")
+                    {
+                        int coinsExchange = Math.Min(3 * item.Key.Count, Bank.coinsAvailable);
+                        Bank.coinsAvailable -= coinsExchange;
+                        Player.coinsAvailable += coinsExchange;
+
+                        // obtenez 3 pièces par la banque pour chaque établissements "Ferme" que vous possédez
+                    }
+                }
             }
             else if (activationValue == 8)
             {
                 name = "Fabrique de Meubles";
                 type = 2;
                 cost = 3;
-                // Bank.coinsAvailable += 3 pièces pour chaque établissements "Forêt" et "Mine" que vous possédez;
+
+                foreach (var item in Player.cardsAvailable)
+                {
+                    if (item.Value == "Forêt" || item.Value == "Mine")
+                    {
+                        int coinsExchange = Math.Min(3 * item.Key.Count, Bank.coinsAvailable);
+                        Bank.coinsAvailable -= coinsExchange;
+                        Player.coinsAvailable += coinsExchange;
+
+                        // obtenez 3 pièces par la banque pour chaque établissements "Forêt" et "Mine" que vous possédez
+                    }
+                }
             }
             else if (activationValue == 9)
             {
                 if (name == "Mine" && type == 1 && cost == 6)
                 {
-                    // Bank.coinsAvailable += 5;
+                    int coinsExchange = Math.Min(5, Bank.coinsAvailable);
+                    Bank.coinsAvailable -= coinsExchange;
+                    Player.coinsAvailable += coinsExchange;
+
+                    // obtenez 5 pièces par la banque
                 }
                 else if (name == "Restaurant" && type == 3 && cost == 3)
                 {
-                    // Player.coinsAvailable += 2;
+                    int coinsExchange = Math.Min(2, Bank.coinsAvailable);
+                    Player.coinsAvailable -= coinsExchange;
+                    Player.coinsAvailable += coinsExchange;
+
+                    // obtenez 2 pièces par un autre joueur
                 }
 
             }
@@ -132,11 +202,20 @@ namespace Miniville
             {
                 if (name == "Restaurant" && type == 3 && cost == 3)
                 {
-                    // Player.coinsAvailable += 2;
+                    int coinsExchange = Math.Min(2, Bank.coinsAvailable);
+                    Player.coinsAvailable -= coinsExchange;
+                    Player.coinsAvailable += coinsExchange;
+
+                    // obtenez 2 pièces par un autre joueur
                 }
                 else if (name == "Verger" && type == 1 && cost == 3)
                 {
-                    // Bank.coinsAvailable += 3;
+                    int coinsExchange = Math.Min(3, Bank.coinsAvailable);
+                    Bank.coinsAvailable -= coinsExchange;
+                    Player.coinsAvailable += coinsExchange;
+
+                    // obtenez 3 pièces par la banque
+
                 }
             }
             else if (activationValue == 11)
@@ -144,14 +223,38 @@ namespace Miniville
                 name = "Marche de fruits et légumes";
                 type = 2;
                 cost = 2;
-                // Bank.coinsAvailable += 2 pour chaque établissements "Verger" et "Champs de Blé" que vous possédez;
+
+                foreach (var item in Player.cardsAvailable)
+                {
+                    if (item.Value == "Verger" || item.Value == "Champs de Blé")
+                    {
+                        int coinsExchange = Math.Min(2 * item.Key.Count, Bank.coinsAvailable);
+                        Bank.coinsAvailable -= coinsExchange;
+                        Player.coinsAvailable += coinsExchange;
+
+                        // obtenez 2 pièces par la banque pour chaque établissements "Verger" et "Champs de Blé" que vous possédez
+                    }
+                }
+
             }
             else if (activationValue == 12)
             {
                 name = "Marche de fruits et légumes";
                 type = 2;
                 cost = 2;
-                // Bank.coinsAvailable += 2 pour chaque établissements "Verger" et "Champs de Blé" que vous possédez;
+
+                foreach (var item in Player.cardsAvailable)
+                {
+                    if (item.Value == "Verger" || item.Value == "Champs de Blé")
+                    {
+                        int coinsExchange = Math.Min(2 * item.Key.Count, Bank.coinsAvailable);
+                        Bank.coinsAvailable -= coinsExchange;
+                        Player.coinsAvailable += coinsExchange;
+                        
+                        // obtenez 2 pièces par la banque pour chaque établissements "Verger" et "Champs de Blé" que vous possédez
+                    }
+                }
+
             }
         }
 
