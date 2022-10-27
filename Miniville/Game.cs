@@ -24,7 +24,7 @@ namespace Miniville
 
             for (int i = 0; i < nbJoueurReel; i++)
             {
-                Console.WriteLine("Joueur " + (i + 1) + "veuillez écrire votre nom : ");
+                Console.WriteLine("Joueur " + (i + 1) + " veuillez écrire votre nom : ");
                 string namePlayer = Console.ReadLine();
                 listPlayer.Add(new Player(namePlayer, false));
             }
@@ -34,6 +34,7 @@ namespace Miniville
             }
             while (!isGameOver)
             {
+                Console.WriteLine("Tour du joueur {0}", playerRound + 1);
                 Round(playerRound);
                 playerRound = (playerRound + 1) % nbJoueurMax;
             }
@@ -278,4 +279,5 @@ namespace Miniville
             return -1;
         }
     }
+
 }
