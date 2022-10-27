@@ -41,14 +41,14 @@ namespace Miniville
 		}
 		public static List<Card> Cards { get { return cards; } }
 
-		public static Dictionary<Pile, string> InitPile()
+		public static Dictionary<String, Pile> InitPile()
 		{
-			Dictionary<Pile, string> result = new Dictionary<Pile, string>();
+			Dictionary<String, Pile> result = new Dictionary<String, Pile>();
 			Pile pile;
 			for (int i = 0; i < 15; i++)
 			{
 				pile = new Pile(Cards[i]);
-				result.Add(pile, Cards[i].Name);
+				result.Add(Cards[i].Name, pile);
 			}
 			return result;
 		}
