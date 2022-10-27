@@ -70,7 +70,7 @@ namespace Miniville
                 }
                 else if (name == "Café" && type == 3 && cost == 2)
                 {
-                    // Bank.coinsAvailable += 2;
+                    // Player.coinsAvailable += 2;
                 }
             }
             else if (activationValue == 4)
@@ -78,28 +78,28 @@ namespace Miniville
                 name = "Supérette";
                 type = 2;
                 cost = 2;
-                // Bank.coinsAvailable += 2;
+                // Bank.coinsAvailable += 3;
             }
             else if (activationValue == 5)
             {
                 name = "Forêt";
                 type = 1;
                 cost = 3;
-                // Bank.coinsAvailable += 3;
+                // Bank.coinsAvailable += 1;
             }
             else if (activationValue == 6)
             {
                 if (name == "Stade" && type == 4 && cost == 6)
                 {
-                    // Bank.coinsAvailable += 6;
+                    // Player.coinsAvailable += 2;
                 }
                 else if (name == "Centre d'Affaires" && type == 4 && cost == 8)
                 {
-                    // Bank.coinsAvailable += 8;
+                    // Player.cardsAvailable += carte établissement d'un joueur au choix qui ne soit pas de type 4;
                 }
                 else if (name == "Chaîne de Télévision" && type == 4 && cost == 7)
                 {
-                    // Bank.coinsAvailable += 7;
+                    // Player.coinsAvailable += 5;
                 }
             }
             else if (activationValue == 7)
@@ -107,24 +107,24 @@ namespace Miniville
                 name = "Fromagerie";
                 type = 2;
                 cost = 5;
-                // Bank.coinsAvailable += 5;
+                // Bank.coinsAvailable += 3 pièces pour chaque établissements "Ferme" que vous possédez;
             }
             else if (activationValue == 8)
             {
                 name = "Fabrique de Meubles";
                 type = 2;
                 cost = 3;
-                // Bank.coinsAvailable += 3;
+                // Bank.coinsAvailable += 3 pièces pour chaque établissements "Forêt" et "Mine" que vous possédez;
             }
             else if (activationValue == 9)
             {
                 if (name == "Mine" && type == 1 && cost == 6)
                 {
-                    // Bank.coinsAvailable += 6;
+                    // Bank.coinsAvailable += 5;
                 }
                 else if (name == "Restaurant" && type == 3 && cost == 3)
                 {
-                    // Bank.coinsAvailable += 3;
+                    // Player.coinsAvailable += 2;
                 }
 
             }
@@ -132,7 +132,7 @@ namespace Miniville
             {
                 if (name == "Restaurant" && type == 3 && cost == 3)
                 {
-                    // Bank.coinsAvailable += 3;
+                    // Player.coinsAvailable += 2;
                 }
                 else if (name == "Verger" && type == 1 && cost == 3)
                 {
@@ -144,15 +144,20 @@ namespace Miniville
                 name = "Marche de fruits et légumes";
                 type = 2;
                 cost = 2;
-                // Bank.coinsAvailable += 2;
+                // Bank.coinsAvailable += 2 pour chaque établissements "Verger" et "Champs de Blé" que vous possédez;
             }
             else if (activationValue == 12)
             {
                 name = "Marche de fruits et légumes";
                 type = 2;
                 cost = 2;
-                // Bank.coinsAvailable += 2;
+                // Bank.coinsAvailable += 2 pour chaque établissements "Verger" et "Champs de Blé" que vous possédez;
             }
+        }
+
+        public void PassiveEffect()
+        {
+            bool isActive = false;
         }
     }
 }
