@@ -13,14 +13,14 @@ namespace Miniville
     {
         public enum Colorcard
         {
-            Blue = 1,
-            Green = 2,
-            Red = 3,
-            Purple = 4
+            Blue = 0,
+            Green = 1,
+            Red = 2,
+            Purple = 3
         }
 
-        private int activationValue; // = Dice.face
-        public int ActivationValue { get; }
+        private (int, int) activationValue; // = Dice.face
+        public (int, int) ActivationValue { get; }
 
         private string name;
         public string Name { get; }
@@ -35,7 +35,7 @@ namespace Miniville
         private string effectDescription;
         public string EffectDescription { get; set; }
 
-        public Card(int ActivationValue, string Name, int Type, int Cost)
+        public Card((int, int) ActivationValue, string Name, int Type, int Cost)
         {
             this.activationValue = ActivationValue;
             this.name = Name;
@@ -45,19 +45,15 @@ namespace Miniville
 
         public void ActiveEffect()
         {
-            if (activationValue == 1)
+            if (activationValue.Item1 == 1)
             {
-                name = "Champs de Blé";
-                type = 1;
-                cost = 1;
-
                 int coinsExchange = Math.Min(1, bank.coinsAvailable);
                 bank.coinsAvailable -= coinsExchange;
                 Player.coinsAvailable += coinsExchange;
 
                 // obtenez 1 pièce par la banque
             }
-            else if (activationValue == 2)
+            else if (activationValue.Item1 == 2)
             {
                 if (name == "Ferme" && type == 1 && cost == 1)
                 {
@@ -97,10 +93,6 @@ namespace Miniville
             }
             else if (activationValue == 4)
             {
-                name = "Supérette";
-                type = 2;
-                cost = 2;
-
                 int coinsExchange = Math.Min(3, bank.coinsAvailable);
                 bank.coinsAvailable -= coinsExchange;
                 Player.coinsAvailable += coinsExchange;
@@ -109,10 +101,6 @@ namespace Miniville
             }
             else if (activationValue == 5)
             {
-                name = "Forêt";
-                type = 1;
-                cost = 3;
-
                 int coinsExchange = Math.Min(1, bank.coinsAvailable);
                 bank.coinsAvailable -= coinsExchange;
                 Player.coinsAvailable += coinsExchange;
@@ -144,10 +132,6 @@ namespace Miniville
             }
             else if (activationValue == 7)
             {
-                name = "Fromagerie";
-                type = 2;
-                cost = 5;
-
                 foreach (var item in Player.cardsAvailable)
                 {
                     if (item.Value == "Ferme")
@@ -162,10 +146,6 @@ namespace Miniville
             }
             else if (activationValue == 8)
             {
-                name = "Fabrique de Meubles";
-                type = 2;
-                cost = 3;
-
                 foreach (var item in Player.cardsAvailable)
                 {
                     if (item.Value == "Forêt" || item.Value == "Mine")
@@ -220,10 +200,6 @@ namespace Miniville
             }
             else if (activationValue == 11)
             {
-                name = "Marche de fruits et légumes";
-                type = 2;
-                cost = 2;
-
                 foreach (var item in Player.cardsAvailable)
                 {
                     if (item.Value == "Verger" || item.Value == "Champs de Blé")
@@ -239,10 +215,6 @@ namespace Miniville
             }
             else if (activationValue == 12)
             {
-                name = "Marche de fruits et légumes";
-                type = 2;
-                cost = 2;
-
                 foreach (var item in Player.cardsAvailable)
                 {
                     if (item.Value == "Verger" || item.Value == "Champs de Blé")
@@ -256,11 +228,6 @@ namespace Miniville
                 }
 
             }
-        }
-
-        public void PassiveEffect()
-        {
-            bool isActive = false;
         }
     }
 }

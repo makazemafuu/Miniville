@@ -10,12 +10,22 @@ namespace Miniville
     {
         private string namePlayer;
         private bool isAI;
+        private bool isPlaying;
+
+        private List<Monument> monuments = new List<Monument>()
+        {
+            new Monument(),
+            new Monument(),
+            new Monument(),
+            new Monument()
+        };
         public bool IsAI { get { return isAI; } }
         public string NamePlayer { get { return namePlayer; } }
         public Player(string namePlayer, bool isAI)
         {
             this.namePlayer = namePlayer;
             this.isAI = isAI;
+
         }
 
         public void Shop(int cartToBuy)
