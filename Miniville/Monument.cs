@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Miniville
 {
-    public class Monument : Cards
+    public class Monument : Card
     {
         private bool isActive = false;
         public bool IsActive

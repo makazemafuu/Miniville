@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 
 namespace Miniville
 {
-    public class Cards
+    public class Card
     {
         enum Color
         {
@@ -35,7 +35,7 @@ namespace Miniville
         private string effectDescription;
         public string EffectDescription { get; }
 
-        public Cards(int ActivationValue, string Name, int Type, int Cost)
+        public Card(int ActivationValue, string Name, int Type, int Cost)
         {
             this.activationValue = ActivationValue;
             this.name = Name;
@@ -250,7 +250,7 @@ namespace Miniville
                         int coinsExchange = Math.Min(2 * item.Key.Count, Bank.coinsAvailable);
                         Bank.coinsAvailable -= coinsExchange;
                         Player.coinsAvailable += coinsExchange;
-                        
+
                         // obtenez 2 pièces par la banque pour chaque établissements "Verger" et "Champs de Blé" que vous possédez
                     }
                 }
