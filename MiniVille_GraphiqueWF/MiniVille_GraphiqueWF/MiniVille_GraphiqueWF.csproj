@@ -12,8 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Test.mp3">
+    <None Update="ButtonHover.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="InGame.wav">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

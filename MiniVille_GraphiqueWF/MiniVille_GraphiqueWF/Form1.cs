@@ -15,20 +15,23 @@ namespace MiniVille_GraphiqueWF
     {
         public int nbJoueur;
         public int difficulty;
-        //public Game game;
+        SoundPlayer activeMusicBackGround;
+
         public int BoardSizeWidth, BoardSizeHeight;
         Label Tourjoueur, MoneyJoueur1, MoneyJoueur2;
         Random random = new Random();
         public Form1()
         {
-            InitializeComponent();
-            //StartMenu();
-           StartGame();
-          
+           InitializeComponent();
+           StartMenu();
+           //StartGame(); 
+            
         }
         #region Start Menu
         void StartMenu()
         {
+            activeMusicBackGround = new SoundPlayer("Sound Design & SFX/Start.wav");
+            activeMusicBackGround.PlayLooping();
             PictureBox StartMenu = new PictureBox
             {
                 Anchor = AnchorStyles.None,
@@ -48,6 +51,7 @@ namespace MiniVille_GraphiqueWF
                 Size = new Size(this.Width, this.Height / 2),
                 BackColor = Color.Transparent,
                 Location = new Point(0, 0),
+                WaitOnLoad = true,
 
             };
             PictureBox Title = new PictureBox
@@ -57,7 +61,8 @@ namespace MiniVille_GraphiqueWF
                 Name = "Title",
                 SizeMode = PictureBoxSizeMode.CenterImage,
                 Size = new Size(this.Width, this.Height / 2),
-                BackColor = Color.Transparent
+                BackColor = Color.Transparent,
+                WaitOnLoad = true,
             };
             SunGif.Controls.Add(Title);
             StartMenu.Controls.Add(SunGif);
@@ -91,9 +96,10 @@ namespace MiniVille_GraphiqueWF
                 Font = new Font("COMIC SANS MS", 12f),
                 ForeColor = Color.DarkBlue,
             };
-            StartGame_Button.Click += new EventHandler(buttonStartGame_Button_Click);
+            StartGame_Button.Click += new EventHandler(buttonStartGame_Button_Click) + new EventHandler(MenuStart_Button_Click_SFX);
             StartGame_Button.MouseEnter += new EventHandler(MenuStart_Button_OnEnter);
             StartGame_Button.MouseLeave += new EventHandler(MenuStart_Button_OnLeave);
+            StartGame_Button.MouseHover += new EventHandler(MenuStart_Button_OnHover_SFX);
             Button Leave_Button = new Button
             {
                 Size = new Size(200, 60),
@@ -105,9 +111,10 @@ namespace MiniVille_GraphiqueWF
                 Font = new Font("COMIC SANS MS", 12f),
                 ForeColor = Color.DarkBlue,
             };
-            Leave_Button.Click += new EventHandler(buttonLeave_Click);
+            Leave_Button.Click += new EventHandler(buttonLeave_Click) + new EventHandler(MenuStart_Button_Click_SFX);
             Leave_Button.MouseEnter += new EventHandler(MenuStart_Button_OnEnter);
             Leave_Button.MouseLeave += new EventHandler(MenuStart_Button_OnLeave);
+            Leave_Button.MouseHover += new EventHandler(MenuStart_Button_OnHover_SFX);
             this.Controls.Add(StartGame_Button);
             this.Controls.Add(Leave_Button);
             StartMenu.SendToBack();
@@ -132,7 +139,7 @@ namespace MiniVille_GraphiqueWF
             DialogResult result = MessageBox.Show("Veux-tu vraiment quitter le jeu ?", "Quitter le jeu", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes)
             {
-                Application.Exit();
+                EndGameCredit(); 
             }
         }
         void MenuStart_Button_OnEnter(object sender, EventArgs e)
@@ -142,6 +149,20 @@ namespace MiniVille_GraphiqueWF
             button.BackColor = Color.DarkBlue;
             button.Size = new Size(button.Width + 14, button.Height + 14);
             button.Location = new Point(button.Location.X - 7, button.Location.Y - 7);
+        }
+        void MenuStart_Button_OnHover_SFX(object sender, EventArgs e)
+        {
+            var reader = new NAudio.Wave.Mp3FileReader("Sound Design & SFX/ButtonHover.mp3");
+            var waveOut = new NAudio.Wave.WaveOut();
+            waveOut.Init(reader);
+            waveOut.Play();
+        }
+        void MenuStart_Button_Click_SFX(object sender, EventArgs e)
+        {
+            var reader = new NAudio.Wave.Mp3FileReader("Sound Design & SFX/ButtonClick.mp3");
+            var waveOut = new NAudio.Wave.WaveOut();
+            waveOut.Init(reader);
+            waveOut.Play();
         }
         void MenuStart_Button_OnLeave(object sender, EventArgs e)
         {
@@ -165,6 +186,7 @@ namespace MiniVille_GraphiqueWF
                 ForeColor = Color.DarkBlue,
             };
             Ending1.MouseEnter += new EventHandler(MenuStart_Button_OnEnter);
+            Ending1.MouseHover += new EventHandler(MenuStart_Button_OnHover_SFX);
             Ending1.MouseLeave += new EventHandler(MenuStart_Button_OnLeave);
             Button Ending2 = new Button
             {
@@ -177,6 +199,7 @@ namespace MiniVille_GraphiqueWF
                 ForeColor = Color.DarkBlue,
             };
             Ending2.MouseEnter += new EventHandler(MenuStart_Button_OnEnter);
+            Ending2.MouseHover += new EventHandler(MenuStart_Button_OnHover_SFX);
             Ending2.MouseLeave += new EventHandler(MenuStart_Button_OnLeave);
             Button Ending3 = new Button
             {
@@ -189,6 +212,7 @@ namespace MiniVille_GraphiqueWF
                 ForeColor = Color.DarkBlue,
             };
             Ending3.MouseEnter += new EventHandler(MenuStart_Button_OnEnter);
+            Ending3.MouseHover += new EventHandler(MenuStart_Button_OnHover_SFX);
             Ending3.MouseLeave += new EventHandler(MenuStart_Button_OnLeave);
             Button TrueEnding = new Button
             {
@@ -201,28 +225,29 @@ namespace MiniVille_GraphiqueWF
                 ForeColor = Color.DarkBlue,
             };
             TrueEnding.MouseEnter += new EventHandler(MenuStart_Button_OnEnter);
+            TrueEnding.MouseHover += new EventHandler(MenuStart_Button_OnHover_SFX);
             TrueEnding.MouseLeave += new EventHandler(MenuStart_Button_OnLeave);
 
             Ending1.Click += new EventHandler((sender, e) =>
             {
                 nbJoueur = 2; Button_Leave_Anim(Ending1); Button_Leave_Anim(Ending2); Button_Leave_Anim(Ending3); Button_Leave_Anim(TrueEnding);
                 StartGame();
-            });
+            }) + new EventHandler(MenuStart_Button_Click_SFX);
             Ending2.Click += new EventHandler((sender, e) =>
             {
                 nbJoueur = 3; Button_Leave_Anim(Ending1); Button_Leave_Anim(Ending2); Button_Leave_Anim(Ending3); Button_Leave_Anim(TrueEnding);
                 StartGame();
-            });
+            }) + new EventHandler(MenuStart_Button_Click_SFX);
             Ending3.Click += new EventHandler((sender, e) =>
             {
                 nbJoueur = 4; Button_Leave_Anim(Ending1); Button_Leave_Anim(Ending2); Button_Leave_Anim(Ending3); Button_Leave_Anim(TrueEnding);
                 StartGame();
-            });
+            }) + new EventHandler(MenuStart_Button_Click_SFX);
             TrueEnding.Click += new EventHandler((sender, e) =>
             {
                 nbJoueur = 4; Button_Leave_Anim(Ending1); Button_Leave_Anim(Ending2); Button_Leave_Anim(Ending3); Button_Leave_Anim(TrueEnding);
                 StartGame();
-            });
+            }) + new EventHandler(MenuStart_Button_Click_SFX);
             this.Controls.Add(Ending1);
             this.Controls.Add(Ending2);
             this.Controls.Add(Ending3);
@@ -249,6 +274,7 @@ namespace MiniVille_GraphiqueWF
                 ForeColor = Color.DarkBlue,
             };
             TwoPlayers.MouseEnter += new EventHandler(MenuStart_Button_OnEnter);
+            TwoPlayers.MouseHover += new EventHandler(MenuStart_Button_OnHover_SFX);
             TwoPlayers.MouseLeave += new EventHandler(MenuStart_Button_OnLeave);
             Button ThreePlayers = new Button
             {
@@ -261,6 +287,7 @@ namespace MiniVille_GraphiqueWF
                 ForeColor = Color.DarkBlue,
             };
             ThreePlayers.MouseEnter += new EventHandler(MenuStart_Button_OnEnter);
+            ThreePlayers.MouseHover += new EventHandler(MenuStart_Button_OnHover_SFX);
             ThreePlayers.MouseLeave += new EventHandler(MenuStart_Button_OnLeave);
             Button FourPlayers = new Button
             {
@@ -273,22 +300,23 @@ namespace MiniVille_GraphiqueWF
                 ForeColor = Color.DarkBlue,
             };
             FourPlayers.MouseEnter += new EventHandler(MenuStart_Button_OnEnter);
+            FourPlayers.MouseHover += new EventHandler(MenuStart_Button_OnHover_SFX);
             FourPlayers.MouseLeave += new EventHandler(MenuStart_Button_OnLeave);
             TwoPlayers.Click += new EventHandler((sender, e) =>
             {
                 nbJoueur = 2; Button_Leave_Anim(TwoPlayers); Button_Leave_Anim(ThreePlayers); Button_Leave_Anim(FourPlayers);
                 DifficultyChoice();
-            });
+            }) + new EventHandler(MenuStart_Button_Click_SFX);
             ThreePlayers.Click += new EventHandler((sender, e) =>
             {
                 nbJoueur = 3; Button_Leave_Anim(TwoPlayers); Button_Leave_Anim(ThreePlayers); Button_Leave_Anim(FourPlayers);
                 DifficultyChoice();
-            });
+            }) + new EventHandler(MenuStart_Button_Click_SFX);
             FourPlayers.Click += new EventHandler((sender, e) =>
             {
                 nbJoueur = 4; Button_Leave_Anim(TwoPlayers); Button_Leave_Anim(ThreePlayers); Button_Leave_Anim(FourPlayers);
                 DifficultyChoice();
-            });
+            }) + new EventHandler(MenuStart_Button_Click_SFX);
             this.Controls.Add(TwoPlayers);
             this.Controls.Add(ThreePlayers);
             this.Controls.Add(FourPlayers);
@@ -307,7 +335,13 @@ namespace MiniVille_GraphiqueWF
             Controls.Clear();
             BoardSizeHeight = this.ClientSize.Height;
             BoardSizeWidth = this.ClientSize.Width - 250; // La taille du menu à gauche = 250
+
+            if(activeMusicBackGround != null) activeMusicBackGround.Stop();
+            activeMusicBackGround = new SoundPlayer("Sound Design & SFX/InGame.wav");
+            activeMusicBackGround.PlayLooping();
+
             //game = new Game();
+
             ZoomCardStart(); //Les cartes en gros quand on Hover
             AddMenu(); //Le menu à droite
             Board_Display();
@@ -322,7 +356,7 @@ namespace MiniVille_GraphiqueWF
                 {
                     // Marge de 20 entre les cartes  ==>  ( x/2 * nb carte sur ligne/colonne ) + x * ( % nb carte sur ligne/colonne) avec x la taille + la marge    : ici 20 de marge
                     Spawn_Cards(BoardSizeHeight / 2 - (60 * 3) + 120 * (i % 3), BoardSizeWidth / 2 - (50 * 5) + 100 * (j % 5), (k++ % 15) + 1, true);
-                    await Task.Delay(100);
+                    await Task.Delay(50);
                 }
             }
             //Affichage des 2 premières cartes Boulangerie et Champs de blé + les 4 monuments 
@@ -349,7 +383,8 @@ namespace MiniVille_GraphiqueWF
                     Visible = false,
                     Size = new Size(400, 600),
                     Name = "ZoomCarte" + i,
-                    SizeMode = PictureBoxSizeMode.StretchImage
+                    SizeMode = PictureBoxSizeMode.StretchImage,
+                    BackColor = Color.Transparent
                 };
                 this.Controls.Add(picturebox);
             }
@@ -361,7 +396,8 @@ namespace MiniVille_GraphiqueWF
                     Visible = false,
                     Name = "ZoomMonu" + i,
                     Size = new Size(400, 600),
-                    SizeMode = PictureBoxSizeMode.StretchImage
+                    SizeMode = PictureBoxSizeMode.StretchImage,
+                    BackColor = Color.Transparent
                 };
                 PictureBox pictureMonumentLocked = new PictureBox
                 {
@@ -369,11 +405,51 @@ namespace MiniVille_GraphiqueWF
                     Visible = false,
                     Name = "ZoomMonu" + i+"Locked",
                     Size = new Size(400, 600),
-                    SizeMode = PictureBoxSizeMode.StretchImage
+                    SizeMode = PictureBoxSizeMode.StretchImage,
+                    BackColor = Color.Transparent
                 };
                 this.Controls.Add(pictureMonument);
                 this.Controls.Add(pictureMonumentLocked);
             }
+        }
+        private void Carte_OnHover(object sender, EventArgs e)
+        {
+            PictureBox thisPicture = (PictureBox)sender;
+            thisPicture.Size = new Size(thisPicture.Width + 20, thisPicture.Height + 20);
+            thisPicture.Location = new Point(thisPicture.Location.X - 10, thisPicture.Location.Y - 10); //déplacement en diagonale donc la moitié de l'aggrandissement
+            var ZoomPicture = this.Controls.Find("Zoom" + thisPicture.Name, true).FirstOrDefault();
+            if (ZoomPicture != null)
+            {
+                ZoomPicture.Visible = true;
+                if (thisPicture.Location.X > this.Width - thisPicture.Width - (ZoomPicture.Width + 30)) ZoomPicture.Location = new Point(thisPicture.Location.X - (ZoomPicture.Width + 30),
+                    this.Height - thisPicture.Location.Y > ZoomPicture.Height ? thisPicture.Location.Y : thisPicture.Location.Y + thisPicture.Height - ZoomPicture.Height);
+                else ZoomPicture.Location = new Point(thisPicture.Location.X + thisPicture.Width + 10,
+                    this.Height - thisPicture.Location.Y > ZoomPicture.Height ? thisPicture.Location.Y : thisPicture.Location.Y + thisPicture.Height - ZoomPicture.Height);
+
+                if (ZoomPicture.Location.Y <-5) ZoomPicture.Location = new Point(ZoomPicture.Location.X, ( this.Height - ZoomPicture.Height)/2);
+                ZoomPicture.BringToFront();
+            }
+        }
+        private void Carte_OnLeave(object sender, EventArgs e)
+        {
+            PictureBox thisPicture = (PictureBox)sender;
+            thisPicture.Size = new Size(thisPicture.Width - 20, thisPicture.Height - 20);
+            thisPicture.Location = new Point(thisPicture.Location.X + 10, thisPicture.Location.Y + 10);
+            var ZoomPicture = this.Controls.Find("Zoom" + thisPicture.Name, true).FirstOrDefault();
+            if (ZoomPicture != null)
+            {
+                ZoomPicture.Visible = false;
+                ZoomPicture.SendToBack();
+            }
+        }
+        private void MonumentBuy(object sender, EventArgs e)
+        {
+            var picturebox = (PictureBox)sender;
+            Carte_OnLeave(sender, e);
+            picturebox.Name = picturebox.Name.Remove(5);
+            picturebox.ImageLocation = "Images/" + picturebox.Name + ".png";
+            Carte_OnHover(sender, e);
+            picturebox.Click -= new EventHandler(MonumentBuy);
         }
         #region Menu à droite
         private void AddMenu()
@@ -506,7 +582,9 @@ namespace MiniVille_GraphiqueWF
             DialogResult result = MessageBox.Show("Changer de mode recommencera une nouvelle partie es-tu sur?", "Change MODE", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes)
             {
-                Controls.Clear();
+                activeMusicBackGround.Stop();
+                activeMusicBackGround = new SoundPlayer("Sound Design & SFX/Start.wav");
+                activeMusicBackGround.PlayLooping(); Controls.Clear();
                 nbPlayerChoice();
             }
         }
@@ -539,15 +617,14 @@ namespace MiniVille_GraphiqueWF
             //    DiceAnim(firstDe, secondDe);
             //}
             //game.DieThrowed = true;
-            DiceAnim(random.Next(1, 6), 0);   //A enlever lors du merge avec le dice de fait
-            var reader = new NAudio.Wave.Mp3FileReader("Test.mp3");
-            var waveOut = new NAudio.Wave.WaveOutEvent();
+            DiceAnim(random.Next(1, 6), 0);   // !!!!!!!!!!!!!! A enlever lors du merge avec le dice de fait
+            var reader = new NAudio.Wave.Mp3FileReader("Sound Design & SFX/Dice Roll.mp3");
+            var waveOut = new NAudio.Wave.WaveOut();
             waveOut.Init(reader);
             waveOut.Play();
             await Task.Delay(2000);
             //game.Update(game.scoreDes);
             //UpdateLabels();
-
             Button thisButton = (Button)sender;
             this.Controls.Find("BoutonPasserTour", true).FirstOrDefault().Enabled = true;
             thisButton.Enabled = false;
@@ -584,7 +661,7 @@ namespace MiniVille_GraphiqueWF
             button.BackColor = button.Enabled == false ? Color.LightSlateGray : Color.LightSteelBlue;
         }
         #endregion
-        #endregion
+        #endregion  
         #region Animation
         private void DiceAnim(int DiceScore1, int DiceScore2 = 0)
         {
@@ -695,40 +772,15 @@ namespace MiniVille_GraphiqueWF
             });
             Time.Start();
         }
-        private void Carte_OnHover(object sender, EventArgs e)
-        {
-            PictureBox thisPicture = (PictureBox)sender;
-            thisPicture.Size = new Size(thisPicture.Width + 20 , thisPicture.Height + 20);
-            thisPicture.Location = new Point(thisPicture.Location.X - 10, thisPicture.Location.Y - 10); //déplacement en diagonale donc la moitié de l'aggrandissement
-            var ZoomPicture = this.Controls.Find("Zoom" + thisPicture.Name, true).FirstOrDefault();
-            if(ZoomPicture != null)
-            {
-                ZoomPicture.Visible = true;
-                ZoomPicture.Location = new Point(thisPicture.Location.X + thisPicture.Width + 10, (this.Height - ZoomPicture.Height) / 2);
-                ZoomPicture.BringToFront();
-            }
-            
-        }
-        private void Carte_OnLeave(object sender, EventArgs e)
-        {
-            PictureBox thisPicture = (PictureBox)sender;
-            thisPicture.Size = new Size(thisPicture.Width - 20, thisPicture.Height - 20);
-            thisPicture.Location = new Point(thisPicture.Location.X + 10, thisPicture.Location.Y + 10);
-            var ZoomPicture = this.Controls.Find("Zoom" + thisPicture.Name, true).FirstOrDefault();
-            if (ZoomPicture != null)
-            {
-                ZoomPicture.Visible = false;
-                ZoomPicture.SendToBack();
-            }
-        }
-        private void Spawn_Cards(int height, int width, int CarteNom = 0, bool Afficher = false, int Sens = 0) // A changer
+        private async void Spawn_Cards(int height, int width, int CarteNom = 0, bool Afficher = false, int Sens = 0) 
         {
             PictureBox picture = new PictureBox
             {
                 Size = new Size(80, 100),
                 BackColor = Color.Transparent,
                 Location = new Point(BoardSizeWidth / 2 - 40, BoardSizeHeight - 100), // width/2 et height * 1
-                Anchor = AnchorStyles.None
+                Anchor = AnchorStyles.None,
+                WaitOnLoad = true
             };
             if (CarteNom != 0 )
             {
@@ -736,13 +788,14 @@ namespace MiniVille_GraphiqueWF
                 {
                     picture.ImageLocation = "Images/Carte" + CarteNom + ".png";
                     picture.SizeMode = PictureBoxSizeMode.StretchImage;
-                    picture.Name = "Carte" + CarteNom;
+                    picture.Name = "Carte" + CarteNom;          
                 }
                 else
                 {
                     picture.ImageLocation = "Images/Monu" + (CarteNom % 15) + "Locked.png";
                     picture.SizeMode = PictureBoxSizeMode.StretchImage;
                     picture.Name = "Monu" + (CarteNom%15) +"Locked";
+                    picture.Click += new EventHandler(MonumentBuy);
                 }
             }
             if(Sens == 1)
@@ -759,11 +812,14 @@ namespace MiniVille_GraphiqueWF
             picture.MouseLeave += new EventHandler(Carte_OnLeave);
             this.Controls.Add(picture);
             picture.BringToFront();
-
+            await Task.Delay(50); 
             Timer Time = new Timer();
 
             int directionY = height - picture.Location.X, directionX = width - picture.Location.Y;
-
+            var reader = new NAudio.Wave.Mp3FileReader("Sound Design & SFX/Cards Flip.mp3");
+            var waveOut = new NAudio.Wave.WaveOut();
+            waveOut.Init(reader);
+            waveOut.Play();
             Time.Interval = 3;
             float totalTime = 15, elapsedTime = 0;
             Time.Tick += new EventHandler((sender, e) =>
@@ -781,6 +837,157 @@ namespace MiniVille_GraphiqueWF
             });
             Time.Start();
         }
+        private async void EndGameCredit()
+        {
+            Controls.Clear();
+            activeMusicBackGround = new SoundPlayer("Sound Design & SFX/Carefree.wav");
+            activeMusicBackGround.PlayLooping();
+            Font FontName = new Font(new FontFamily("Verdana"), 10);
+            Label thanks = new Label
+            {
+                Size = new Size(400,40),
+                Text = "Thank you for playing our game ! ",
+                Location = new Point(this.Width/ 2  -"Thank you for playing our game ! ".Length, this.Height / 5)
+            };
+            this.Controls.Add(thanks);
+
+            #region Les danses Fornites anim
+            PictureBox Fornite1 = new PictureBox
+            {
+                ImageLocation = "Images/Fornite1.gif",
+                Size = new Size(200, 350),
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                BackColor = Color.Transparent,
+                Location = new Point(-200, this.Height / 2 - 350 / 2),
+                WaitOnLoad = true,
+            };
+            Fornite1.Paint += new PaintEventHandler((sender, e) =>
+            {
+                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                e.Graphics.DrawString("OCEANE", FontName, Brushes.Black, 40, 40);
+            });
+            Controls.Add(Fornite1);
+            Timer Time1 = new Timer();
+            Time1.Interval = 20;
+            Time1.Tick += new EventHandler((sender, e) =>
+            {
+                if (Fornite1.Location.X > this.Width )
+                {
+                    Time1.Stop();
+                }
+                else
+                {
+                    Fornite1.Location = new Point(Fornite1.Location.X + 20, Fornite1.Location.Y);
+                }
+            });
+            Time1.Start();
+            while (Time1.Enabled == true) await Task.Delay(1000);
+
+            
+            PictureBox Fornite2 = new PictureBox
+            {
+                ImageLocation = "Images/Fornite2.gif",
+                Size = new Size(200, 350),
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                BackColor = Color.Transparent,
+                Location = new Point(this.Width+200, this.Height / 2 - 350 / 2),
+                WaitOnLoad = true,
+            };
+            Fornite2.Paint += new PaintEventHandler((sender, e) =>
+            {
+                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                e.Graphics.DrawString("DIANE", FontName, Brushes.Black, 40, 40);
+            });
+            Controls.Add(Fornite2);
+            Timer Time2 = new Timer();
+            Time2.Interval = 20;
+            Time2.Tick += new EventHandler((sender, e) =>
+            {
+                if (Fornite2.Location.X < -Fornite2.Width)
+                {
+                    Time2.Stop();
+                }
+                else
+                {
+                    Fornite2.Location = new Point(Fornite2.Location.X - 20, Fornite2.Location.Y);
+                }
+            });
+            Time2.Start();
+            while (Time2.Enabled == true) await Task.Delay(1000);
+
+
+            PictureBox Fornite3 = new PictureBox
+            {
+                ImageLocation = "Images/Fornite3.gif",
+                Size = new Size(200, 350),
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                BackColor = Color.Transparent,
+                Location = new Point(-200, this.Height / 2 - 350 / 2),
+                WaitOnLoad = true,
+            };
+            Fornite3.Paint += new PaintEventHandler((sender, e) =>
+            {
+                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                e.Graphics.DrawString("BAO", FontName, Brushes.Black, 40, 40);
+            });
+            Controls.Add(Fornite3);
+            Timer Time3 = new Timer();
+            Time3.Interval = 20;
+            Time3.Tick += new EventHandler((sender, e) =>
+            {
+                if (Fornite3.Location.X > this.Width)
+                {
+                    Time3.Stop();
+                }
+                else
+                {
+                    Fornite3.Location = new Point(Fornite3.Location.X + 20, Fornite3.Location.Y);
+                }
+            });
+            Time3.Start();
+            while (Time3.Enabled == true) await Task.Delay(1000);
+
+
+            PictureBox Fornite4 = new PictureBox
+            {
+                ImageLocation = "Images/Fornite4.gif",
+                Size = new Size(200, 350),
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                BackColor = Color.Transparent,
+                Location = new Point(this.Width + 200, this.Height / 2 - 350 / 2),
+                WaitOnLoad = true,
+            };
+            Fornite4.Paint += new PaintEventHandler((sender, e) =>
+            {
+                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                e.Graphics.DrawString("GUILLAUME", FontName, Brushes.Black, 40, 40);
+            });
+            Controls.Add(Fornite4);
+            Timer Time4 = new Timer();
+            Time4.Interval = 20;
+            Time4.Tick += new EventHandler((sender, e) =>
+            {
+                if (Fornite4.Location.X < -Fornite4.Width)
+                {
+                    Time4.Stop();
+                }
+                else
+                {
+                    Fornite4.Location = new Point(Fornite4.Location.X - 20, Fornite4.Location.Y);
+                }
+            });
+            Time4.Start();
+            while (Time4.Enabled == true) await Task.Delay(1000);
+            #endregion
+            //On remet leur pos ensemble à 4 pour la fin
+            Fornite1.Location = new Point(this.Width/2 - (Fornite1.Width * 2),Fornite1.Location.Y);
+            Fornite2.Location = new Point(this.Width / 2 - Fornite2.Width , Fornite2.Location.Y);
+            Fornite3.Location = new Point(this.Width / 2 , Fornite3.Location.Y);
+            Fornite4.Location = new Point(this.Width / 2 + Fornite4.Width, Fornite4.Location.Y);
+            await Task.Delay(8000);
+            Application.Exit();
+        }
         #endregion
+
     }
 }
