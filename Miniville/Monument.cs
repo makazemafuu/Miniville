@@ -17,7 +17,9 @@ namespace Miniville
             set { isActive = value; }
         }
 
+
         public Monument(string Name, int Type) 
+
         {
             this.name = Name;
             this.cost = Cost;

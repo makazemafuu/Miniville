@@ -41,6 +41,7 @@ namespace Miniville
         protected string name;
         public string Name { get { return this.name; } }
 
+
         private int type;
         public int Type { get; }
 
@@ -49,6 +50,7 @@ namespace Miniville
 
         // string not used in this class
         private string effectDescription;
+
         public string EffectDescription { get; set; }
 
         public Card((int, int) ActivationValue, string Name, int Type, int Cost)
@@ -69,11 +71,14 @@ namespace Miniville
         /*
         public void ActiveEffect()
         {
+
             if (activationValue.Item1 == 1)
             {
                 // obtenez 1 pièce par la banque
             }
+
             else if (activationValue.Item1 == 2 || activationValue.Item2 == 2)
+
             {
                 if (name == "Ferme" && type == 1 && cost == 1)
                 {
@@ -82,7 +87,9 @@ namespace Miniville
                 }
                 else if (name == "Boulangerie" && type == 2 && cost == 1)
                 {
+
                     
+
                     // obtenez 1 pièce par la banque
                 }
             }
@@ -90,11 +97,12 @@ namespace Miniville
             {
                 if (name == "Boulangerie" && type == 2 && cost == 1)
                 {
+
                     // obtenez 1 pièce par la banque
                 }
                 else if (name == "Café" && type == 3 && cost == 2)
                 {
-                    
+
 
                     // obtenez 2 pièces par un autre joueur
                 }
@@ -106,7 +114,7 @@ namespace Miniville
             }
             else if (activationValue.Item1 == 5 || activationValue.Item2 == 5)
             {
-                
+
 
                 // obtenez 1 pièces par la banque
             }
@@ -114,6 +122,7 @@ namespace Miniville
             {
                 if (name == "Stade" && type == 4 && cost == 6)
                 {
+
 
                     // obtenez 5 pièces par un autre joueur
                 }
@@ -123,7 +132,7 @@ namespace Miniville
                 }
                 else if (name == "Chaîne de Télévision" && type == 4 && cost == 7)
                 {
-                   
+
 
                     // obtenez 5 pièces par la banque
                 }
@@ -134,7 +143,6 @@ namespace Miniville
                 {
                     if (item.Key == "Ferme")
                     {
-             
 
                         // obtenez 3 pièces par la banque pour chaque établissements "Ferme" que vous possédez
                     }
@@ -156,6 +164,7 @@ namespace Miniville
                 if (name == "Mine" && type == 1 && cost == 6)
                 {
 
+
                     // obtenez 5 pièces par la banque
                 }
                 else if (name == "Restaurant" && type == 3 && cost == 3)
@@ -169,6 +178,7 @@ namespace Miniville
             {
                 if (name == "Restaurant" && type == 3 && cost == 3)
                 {
+
 
                     // obtenez 2 pièces par un autre joueur
                 }
