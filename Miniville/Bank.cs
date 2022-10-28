@@ -10,18 +10,29 @@ namespace Miniville
 	internal class Bank 
 	{
 		protected int coinsAvailable = 250;
-		protected Dictionary<String, Pile> cardsAvailable = Pile.InitPile();
+		protected Game game;
+        protected Dictionary<string, Pile> cardsAvailable;
+		private Pile pile = new Pile();
 
-		public void DisplayCards()
+        public Bank(Game Game, int money)
+		{
+			this.coinsAvailable = money;
+			this.game = Game;
+			cardsAvailable = pile.InitPile(game);
+		}
+
+        public void DisplayCards()
 		{
 			foreach (var card in cardsAvailable)
 				Console.WriteLine(card.Value);
 		}
+
 		public Dictionary<String, Pile> CardsAvailable
 		{
 			get { return this.cardsAvailable; }
 			set { this.cardsAvailable = value; }
 		}
+
 		public int CoinsAvailable
 		{
 			get { return this.coinsAvailable; }
@@ -35,7 +46,7 @@ namespace Miniville
 				Console.WriteLine("There is {0} cards of the type {1} remaining of the type in the Bank", card.Value.PileCards.Count, card.Key);
 		}
 
-		public void Trade()
+		public void Trade(Bank from, Bank to,)
 		{
 
 		}

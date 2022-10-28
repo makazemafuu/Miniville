@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Miniville
 {
-    public class Monument : Card
+    internal class Monument : Card
     {
         private bool isActive = false;
         public bool IsActive
@@ -17,9 +17,11 @@ namespace Miniville
             set { isActive = value; }
         }
 
-        public Monument((int, int) ActivationValue, string Name, int Type, int Cost) : base(ActivationValue, Name, Type, Cost)
+        public Monument(string Name, int Type) 
         {
-
+            this.name = Name;
+            this.cost = Cost;
+            this.IsActive = false;
         }
         public void PassiveEffect()
         {
