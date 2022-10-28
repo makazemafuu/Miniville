@@ -1,6 +1,6 @@
-+-------------+
-| Présentation|
-+-------------+
++--------------+
+| Présentation |
++--------------+
 
 • Programmers •
 
@@ -20,7 +20,7 @@
 • Other •
 
 - Océane Masse & Guillaume Patrice (UML)
-- Diane Aveillan (readme)
+- Diane Aveillan (ReadMe)
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   
@@ -35,8 +35,8 @@ En espérant que notre Miniville vous plaise !
 
 Guillaume s'est occupé de la classe Bank et Piles, puis à ensuite touché à toutes les classes afin de s'assurer que chaque classe fonctionnaient bien les unes avec les autres.
 Océane s'est occupée de la classe Player et Dice puis à travaillé en parallèle avec Guillaume pour les crash test.
-Bao à entièrement travaillé sur l'interface graphique après avoir fait le code de base.
-Diane s'est occupée de la classe Cards et Monument puis du son et ensuite du readme (yup je parle de moi à la 3ème personne du coup #rip).
+Bao à entièrement travaillé sur l'interface graphique après avoir fait le code de base (une première ébauche).
+Diane s'est occupée de la classe Cards et Monument puis du son et ensuite du ReadMe (yup je parle de moi à la 3ème personne du coup #rip).
 
 Les règles du jeu peuvent être trouvé en format PDF ici : https://github.com/makazemafuu/Miniville - vous aurez aussi accès aux sons, images, et notre travail en entier.
 Les règles du Miniville n'ont pas été changé pour ce projet !
@@ -45,7 +45,7 @@ Logiciels utilités :
 - Visual Studio
 - Windows Form
 - Github & Github Desktop, Git Kraken, et Git Bash.
-- Krita (?)
+- Photopea
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -58,4 +58,4 @@ même avec Github, plus de sérieux et de temps sur l'UML nous paraît donc vrai
 Ensuite il y a bien sûr eu l'interprétation de chacun de l'UML, même après l'avoir travaillé, il y a eu quelques malentendus au sein du groupe dans l'implémentation.
 
 On vous en dira plus à l'oral ! N'hésitez pas si vous avez des questions. ^-^
-Merci à tous ceux qui nous (enfin moi) auront lu.
+Merci à tous ceux qui nous auront lu et GLHF !
