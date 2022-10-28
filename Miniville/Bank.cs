@@ -48,7 +48,13 @@ namespace Miniville
 
 		public void Trade(Bank from, Bank to, string type, string value)
 		{
-
+			if (type == "Card")
+				to.CardsAvailable[value].PileCards.Push(from.CardsAvailable[value].PileCards.Pop());
+			else if (type == "Coin")
+			{
+				to.CoinsAvailable += int.Parse(value);
+				from.CoinsAvailable -= int.Parse(value);
+			}
 		}
     }
 }

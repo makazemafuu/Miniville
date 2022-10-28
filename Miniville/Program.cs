@@ -12,7 +12,7 @@ namespace Miniville
         public static void Main()
         {
             Game game = new Game();
-            game.Bank.DisplayRessources();
+            game.Run();
           /*  Bank bank = new Bank();
             bank.DisplayRessources();
             bank.CardsAvailable["Verger"].PileCards.Pop();

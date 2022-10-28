@@ -36,17 +36,7 @@ namespace Miniville
 
         public void Shop(int choixPile)
         {
-            // il reçoit la carte à acheter en argument
-
-            // on retire au joueur le coût de la carte
-            CoinsAvailable -= cartToBuy.Cost;
-
-            // on rend l'argent à la banque
-            bank.CoinsAvailable += cartToBuy.Cost;
-
-            // on ajoute la carte à la main
-            CardsAvailable[cartToBuy.Name].PileCards.Push(cartToBuy);
-
+            // on donne en argument la pile de la carte
 
         }
 
