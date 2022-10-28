@@ -34,23 +34,23 @@ namespace Miniville
             this.theBank = TheBank;
         }
 
-        private void Shop(Card cartToBuy, Bank bank)
+        public void Shop(int choixPile)
         {
             // il reçoit la carte à acheter en argument
 
             // on retire au joueur le coût de la carte
-            coinsAvailable -= cartToBuy.Cost;
+            CoinsAvailable -= cartToBuy.Cost;
 
             // on rend l'argent à la banque
             bank.CoinsAvailable += cartToBuy.Cost;
 
             // on ajoute la carte à la main
-            cardsAvailable[cartToBuy.Name].Push(cartToBuy);
+            CardsAvailable[cartToBuy.Name].PileCards.Push(cartToBuy);
 
 
         }
 
-        private List<Card> DisplayChoice(Dice dice)
+        public List<Card> DisplayChoice()
         {
             // consulte la valeur actuelle du dé
             // regarde les cartes activables
@@ -59,7 +59,7 @@ namespace Miniville
 
             foreach (var card in CardsAvailable)
             {
-                if (card.Value.PileCards.Peek().ActivationValue == dice.face)
+                if (card.Value.PileCards.Peek().ActivationValue.Item1 == game.Dice.Face || card.Value.PileCards.Peek().ActivationValue.Item2 == game.Dice.Face)
                 {
                     cartesActivables.Add(card.Value.PileCards.Peek());
                 }
@@ -69,7 +69,7 @@ namespace Miniville
         }
 
 
-        private void PlayerChoice(Card carteChoisie)
+        public void PlayerChoice(Card carteChoisie)
         {
 
         }

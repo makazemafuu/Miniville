@@ -18,6 +18,8 @@ namespace Miniville
 		private Random random = new Random();
 
 		public Bank Bank { get { return bank; } }
+
+		public Dice Dice { get { return dice; } }
 		public Game()
 		{
 			listPlayer = new List<Player>();
