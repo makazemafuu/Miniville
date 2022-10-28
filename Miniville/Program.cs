@@ -1,20 +1,21 @@
 ﻿using System;
-using System.Threading;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using System.Media;
-using System.Runtime.InteropServices;
-using System.ComponentModel;
-using System.Drawing;
+
 
 namespace Miniville
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
-
+            Game game = new Game();
+            Bank bank = new Bank();
+            bank.DisplayRessources();
+            bank.CardsAvailable["Verger"].PileCards.Pop();
+            bank.DisplayRessources();
         }
-
     }
 }

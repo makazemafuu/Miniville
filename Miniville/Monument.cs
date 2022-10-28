@@ -16,8 +16,7 @@ namespace Miniville
             get { return isActive; }
             set { isActive = value; }
         }
-
-        public Monument(int ActivationValue, string Name, int Type, int Cost) : base(ActivationValue, Name, Type, Cost)
+        public Monument((int, int) ActivationValue, string Name, int Type, int Cost) : base(ActivationValue, Name, Type, Cost)
         {
 
         }
