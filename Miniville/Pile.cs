@@ -8,7 +8,9 @@ namespace Miniville
 {
 	internal class Pile
 	{
-		private static List<Card> cards = new List<Card>()
+		private Game game;
+
+		public List<Card> cards = new List<Card>()
 		{
 			new Card((1,1), "Champs de blé", 0, 1),
 			new Card((2,2), "Ferme", 0, 1),
@@ -29,25 +31,28 @@ namespace Miniville
 
 		private Stack<Card> pileCards = new Stack<Card>();
 
-		public Pile(Card toFillIn)
+		public Pile(Card toFillIn, Game game)
 		{
+			toFillIn.Party = game;
 			for (int i = 0; i < 6; i++)
 				this.pileCards.Push(toFillIn);
 		}
+
+		public Pile() {}
 
 		public Stack<Card> PileCards
 		{
 			get { return pileCards; }
 		}
-		public static List<Card> Cards { get { return cards; } }
+		public List<Card> Cards { get { return cards; } }
 
-		public static Dictionary<String, Pile> InitPile()
+		public Dictionary<string, Pile> InitPile(Game game)
 		{
 			Dictionary<String, Pile> result = new Dictionary<String, Pile>();
 			Pile pile;
 			for (int i = 0; i < 15; i++)
 			{
-				pile = new Pile(Cards[i]);
+				pile = new Pile(Cards[i], game);
 				result.Add(Cards[i].Name, pile);
 			}
 			return result;

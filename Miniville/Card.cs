@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 
 namespace Miniville
 {
-    public class Card
+    internal class Card
     {
         public enum Colorcard
         {
@@ -19,17 +19,33 @@ namespace Miniville
             Purple = 3
         }
 
+        private Game game;
+        private Player player;
+
+        public Player Player { get { return this.player; } set { this.player = value; } }
+
+        public Game Party
+        {
+            get { return game; }
+            set {
+                if (this.game == null)
+                    game = value;
+                else
+                    Console.WriteLine("Vous ne pouvez pas redéfinir game, il a déjà été défini.");
+            }
+        }
+
         private (int, int) activationValue; // = Dice.face
         public (int, int) ActivationValue { get; }
 
+        protected string name;
+        public string Name { get { return this.name; } }
 
-        private string name;
-        public string Name { get; }
 
         private int type;
         public int Type { get; }
 
-        private int cost;
+        protected int cost;
         public int Cost { get; }
 
         // string not used in this class
@@ -45,84 +61,68 @@ namespace Miniville
             this.cost = Cost;
         }
 
+        public Card(string Name, int Cost)
+        {
+            this.name = Name;
+            this.cost = Cost;
+        }
+
+        public Card() { }
+        /*
         public void ActiveEffect()
         {
 
             if (activationValue.Item1 == 1)
             {
-                int coinsExchange = Math.Min(1, bank.coinsAvailable);
-                bank.coinsAvailable -= coinsExchange;
-                Player.coinsAvailable += coinsExchange;
-
                 // obtenez 1 pièce par la banque
             }
 
-            else if (activationValue.Item1 == 2)
+            else if (activationValue.Item1 == 2 || activationValue.Item2 == 2)
+
             {
                 if (name == "Ferme" && type == 1 && cost == 1)
                 {
-                    int coinsExchange = Math.Min(1, bank.coinsAvailable);
-                    bank.coinsAvailable -= coinsExchange;
-                    Player.coinsAvailable += coinsExchange;
-
+                    
                     // obtenez 1 pièce par la banque
                 }
                 else if (name == "Boulangerie" && type == 2 && cost == 1)
                 {
 
-                    int coinsExchange = Math.Min(1, bank.coinsAvailable);
-                    bank.coinsAvailable -= coinsExchange;
-                    Player.coinsAvailable += coinsExchange;
+                    
 
                     // obtenez 1 pièce par la banque
                 }
             }
-            else if (activationValue == 3)
+            else if (activationValue.Item1 == 3 || activationValue.Item2 == 3)
             {
                 if (name == "Boulangerie" && type == 2 && cost == 1)
                 {
-
-                    int coinsExchange = Math.Min(1, bank.coinsAvailable);
-                    bank.coinsAvailable -= coinsExchange;
-                    Player.coinsAvailable += coinsExchange;
 
                     // obtenez 1 pièce par la banque
                 }
                 else if (name == "Café" && type == 3 && cost == 2)
                 {
 
-                    int coinsExchange = Math.Min(2, bank.coinsAvailable);
-                    Player.coinsAvailable -= coinsExchange;
-                    Player.coinsAvailable += coinsExchange;
 
                     // obtenez 2 pièces par un autre joueur
                 }
             }
-            else if (activationValue == 4)
+            else if (activationValue.Item1 == 4 || activationValue.Item2 == 4)
             {
-                int coinsExchange = Math.Min(3, bank.coinsAvailable);
-                bank.coinsAvailable -= coinsExchange;
-                Player.coinsAvailable += coinsExchange;
 
                 // obtenez 3 pièces par la banque
             }
-            else if (activationValue == 5)
+            else if (activationValue.Item1 == 5 || activationValue.Item2 == 5)
             {
 
-                int coinsExchange = Math.Min(1, bank.coinsAvailable);
-                bank.coinsAvailable -= coinsExchange;
-                Player.coinsAvailable += coinsExchange;
 
                 // obtenez 1 pièces par la banque
             }
-            else if (activationValue == 6)
+            else if (activationValue.Item1 == 6 || activationValue.Item2 == 6)
             {
                 if (name == "Stade" && type == 4 && cost == 6)
                 {
 
-                    int coinsExchange = Math.Min(5, bank.coinsAvailable);
-                    Player.coinsAvailable -= coinsExchange;
-                    Player.coinsAvailable += coinsExchange;
 
                     // obtenez 5 pièces par un autre joueur
                 }
@@ -133,38 +133,27 @@ namespace Miniville
                 else if (name == "Chaîne de Télévision" && type == 4 && cost == 7)
                 {
 
-                    int coinsExchange = Math.Min(5, bank.coinsAvailable);
-                    bank.coinsAvailable -= coinsExchange;
-                    Player.coinsAvailable += coinsExchange;
 
                     // obtenez 5 pièces par la banque
                 }
             }
-            else if (activationValue == 7)
+            else if (activationValue.Item1 == 7 || activationValue.Item2 == 7)
             {
-                foreach (var item in Player.cardsAvailable)
+                foreach (var item in Player.CardsAvailable)
                 {
-                    if (item.Value == "Ferme")
+                    if (item.Key == "Ferme")
                     {
-                        int coinsExchange = Math.Min(3 * item.Key.Count, bank.coinsAvailable);
-                        bank.coinsAvailable -= coinsExchange;
-
-                        Player.coinsAvailable += coinsExchange;
 
                         // obtenez 3 pièces par la banque pour chaque établissements "Ferme" que vous possédez
                     }
                 }
             }
-            else if (activationValue == 8)
+            else if (activationValue.Item1 == 8 || activationValue.Item2 == 8)
             {
                 foreach (var item in Player.cardsAvailable)
                 {
                     if (item.Value == "Forêt" || item.Value == "Mine")
                     {
-
-                        int coinsExchange = Math.Min(3 * item.Key.Count, bank.coinsAvailable);
-                        bank.coinsAvailable -= coinsExchange;
-                        Player.coinsAvailable += coinsExchange;
 
                         // obtenez 3 pièces par la banque pour chaque établissements "Forêt" et "Mine" que vous possédez
                     }
@@ -175,17 +164,11 @@ namespace Miniville
                 if (name == "Mine" && type == 1 && cost == 6)
                 {
 
-                    int coinsExchange = Math.Min(5, bank.coinsAvailable);
-                    bank.coinsAvailable -= coinsExchange;
-                    Player.coinsAvailable += coinsExchange;
 
                     // obtenez 5 pièces par la banque
                 }
                 else if (name == "Restaurant" && type == 3 && cost == 3)
                 {
-                    int coinsExchange = Math.Min(2, bank.coinsAvailable);
-                    Player.coinsAvailable -= coinsExchange;
-                    Player.coinsAvailable += coinsExchange;
 
                     // obtenez 2 pièces par un autre joueur
                 }
@@ -196,17 +179,11 @@ namespace Miniville
                 if (name == "Restaurant" && type == 3 && cost == 3)
                 {
 
-                    int coinsExchange = Math.Min(2, bank.coinsAvailable);
-                    Player.coinsAvailable -= coinsExchange;
-                    Player.coinsAvailable += coinsExchange;
 
                     // obtenez 2 pièces par un autre joueur
                 }
                 else if (name == "Verger" && type == 1 && cost == 3)
                 {
-                    int coinsExchange = Math.Min(3, bank.coinsAvailable);
-                    bank.coinsAvailable -= coinsExchange;
-                    Player.coinsAvailable += coinsExchange;
 
                     // obtenez 3 pièces par la banque
 
@@ -218,9 +195,6 @@ namespace Miniville
                 {
                     if (item.Value == "Verger" || item.Value == "Champs de Blé")
                     {
-                        int coinsExchange = Math.Min(2 * item.Key.Count, bank.coinsAvailable);
-                        bank.coinsAvailable -= coinsExchange;
-                        Player.coinsAvailable += coinsExchange;
 
                         // obtenez 2 pièces par la banque pour chaque établissements "Verger" et "Champs de Blé" que vous possédez
                     }
@@ -233,15 +207,12 @@ namespace Miniville
                 {
                     if (item.Value == "Verger" || item.Value == "Champs de Blé")
                     {
-                        int coinsExchange = Math.Min(2 * item.Key.Count, bank.coinsAvailable);
-                        bank.coinsAvailable -= coinsExchange;
-                        Player.coinsAvailable += coinsExchange;
 
                         // obtenez 2 pièces par la banque pour chaque établissements "Verger" et "Champs de Blé" que vous possédez
                     }
                 }
 
             }
-        }
+        }*/
     }
 }
