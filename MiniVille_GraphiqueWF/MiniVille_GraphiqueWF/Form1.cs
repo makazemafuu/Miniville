@@ -18,12 +18,18 @@ namespace MiniVille_GraphiqueWF
         SoundPlayer activeMusicBackGround;
 
         public int BoardSizeWidth, BoardSizeHeight;
-        Label Tourjoueur, MoneyJoueur1, MoneyJoueur2;
+        //Label Tourjoueur, MoneyJoueur1, MoneyJoueur2;
+        NAudio.Wave.WaveOut waveOutCards;
         Random random = new Random();
         public Form1()
         {
            InitializeComponent();
-           StartMenu();
+
+            //Init des SFX ici pour plus de fluidité
+            var readerCards = new NAudio.Wave.Mp3FileReader("Sound Design & SFX/Cards Flip.mp3");
+            waveOutCards = new NAudio.Wave.WaveOut();
+            waveOutCards.Init(readerCards);
+            StartMenu();
            //StartGame(); 
             
         }
@@ -45,25 +51,27 @@ namespace MiniVille_GraphiqueWF
             PictureBox SunGif = new PictureBox
             {
                 Anchor = AnchorStyles.None,
-                ImageLocation = "Images/Sun.gif",
+                //ImageLocation = "Images/Sun.gif",  //en commentaire car nouveau test avec le LoadAsync pour éviter un chargement
                 Name = "Sun",
                 SizeMode = PictureBoxSizeMode.CenterImage,
                 Size = new Size(this.Width, this.Height / 2),
                 BackColor = Color.Transparent,
                 Location = new Point(0, 0),
-                WaitOnLoad = true,
+                WaitOnLoad = false, //A mettre à true si enlever le LoadAsync
 
             };
+            SunGif.LoadAsync("Images/Sun.gif");
             PictureBox Title = new PictureBox
             {
                 Anchor = AnchorStyles.None,
-                ImageLocation = "Images/MV_Title.png",
+                //ImageLocation = "Images/MV_Title.png",
                 Name = "Title",
                 SizeMode = PictureBoxSizeMode.CenterImage,
                 Size = new Size(this.Width, this.Height / 2),
                 BackColor = Color.Transparent,
-                WaitOnLoad = true,
+                WaitOnLoad = false, //A mettre à true si enlever le LoadAsync
             };
+            Title.LoadAsync("Images/MV_Title.png");
             SunGif.Controls.Add(Title);
             StartMenu.Controls.Add(SunGif);
             PictureBox CityGif = new PictureBox
@@ -361,16 +369,22 @@ namespace MiniVille_GraphiqueWF
             }
             //Affichage des 2 premières cartes Boulangerie et Champs de blé + les 4 monuments 
             Spawn_Cards(BoardSizeHeight - 110,5,1, true,1); //Champs
+            await Task.Delay(50);
             Spawn_Cards(BoardSizeHeight - 110, 5, 1, true, -1); // joueur 2 dernier arg en -1
-            await Task.Delay(100);
+            await Task.Delay(50);
+            //await Task.Delay(100);
             Spawn_Cards(BoardSizeHeight - 110, 100, 3, true, 1); //Boulang
-            Spawn_Cards(BoardSizeHeight - 110, 100, 3, true, -1); 
+            await Task.Delay(50);
+            Spawn_Cards(BoardSizeHeight - 110, 100, 3, true, -1);
+            await Task.Delay(50);
             //Les Monuments
             for (int i = 0; i < 4; i++)
             {
-                await Task.Delay(100);
+                ///await Task.Delay(100);
                 Spawn_Cards(BoardSizeHeight - 220, 5 + i * 30, 16+i, true, 1);
-                Spawn_Cards(BoardSizeHeight - 220, 5 + i * 30, 16 + i, true, -1); 
+                await Task.Delay(50);
+                Spawn_Cards(BoardSizeHeight - 220, 5 + i * 30, 16 + i, true, -1);
+                await Task.Delay(50);
             }
         }
         private void ZoomCardStart()
@@ -532,30 +546,30 @@ namespace MiniVille_GraphiqueWF
             FinDuTour.MouseEnter += new EventHandler(Menu_Game_Button_OnEnter);
             FinDuTour.MouseLeave += new EventHandler(Menu_Game_Button_OnLeave);
             FinDuTour.EnabledChanged += new EventHandler(Menu_Game_Button_EnabledChanged);
-            Tourjoueur = new Label
-            {
-                Size = new Size(400, 20),
-                Location = new Point(0, 300),
-                Anchor = AnchorStyles.Right,
-                //Text = "C'est le tour du joueur " + game.tourJoueur,
-            };
-            MoneyJoueur1 = new Label
-            {
-                Size = new Size(400, 20),
-                Location = new Point(0, 320),
-                Anchor = AnchorStyles.Right,
-                //Text = "Pièces joueur 1 : " + game.player1.Pieces,
-            };
-            MoneyJoueur2 = new Label
-            {
-                Size = new Size(400, 20),
-                Location = new Point(0, 340),
-                Anchor = AnchorStyles.Right,
-                //Text = "Pièces joueur 2 : " + game.player2.Pieces,
-            };
-            MenuBackGround.Controls.Add(MoneyJoueur1);
-            MenuBackGround.Controls.Add(MoneyJoueur2);
-            MenuBackGround.Controls.Add(Tourjoueur);
+            //Tourjoueur = new Label
+            //{
+            //    Size = new Size(400, 20),
+            //    Location = new Point(0, 300),
+            //    Anchor = AnchorStyles.Right,
+            //    //Text = "C'est le tour du joueur " + game.tourJoueur,
+            //};
+            //MoneyJoueur1 = new Label
+            //{
+            //    Size = new Size(400, 20),
+            //    Location = new Point(0, 320),
+            //    Anchor = AnchorStyles.Right,
+            //    //Text = "Pièces joueur 1 : " + game.player1.Pieces,
+            //};
+            //MoneyJoueur2 = new Label
+            //{
+            //    Size = new Size(400, 20),
+            //    Location = new Point(0, 340),
+            //    Anchor = AnchorStyles.Right,
+            //    //Text = "Pièces joueur 2 : " + game.player2.Pieces,
+            //};
+            //MenuBackGround.Controls.Add(MoneyJoueur1);
+            //MenuBackGround.Controls.Add(MoneyJoueur2);
+            //MenuBackGround.Controls.Add(Tourjoueur);
             MenuBackGround.Controls.Add(CheckBoxDe);
             MenuBackGround.Controls.Add(LancerDe);
             MenuBackGround.Controls.Add(FinDuTour);
@@ -598,6 +612,8 @@ namespace MiniVille_GraphiqueWF
                 {
                     if (temp[i].Name != "MenuDroite") Controls.Remove(temp[i]);
                 }
+                BoardSizeHeight = this.ClientSize.Height;
+                BoardSizeWidth = this.ClientSize.Width - 250; // La taille du menu à gauche = 250
                 //game = new Game();
                 Board_Display();
                 ZoomCardStart();
@@ -780,19 +796,21 @@ namespace MiniVille_GraphiqueWF
                 BackColor = Color.Transparent,
                 Location = new Point(BoardSizeWidth / 2 - 40, BoardSizeHeight - 100), // width/2 et height * 1
                 Anchor = AnchorStyles.None,
-                WaitOnLoad = true
+                WaitOnLoad = false,
             };
             if (CarteNom != 0 )
             {
                 if(CarteNom < 16)
                 {
-                    picture.ImageLocation = "Images/Carte" + CarteNom + ".png";
+                    //picture.ImageLocation = "Images/Carte" + CarteNom + ".png";
+                    picture.LoadAsync("Images/Carte" + CarteNom + ".png");
                     picture.SizeMode = PictureBoxSizeMode.StretchImage;
                     picture.Name = "Carte" + CarteNom;          
                 }
                 else
                 {
-                    picture.ImageLocation = "Images/Monu" + (CarteNom % 15) + "Locked.png";
+                    //picture.ImageLocation = "Images/Monu" + (CarteNom % 15) + "Locked.png";
+                    picture.LoadAsync("Images/Monu" + (CarteNom % 15) + "Locked.png");
                     picture.SizeMode = PictureBoxSizeMode.StretchImage;
                     picture.Name = "Monu" + (CarteNom%15) +"Locked";
                     picture.Click += new EventHandler(MonumentBuy);
@@ -815,11 +833,9 @@ namespace MiniVille_GraphiqueWF
             await Task.Delay(50); 
             Timer Time = new Timer();
 
-            int directionY = height - picture.Location.X, directionX = width - picture.Location.Y;
-            var reader = new NAudio.Wave.Mp3FileReader("Sound Design & SFX/Cards Flip.mp3");
-            var waveOut = new NAudio.Wave.WaveOut();
-            waveOut.Init(reader);
-            waveOut.Play();
+            int directionY = height - picture.Location.Y, directionX = width - picture.Location.X;
+
+            waveOutCards.Play();
             Time.Interval = 3;
             float totalTime = 15, elapsedTime = 0;
             Time.Tick += new EventHandler((sender, e) =>
