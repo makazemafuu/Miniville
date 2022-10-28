@@ -29,16 +29,20 @@ namespace Miniville
 
 		public void Run()
 		{
-			int nbJoueurReel;
-			int nbJoueurMax;
-            Console.WriteLine("Combien de joueurs êtes-vous ?");
-			
-			while (!int.TryParse(Console.ReadLine(), out nbJoueurReel))
-				Console.WriteLine("Combien de joueurs êtes-vous ?");
-
-            Console.WriteLine("Combien de joueurs voulez-vous être au total ? Vous pouvez être jusqu'à 4 tous joueurs confondus.");
-			while (!int.TryParse(Console.ReadLine(), out nbJoueurMax))
-				Console.WriteLine("Combien de joueurs voulez-vous être au total ? Vous pouvez être jusqu'à 4 tous joueurs confondus.");
+			int nbJoueurReel = 0;
+			int nbJoueurMax = -1;
+			int nbIA = 4;
+            Console.WriteLine("Combien de joueurs êtes-vous ? Vous pouvez jouer de 1 à 4 joueurs. Dans le cas où vous joueriez seul, il y aura au minimum une IA.");
+			while(nbJoueurReel < 1 || nbJoueurReel > 4)
+				while (!int.TryParse(Console.ReadLine(), out nbJoueurReel))
+					Console.WriteLine("Combien de joueurs êtes-vous ?");
+			if (nbJoueurReel < 4)
+			{
+				Console.WriteLine("Combien de joueurs voulez-vous ajouter ? Vous pouvez être ajouter jusqu'à {0} joueurs pour être au maximum 4.", nbIA - nbJoueurReel);
+				while (nbIA - nbJoueurReel < nbJoueurMax || nbJoueurMax == -1 || nbJoueurReel + nbJoueurMax < 2)
+					while (!int.TryParse(Console.ReadLine(), out nbJoueurMax))
+						Console.WriteLine("Combien de joueurs voulez-vous être au total ? Vous pouvez être ajouter jusqu'à {0} joueurs pour être au maximum 4.", nbIA - nbJoueurReel);
+            }
 
             for (int i = 0; i < nbJoueurReel; i++)
             {
@@ -46,6 +50,14 @@ namespace Miniville
                 string namePlayer = Console.ReadLine();
                 listPlayer.Add(new Player(namePlayer, false, this, 3, Bank));
             }
+			foreach (Player player in listPlayer)
+			{
+				player.DisplayRessources(player.NamePlayer);
+				player.Trade(player, Bank, "Coin", "3");
+				Bank.DisplayRessources("Bank");
+				player.DisplayRessources(player.NamePlayer);
+			}
+			Console.ReadLine();
             for (int i = nbJoueurReel; i < nbJoueurMax; i++)
             {
                 listPlayer.Add(new Player("IA " + (nbJoueurReel - 1 - i), true, this, 3, Bank));

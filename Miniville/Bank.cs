@@ -39,11 +39,11 @@ namespace Miniville
 			set { this.coinsAvailable = value; }
 		}
 
-		public void DisplayRessources()
+		public void DisplayRessources(string from)
 		{
-			Console.WriteLine("There is {0} coins remaining in the Bank", CoinsAvailable);
+			Console.WriteLine("There is {0} coins remaining in {1}.", CoinsAvailable, from);
 			foreach (var card in cardsAvailable)
-				Console.WriteLine("There is {0} cards of the type {1} remaining of the type in the Bank", card.Value.PileCards.Count, card.Key);
+				Console.WriteLine("There is {0} cards of the type {1} remaining of the type in {2}", card.Value.PileCards.Count, card.Key, from);
 		}
 
 		public void Trade(Bank from, Bank to, string type, string value)
