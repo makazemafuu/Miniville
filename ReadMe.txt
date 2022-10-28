@@ -1,4 +1,6 @@
-Présentation
++-------------+
+| Présentation|
++-------------+
 
 Règles du jeu (pdf)
 Modifition des règles par nos soins :
