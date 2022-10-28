@@ -9,7 +9,7 @@ namespace Miniville
 {
 	internal class Bank 
 	{
-		protected int coinsAvailable = 250;
+		protected int coinsAvailable;
 		protected Game game;
         protected Dictionary<string, Pile> cardsAvailable;
 		private Pile pile = new Pile();
@@ -46,7 +46,7 @@ namespace Miniville
 				Console.WriteLine("There is {0} cards of the type {1} remaining of the type in the Bank", card.Value.PileCards.Count, card.Key);
 		}
 
-		public void Trade(Bank from, Bank to,)
+		public void Trade(Bank from, Bank to, string type, string value)
 		{
 
 		}
