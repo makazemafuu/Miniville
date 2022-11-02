@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace MiniVille_GraphiqueWF
 {
-    public enum CouleurCarte
+    public enum CouleurCarte //Enum des couleurs
     {
         Bleu,
         Rouge,
         Vert,
         Violet
     }
-    public enum NomCarte
+    public enum NomCarte //Enum des noms
     {
         ChampsDeBle = 1    ,
         Ferme       = 2    ,
@@ -30,7 +30,7 @@ namespace MiniVille_GraphiqueWF
     }
     public class Cards
     {
-        public readonly Dictionary<NomCarte,Object[]> ListeCartes = new Dictionary<NomCarte,Object[]>
+        public readonly Dictionary<NomCarte,Object[]> ListeCartes = new Dictionary<NomCarte,Object[]> //Caractéristiques de chaque carte
          {
             //Nom, Activation Value, Couleur, Coût, Gain, Effet, Type
             { NomCarte.ChampsDeBle, new Object[] { new int[] { 1 },      CouleurCarte.Bleu,   1, 1, "Recevez 1 pièce"                                                       , 1 } },

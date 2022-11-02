@@ -9,7 +9,7 @@ namespace MiniVille_GraphiqueWF
         public Stack<Cards> PileCartes;
         public Piles()
         {
-            PileCartes = new Stack<Cards>();
+            PileCartes = new Stack<Cards>(); 
         }
     }
 }

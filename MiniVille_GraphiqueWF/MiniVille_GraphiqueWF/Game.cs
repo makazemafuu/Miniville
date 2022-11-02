@@ -18,15 +18,15 @@ namespace MiniVille_GraphiqueWF
         public Random random = new Random();
 
 
-        public Game(int nbJoueur = 2)
+        public Game(int nbJoueur = 2) //Jeu de base nbJoueur = 2
         {
-            for(int i = 0; i < nbJoueur; i++)
+            for(int i = 0; i < nbJoueur; i++) //On initialise tous les joueurs dans la liste de joueurs
             {
                 playerList.Add(new Player());
             }
-            die = new Die();
-            NombreDe = 1;
-            foreach (NomCarte i in Enum.GetValues(typeof(NomCarte)))
+            die = new Die(); //Nouveau dé
+            NombreDe = 1; //Au départ le nombre de dé est = 1
+            foreach (NomCarte i in Enum.GetValues(typeof(NomCarte))) //Pour chaque carte, nous allons les mettre dans une pile de 6 exemplaires chacunes
             {
                 Piles pile = new Piles();
                 for(int j = 0; j < 6; j++)
