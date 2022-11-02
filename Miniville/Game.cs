@@ -11,7 +11,7 @@ namespace Miniville
 
 		private List<Player> listPlayer;
 		private bool isGameOver = false;
-		private bool TrueEnding = true;
+		private bool TrueEnding = false;
 		private int playerRound = 0;
 		private Bank bank;
 		private Dice dice;
@@ -50,7 +50,7 @@ namespace Miniville
             {
                 Console.WriteLine("Joueur " + (i + 1) + " veuillez écrire votre nom : ");
                 string namePlayer = Console.ReadLine();
-                listPlayer.Add(new Player(namePlayer, false, this, 3, Bank));
+                listPlayer.Add(new Player(namePlayer, false, this, 6, Bank));
             }
 		/*	foreach (Player player in listPlayer) //Display Ressources for tests. 
 			{
@@ -67,7 +67,7 @@ namespace Miniville
             {
                 Console.WriteLine("Tour du joueur {0}", playerRound + 1);
                 Round(playerRound);
-                playerRound = (playerRound + 1) % nbJoueurMax;
+                playerRound = (playerRound + 1) % nbJoueurReel;
             }
 
             Console.WriteLine("Le joueur {0} gagne la partie.", isEndgame(TrueEnding) + 1);
@@ -75,6 +75,7 @@ namespace Miniville
 		private void Round(int PlayerRound)
 		{
 			listPlayer[playerRound].IsPlaying = true;
+			List<Card> oskour = new List<Card>();
 			if (!listPlayer[PlayerRound].IsAI)
 			{
 				#region Lancé de dé
@@ -166,9 +167,10 @@ namespace Miniville
 				}
 
 				#endregion
-				if (isEndgame(TrueEnding) != -1) return;
+				if (isEndgame(TrueEnding) != -1) 
+					return;
 				#region Achat
-				Console.WriteLine("Voici les cartes que vous pouvez acheter, veuillez taper le numéro de la pile que vous souhaitez acheter");
+				Console.WriteLine("Voici les cartes que vous pouvez acheter, veuillez taper le numéro de la pile que vous souhaitez acheter :\n");
 				listPlayer[PlayerRound].DisplayChoice();
 				string PlayerChoice = Console.ReadLine();
 				int nbPileChoice;
@@ -179,10 +181,11 @@ namespace Miniville
 					PlayerChoice = Console.ReadLine();
 					Console.WriteLine();
 				}
-				listPlayer[PlayerRound].Shop(nbPileChoice);
+				listPlayer[PlayerRound].ShopIA(nbPileChoice, listPlayer[PlayerRound].DisplayChoice());
 				#endregion
 				//rejoue si parc d'attraction
-				if (hasParc(listPlayer[PlayerRound]) && ScoreDes1 == scoreDes2 && ScoreDes1 != 0) Round(PlayerRound);
+				if (hasParc(listPlayer[PlayerRound]) && ScoreDes1 == scoreDes2 && ScoreDes1 != 0)
+					Round(PlayerRound);
 			}
 			else
 			{
@@ -243,12 +246,11 @@ namespace Miniville
 				}
 
 				#endregion
-				if (isEndgame(TrueEnding) != -1) return;
+				if (isEndgame(TrueEnding) != -1)
+					return;
 				#region Achat
-				Console.WriteLine("Voici les cartes que vous pouvez acheter, veuillez taper le numéro de la pile que vous souhaitez acheter");
-				listPlayer[PlayerRound].DisplayChoice();
-				int nbPileChoice = random.Next(1, 16); // a modifié car pas convaincu par le displayChoice de la banque
-				listPlayer[PlayerRound].Shop(nbPileChoice);
+				int nbPileChoice = random.Next(1, listPlayer[PlayerRound].DisplayChoice().Count);
+				listPlayer[PlayerRound].ShopIA(nbPileChoice, listPlayer[PlayerRound].DisplayChoice());
 				#endregion
 				//rejoue si parc d'attraction
 				if (hasParc(listPlayer[PlayerRound]) && ScoreDes1 == scoreDes2 && ScoreDes1 != 0) Round(PlayerRound);
@@ -303,7 +305,6 @@ namespace Miniville
 					}
 				}
 			}
-
 			return -1;
 		}
 	}

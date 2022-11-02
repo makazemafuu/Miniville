@@ -17,10 +17,10 @@ namespace Miniville
         
         private List<Monument> monuments = new List<Monument>()
         {
-            new Monument("Gare", 4),
-            new Monument("Centre Commercial", 10),
-            new Monument("Tour Radio", 22),
-            new Monument("Parc d'Attractions", 16)
+            new Monument("Gare", 4, 3, "Vous pouvez lancez deux dés au lieu d'un."),
+            new Monument("Centre Commercial", 10, 3, "Vos établissement Boulangerie, Supérette, Café, Restaurant vous rapportent une pièce de plus."),
+            new Monument("Tour Radio", 22, 3, "Une fois par tour, vous pouvez choisir de relancer les dés."),
+            new Monument("Parc d'Attractions", 22, 3, "Si votre lancé de dés est un double, vous pouvez rejouer un tour après celui-ci.")
         };
 
         public List<Monument> Monuments { get { return monuments; } }
@@ -52,23 +52,49 @@ namespace Miniville
             // on rend l'argent à la banque
             Trade(this, theBank, "Coin", theBank.CardsAvailable.ElementAt(choixPile).Value.PileCards.Peek().Cost.ToString());    
         }
+        
+        public void ShopIA(int choixPile, List<Card> cards)
+        {
+            // il reçoit la carte à acheter en argument
+            // on ajoute la carte à la main
+            Trade(theBank, this, "Card", cards[choixPile].Name);
+            // on retire au joueur le coût de la carte
+            // on rend l'argent à la banque
+            Trade(this, theBank, "Coin", cards[choixPile].Cost.ToString());    
+        }
 
         public List<Card> DisplayChoice()
         {
-            // consulte la valeur actuelle du dé
+            List<Card> aled = new List<Card>();
             // regarde les cartes activables
-
-            List<Card> cartesActivables = new List<Card>();
-
-            foreach (var card in CardsAvailable)
+            int i = 0;
+            int t = 0;
+            while (i < game.Bank.CardsAvailable.Count)
             {
-                if (card.Value.PileCards.Peek().ActivationValue.Item1 == game.Dice.Face || card.Value.PileCards.Peek().ActivationValue.Item2 == game.Dice.Face)
-                {
-                    cartesActivables.Add(card.Value.PileCards.Peek());
-                }
+                if (game.Bank.CardsAvailable.ElementAt(i).Value.PileCards.Count > 0)
+                    if (game.Bank.CardsAvailable.ElementAt(i).Value.PileCards.Peek().Cost <= CoinsAvailable)
+                    { 
+                        Console.WriteLine("{0} : {4} \n Coût : {1} pièce(s), {3} restantes en banque, entrez {2} pour l'acheter.\n", game.Bank.CardsAvailable.ElementAt(i).Key,
+                            game.Bank.CardsAvailable.ElementAt(i).Value.PileCards.Peek().Cost, t, game.Bank.CardsAvailable.ElementAt(i).Value.PileCards.Count, 
+                            game.Bank.CardsAvailable.ElementAt(i).Value.PileCards.Peek().EffectDescription);
+                        aled.Add(game.Bank.CardsAvailable.ElementAt(i).Value.PileCards.Peek());
+                        t++;
+                    }
+                i++;
             }
-
-            return cartesActivables;
+            int j = 0;
+            while (j < Monuments.Count)
+            {
+                if (!Monuments[j].IsActive)
+                    if (Monuments[j].Cost <= CoinsAvailable)
+                    {
+                        Console.WriteLine("{0} : {3} \n Coût : {1} pièce(s), entrez {2} pour l'acheter.\n", Monuments[j].Name, Monuments[j].Cost, t, Monuments[j].EffectDescription);
+                        aled.Add(Monuments[j]);
+                        t++;
+                    }
+                j++;
+            }
+            return aled;
         }
     }
 }

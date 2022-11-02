@@ -12,21 +12,21 @@ namespace Miniville
 
 		public List<Card> cards = new List<Card>()
 		{
-			new Card((1,1), "Champs de Blé", 0, 1),
-			new Card((2,2), "Ferme", 0, 1),
-			new Card((2,3), "Boulangerie", 1, 1),
-			new Card((3,3), "Café", 2, 2),
-			new Card((4,4), "Supérette", 1, 2),
-			new Card((5,5), "Forêt", 0, 3),
-			new Card((6,6), "Stade", 3, 6),
-			new Card((6,6), "Centre d'Affaires", 3, 8),
-			new Card((6,6), "Chaîne de Télévision", 3, 7),
-			new Card((7,7), "Fromagerie", 1, 5),
-			new Card((8,8), "Fabrique de Meubles", 1, 3),
-			new Card((9,9), "Mine", 0, 6),
-			new Card((9,10), "Restaurant", 2, 3),
-			new Card((10,10), "Verger", 0, 3),
-			new Card((11,12), "Marché de Fruits et Légumes", 1, 2),
+			new Card((1,1), "Champs de Blé", 0, 1 , "Pendant le tour de n'importe quel joueur : Recevez une pièce de la banque."),
+			new Card((2,2), "Ferme", 0, 1, "Pendant le tour de n'importe quel joueur : Recevez une pièce de la banque."),
+            new Card((2,3), "Boulangerie", 1, 1, "Pendant votre tour uniquement : Recevez une pièce de la banque."),
+			new Card((3,3), "Café", 2, 2, "Recevez une pièce du joueur qui a lancé les dés."),
+			new Card((4,4), "Supérette", 1, 2, "Pendant votre tour uniquement : Recevez trois pièces de la banque."),
+			new Card((5,5), "Forêt", 0, 3, "Pendant le tour de n'importe quel joueur : Recevez une pièce de la banque."),
+            new Card((6,6), "Stade", 3, 6, "Pendant votre tour uniquement : Recevez deux pièces de la part de chaque autre joueur."),
+            new Card((6,6), "Centre d'Affaires", 3, 8, "Pendant votre tour uniquement : Vous pouvez échanger la carte de votre choix avec le joueur de votre choix."),
+            new Card((6,6), "Chaîne de Télévision", 3, 7, "Pendant votre tour uniquement : Recevez 5 pièces du joueur de votre choix."),
+			new Card((7,7), "Fromagerie", 1, 5, "Pendant votre tour uniquement : Recevez 3 pièces de la banque pour chaque ferme que vous possédez."),
+			new Card((8,8), "Fabrique de Meubles", 1, 3, "Pendant votre tour uniquement : Recevez 3 pièces de la banque pour chaque Forêt ou Mine que vous possédez. "),
+			new Card((9,9), "Mine", 0, 6, "Pendant le tour de n'importe quel joueur : Recevez 5 pièces de la banque."),
+            new Card((9,10), "Restaurant", 2, 3, "Recevez 2 pièces de la part du joueur qui a lancé les dés."),
+			new Card((10,10), "Verger", 0, 3, "Pendant le tour de n'importe quel joueur : Recevez 3 pièces de la banque."),
+			new Card((11,12), "Marché de Fruits et Légumes", 1, 2, "Pendant votre tour uniquement : Recevez 2 pièces de la banque pour chaque Champs de Blé ou Verger que vous possédez."),
 		};
 
 		private Stack<Card> pileCards = new Stack<Card>();

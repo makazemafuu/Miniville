@@ -44,22 +44,23 @@ namespace Miniville
 
 
 		private int type;
-		public int Type { get; }
+		public int Type { get { return type; } }
 
 		protected int cost;
-		public int Cost { get; }
+		public int Cost { get { return cost; } }
 
 		// string not used in this class
-		private string effectDescription;
+		protected string effectDescription;
 
-		public string EffectDescription { get; set; }
+		public string EffectDescription { get { return effectDescription; } }
 
-		public Card((int, int) ActivationValue, string Name, int Type, int Cost)
+		public Card((int, int) ActivationValue, string Name, int Type, int Cost, string Description)
 		{
 			this.activationValue = ActivationValue;
 			this.name = Name;
 			this.type = Type;
 			this.cost = Cost;
+			this.effectDescription = Description;
 		}
 
 		public Card(string Name, int Cost)
@@ -94,11 +95,47 @@ namespace Miniville
             }
 			else if (name == "Centre d'Affaires")
 			{
-				// Player.cardsAvailable += carte établissement d'un joueur au choix qui ne soit pas de type 4;
-			}
+				int i = 0;
+				while (i++ < game.ListPlayer.Count)
+				{
+					game.ListPlayer[i].DisplayCardsOtherPLayer(game.ListPlayer[i].NamePlayer);
+					Console.WriteLine("Enter {0} if you want to choose this player.", i);
+				}
+                while (i < 0 || game.ListPlayer[i] == null)
+                    while (!int.TryParse(Console.ReadLine(), out i)) 
+					{
+						Console.WriteLine("Sélectionnez un chiffre valable s'il vous plait.");
+					}
+				int j = -1;
+				while (j < 0 || game.ListPlayer[i].CardsAvailable.ElementAt(j).Value.PileCards.Count == 0 || game.ListPlayer[i].CardsAvailable.ElementAt(j).Value.PileCards.Peek().Type == 3)
+				{
+					while (!int.TryParse(Console.ReadLine(), out j))
+						game.ListPlayer[i].ChooseCardOtherPlayer(game.ListPlayer[i].NamePlayer);
+				}
+				int k = -1;
+                while (k < 0 || owner.CardsAvailable.ElementAt(k).Value.PileCards.Count == 0 || owner.CardsAvailable.ElementAt(j).Value.PileCards.Peek().Type == 3)
+                {
+                    while (!int.TryParse(Console.ReadLine(), out k))
+						owner.DisplayYourCards();
+                }
+				game.Bank.Trade(game.ListPlayer[i], Owner, "Card", game.ListPlayer[i].CardsAvailable.ElementAt(j).Key);
+				game.Bank.Trade(Owner, game.ListPlayer[i], "Card", owner.CardsAvailable.ElementAt(k).Key);
+                // Le joueur possèdant la carte centre d'affaire échange avec un autre joueur de son choix une carte de son choix sauf carte violette.
+            }
 			else if (name == "Chaîne de Télévision")
 			{
-					game.Bank.Trade(game.Bank, owner, "Coin", "5");
+				int i = 0;
+                while (i++ < game.ListPlayer.Count)
+                {
+                    game.ListPlayer[i].DisplayMoney(game.ListPlayer[i].NamePlayer);
+                    Console.WriteLine("Enter {0} if you want to choose this player.", i);
+                }
+                while (i < 0 || game.ListPlayer[i] == null)
+                    while (!int.TryParse(Console.ReadLine(), out i))
+                    {
+                        Console.WriteLine("Sélectionnez un chiffre valable s'il vous plait.");
+                    }
+				game.Bank.Trade(game.ListPlayer[i], owner, "Coin", "5");
                 // obtenez 5 pièces par un autre joueur
 
             }
@@ -116,22 +153,21 @@ namespace Miniville
                 foreach (var item in owner.CardsAvailable)
                     if (item.Key == "Forêt" || item.Key == "Mine")
                         coins += item.Value.PileCards.Count;
-                game.Bank.Trade(game.Bank, owner, "Coin", (coins * 3).ToString());
-                // obtenez 3 pièces par la banque pour chaque établissements "Forêt" et "Mine" que vous possédez
+                game.Bank.Trade(game.Bank, owner, "Coin", (coins * 3).ToString()); // obtenez 3 pièces par la banque pour chaque établissements "Forêt" et "Mine" que vous possédez
             }
 			else if (name == "Mine")
 			{
-
 				game.Bank.Trade(game.Bank, owner, "Coin", "5"); // obtenez 5 pièces par la banque
 			}
             else if (name == "Restaurant")
 			{
-
-					// obtenez 2 pièces par un autre joueur
-			}
+                foreach (Player player in game.ListPlayer)
+                    if (player.IsPlaying && player.NamePlayer != Owner.NamePlayer) // obtenez 1 pièce par le joueur qui a lancé les dés
+                        game.Bank.Trade(player, Owner, "Coin", "2");
+                // obtenez 2 pièces par un autre joueur
+            }
 			else if (name == "Verger")
 			{
-
                 game.Bank.Trade(game.Bank, owner, "Coin", "3"); // obtenez 3 pièces par la banque
             }
 			else if (name == "Marché de Fruits et Légumes")

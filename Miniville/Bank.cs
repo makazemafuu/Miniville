@@ -45,26 +45,48 @@ namespace Miniville
 			Console.WriteLine("There is {0} coins remaining in {1}.", CoinsAvailable, from);
 			foreach (var card in cardsAvailable)
 			{
-				Console.Write("There is {0} cards of the type {1} remaining of the type in {2}", card.Value.PileCards.Count, card.Key, from);
-				if (card.Value.PileCards.Count > 0 && from != "Bank")
-					Console.Write("the player owner is " + card.Value.PileCards.Peek().Owner.NamePlayer);
-				else
-					Console.WriteLine();
+				Console.WriteLine("There is {0} cards of the type {1} remaining in {2}", card.Value.PileCards.Count, card.Key, from);
             }
 		}
 
-        public void DisplayCards(string from)
+        public void DisplayCardsOtherPLayer(string from)
         {
-            Console.WriteLine("There is {0} coins remaining in {1}.", CoinsAvailable, from);
             foreach (var card in cardsAvailable)
             {
-                Console.Write("There is {0} cards of the type {1} remaining of the type in {2}", card.Value.PileCards.Count, card.Key, from);
-                if (card.Value.PileCards.Count > 0 && from != "Bank")
-                    Console.Write("the player owner is " + card.Value.PileCards.Peek().Owner.NamePlayer);
-                else
-                    Console.WriteLine();
+				if (card.Value.PileCards.Peek().Type != 3)
+					Console.WriteLine("{2} have {0} cards of the type {1}.", card.Value.PileCards.Count, card.Key, from);
             }
         }
+		public void ChooseCardOtherPlayer(string from)
+        {
+			int i = 0;
+            foreach (var card in cardsAvailable)
+            {
+				if (card.Value.PileCards.Peek().Type != 3)
+				{
+					Console.WriteLine("There is {0} cards of the type {1} remaining in {2}, enter \"{3}\" if you want to pick this one.", card.Value.PileCards.Count, card.Key, from, i);
+					i++;
+				}
+            }
+        }
+
+        public void DisplayYourCards()
+        {
+            int i = 0;
+            foreach (var card in cardsAvailable)
+            {
+                if (card.Value.PileCards.Peek().Type != 3)
+				{
+                    Console.WriteLine("You have {0} cards of the type {1} remaining, enter \"{3}\" if you want to give this one", card.Value.PileCards.Count, card.Key, i);
+					i++;
+				}
+			}
+        }
+
+		public void DisplayMoney(string from)
+		{
+			Console.WriteLine(from + "have {0} coins, do you want to rob him ?", CoinsAvailable);
+		}
 
         public void Trade(Bank from, Bank to, string type, string value)
 		{
