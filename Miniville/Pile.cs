@@ -12,21 +12,21 @@ namespace Miniville
 
 		public List<Card> cards = new List<Card>()
 		{
-			new Card((1,1), "Champs de blé", 0, 1),
+			new Card((1,1), "Champs de Blé", 0, 1),
 			new Card((2,2), "Ferme", 0, 1),
 			new Card((2,3), "Boulangerie", 1, 1),
 			new Card((3,3), "Café", 2, 2),
 			new Card((4,4), "Supérette", 1, 2),
 			new Card((5,5), "Forêt", 0, 3),
 			new Card((6,6), "Stade", 3, 6),
-			new Card((6,6), "Centre d'affaires", 3, 8),
-			new Card((6,6), "Chaîne de télévision", 3, 7),
+			new Card((6,6), "Centre d'Affaires", 3, 8),
+			new Card((6,6), "Chaîne de Télévision", 3, 7),
 			new Card((7,7), "Fromagerie", 1, 5),
-			new Card((8,8), "Fabrique de meubles", 1, 3),
+			new Card((8,8), "Fabrique de Meubles", 1, 3),
 			new Card((9,9), "Mine", 0, 6),
 			new Card((9,10), "Restaurant", 2, 3),
 			new Card((10,10), "Verger", 0, 3),
-			new Card((11,12), "Marché de fruits et légumes", 1, 2),
+			new Card((11,12), "Marché de Fruits et Légumes", 1, 2),
 		};
 
 		private Stack<Card> pileCards = new Stack<Card>();

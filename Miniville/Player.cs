@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NAudio.Codecs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -25,6 +26,12 @@ namespace Miniville
         public List<Monument> Monuments { get { return monuments; } }
         public bool IsAI { get { return isAI; } }
         public string NamePlayer { get { return namePlayer; } }
+
+        public bool IsPlaying
+        {
+            get { return isPlaying; }
+            set { isPlaying = value; }
+        }
         public Player(string namePlayer, bool isAI, Game game, int money, Bank TheBank) : base(game, money)
         {
             this.namePlayer = namePlayer;
@@ -32,12 +39,18 @@ namespace Miniville
             this.game = game;
             this.coinsAvailable = money;
             this.theBank = TheBank;
+            foreach (Pile pile in cardsAvailable.Values)
+                pile.PileCards.Clear();
         }
 
         public void Shop(int choixPile)
         {
-            // on donne en argument la pile de la carte
-
+            // il reçoit la carte à acheter en argument
+            // on ajoute la carte à la main
+            Trade(theBank, this, "Card", theBank.CardsAvailable.ElementAt(choixPile).Key);
+            // on retire au joueur le coût de la carte
+            // on rend l'argent à la banque
+            Trade(this, theBank, "Coin", theBank.CardsAvailable.ElementAt(choixPile).Value.PileCards.Peek().Cost.ToString());    
         }
 
         public List<Card> DisplayChoice()
@@ -56,12 +69,6 @@ namespace Miniville
             }
 
             return cartesActivables;
-        }
-
-
-        public void PlayerChoice(Card carteChoisie)
-        {
-
         }
     }
 }
