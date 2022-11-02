@@ -1034,8 +1034,7 @@ namespace MiniVille_GraphiqueWF
                 #region Tour de l'IA
 
                 game.NombreDeIA = 1; //On remet le nombre de dé à 1 à chaque nouveau tour de IA
-
-                if (game.playerList[game.tourJoueur - 1].hasGare) game.NombreDeIA = random.Next(1, 3); //Si l'IA possède la gare, il choisit aléatoirement entre 1 ou 2 dés
+                if (game.playerList[game.tourJoueur - 1].hasGare && game.playerList[game.tourJoueur - 1].CarteAcquisesUniques.Count > 10) game.NombreDeIA = random.Next(1, 3); //Si l'IA possède la gare, il choisit aléatoirement entre 1 ou 2 dés
                 if (game.NombreDeIA == 1) //Lancé de 1 dé
                 {
                     game.scoreDes = game.die.Lancer();
