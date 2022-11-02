@@ -41,6 +41,8 @@ namespace MiniVille_GraphiqueWF
         public int TargetTelevision;
         public int TargetCentreAffaire, CarteRecue, CarteEnvoyee;
         // Affichage
+        string historique = "Tour du joueur 1";
+        Label HistoriqueLabel1, HistoriqueLabel2, HistoriqueLabel3, HistoriqueLabel4;
         List<PictureBox> CarteBoardList;
         List<PictureBox> CarteJoueur1, CarteJoueur2, CarteJoueur3, CarteJoueur4;
         List<PictureBox> MonuJoueur1, MonuJoueur2, MonuJoueur3, MonuJoueur4;
@@ -509,7 +511,7 @@ namespace MiniVille_GraphiqueWF
                 BackColor = Color.CornflowerBlue, //Couleur diff 
                 Location = new Point(BoardSizeWidth, 0), //On le place à droite du board
                 Name = "MenuDroite",
-                Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right) 
+                Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right)
             };
 
             //Bouton nouvelle partie 
@@ -620,6 +622,46 @@ namespace MiniVille_GraphiqueWF
             MenuBackGround.Controls.Add(ChangeMode);
             MenuBackGround.Controls.Add(LeaveButton);
 
+            //Label historique
+            HistoriqueLabel1 = new Label
+            {
+                Size = new Size(MenuBackGround.Width - 5, 50),
+                Text = "Tour du joueur 1",
+                Location = new Point(5, LeaveButton.Location.Y + LeaveButton.Height + 5),
+                Font = new Font("COMIC SANS MS", 9f),
+                ForeColor = Color.Yellow,
+                Anchor = AnchorStyles.Right,
+            };
+            HistoriqueLabel2 = new Label
+            {
+                Size = new Size(MenuBackGround.Width-5, 50),
+                Text = "Tour du joueur 2",
+                Location = new Point(5, HistoriqueLabel1.Location.Y + HistoriqueLabel1.Height + 15),
+                Font = new Font("COMIC SANS MS", 9f),
+                Anchor = AnchorStyles.Right,
+            };
+            HistoriqueLabel3 = new Label
+            {
+                Size = new Size(MenuBackGround.Width-5, 50),
+                Text = "Tour du joueur 3",
+                Location = new Point(5, HistoriqueLabel2.Location.Y + HistoriqueLabel2.Height + 15),
+                Visible = false,
+                Font = new Font("COMIC SANS MS", 9f),
+                Anchor = AnchorStyles.Right,
+            };
+            HistoriqueLabel4 = new Label
+            {
+                Size = new Size(MenuBackGround.Width-5, 50),
+                Text = "Tour du joueur 4",
+                Location = new Point(5, HistoriqueLabel3.Location.Y + HistoriqueLabel3.Height + 15),
+                Visible = false,
+                Font = new Font("COMIC SANS MS", 9f),
+                Anchor = AnchorStyles.Right,
+            };
+            MenuBackGround.Controls.Add(HistoriqueLabel1);
+            MenuBackGround.Controls.Add(HistoriqueLabel2);
+            if (nbJoueur >= 3) { HistoriqueLabel3.Visible = true; MenuBackGround.Controls.Add(HistoriqueLabel3); }
+            if (nbJoueur == 4) { HistoriqueLabel4.Visible = true; MenuBackGround.Controls.Add(HistoriqueLabel4); }
             //Ajout du menu dans le forms
             this.Controls.Add(MenuBackGround);
         }
@@ -682,6 +724,7 @@ namespace MiniVille_GraphiqueWF
                 game.scoreDes = game.die.Lancer();
                 diceScore1 = game.scoreDes; //On prend le diceScore
                 DiceAnim(game.scoreDes, 0); //Animation des dés
+                historique += "\nScore lancé : " +  game.scoreDes;
             }
             else //On lance deux dés
             {
@@ -689,6 +732,7 @@ namespace MiniVille_GraphiqueWF
                 diceScore2 = game.die.Lancer();
                 game.scoreDes = diceScore1 + diceScore2; //Somme des deux pour l'activation value
                 DiceAnim(diceScore1, diceScore2); //Animation des dés
+                historique += "\nScore lancé : " + diceScore1 + " + " + diceScore2 + " = " + game.scoreDes;
             }
             //SFX
             readerLanceDe = new NAudio.Wave.Mp3FileReader("Sound Design & SFX/Dice Roll.mp3");
@@ -710,6 +754,7 @@ namespace MiniVille_GraphiqueWF
                         game.scoreDes = game.die.Lancer();
                         diceScore1 = game.scoreDes;
                         DiceAnim(game.scoreDes, 0);
+                        historique += "\nScore relancé : " + game.scoreDes;
                     }
                     else
                     {
@@ -717,6 +762,7 @@ namespace MiniVille_GraphiqueWF
                         diceScore2 = game.die.Lancer();
                         game.scoreDes = diceScore1 + diceScore2;
                         DiceAnim(diceScore1, diceScore2);
+                        historique += "\nScore relancé : " + diceScore1 + " + " + diceScore2 + " = " + game.scoreDes;
                     }
                     readerLanceDe = new NAudio.Wave.Mp3FileReader("Sound Design & SFX/Dice Roll.mp3");
                     waveOutLanceDe.Init(readerLanceDe);
@@ -942,14 +988,17 @@ namespace MiniVille_GraphiqueWF
         private async void TourNext() //Passage au prochain tour
         {
             //Si le joueur du tour actuel possède le monument parc et a fait un double, alors il va rejouer. Sinon on augmente la variable tourjoueur de 1 (modulo le nb de joueur pour boucler)
+            buyingPhase = false;
             if (!(game.playerList[game.tourJoueur - 1].hasParc && diceScore1 == diceScore2)) game.tourJoueur = game.tourJoueur % nbJoueur + 1;
             diceScore2 = 0;
+            historique = "Tour du joueur " + game.tourJoueur;
             if (game.tourJoueur == 1) //Si le tour du joueur est celui du joueur principal, on met le label du tour du joueur précédent en noir
             {
-                if (nbJoueur == 4) TourJoueur4.ForeColor = Color.Black;
-                if (nbJoueur == 3) TourJoueur3.ForeColor = Color.Black;
-                if (nbJoueur == 2) TourJoueur2.ForeColor = Color.Black;
+                if (nbJoueur == 4) { TourJoueur4.ForeColor = Color.Black; HistoriqueLabel4.ForeColor = Color.Black; }
+                if (nbJoueur == 3) {TourJoueur3.ForeColor = Color.Black; HistoriqueLabel3.ForeColor = Color.Black; }
+                if (nbJoueur == 2) {TourJoueur2.ForeColor = Color.Black; HistoriqueLabel2.ForeColor = Color.Black; }
                 TourJoueur1.ForeColor = Color.Yellow; // On met le label du joueur actuel en jaune
+                HistoriqueLabel1.ForeColor = Color.Yellow;
                 this.Controls.Find("BoutonLancer", true).FirstOrDefault().Enabled = true; //On active le bouton lancer de dé
                 return;
             }
@@ -959,16 +1008,25 @@ namespace MiniVille_GraphiqueWF
                 {
                     TourJoueur1.ForeColor = Color.Black;
                     TourJoueur2.ForeColor = Color.Yellow;
+
+                    HistoriqueLabel1.ForeColor = Color.Black;
+                    HistoriqueLabel2.ForeColor = Color.Yellow;
                 }
                 if (game.tourJoueur == 3)
                 {
                     TourJoueur2.ForeColor = Color.Black;
                     TourJoueur3.ForeColor = Color.Yellow;
+
+                    HistoriqueLabel2.ForeColor = Color.Black;
+                    HistoriqueLabel3.ForeColor = Color.Yellow;
                 }
                 if (game.tourJoueur == 4)
                 {
                     TourJoueur3.ForeColor = Color.Black;
                     TourJoueur4.ForeColor = Color.Yellow;
+
+                    HistoriqueLabel3.ForeColor = Color.Black;
+                    HistoriqueLabel4.ForeColor = Color.Yellow;
                 }
 
 
@@ -982,7 +1040,8 @@ namespace MiniVille_GraphiqueWF
                 {
                     game.scoreDes = game.die.Lancer();
                     diceScore1 = game.scoreDes;
-                    DiceAnim(game.scoreDes); 
+                    DiceAnim(game.scoreDes);
+                    historique += "\nScore lancé : " + game.scoreDes;
                 }
                 else //Lancé de 2 dés
                 {
@@ -990,6 +1049,7 @@ namespace MiniVille_GraphiqueWF
                     diceScore2 = game.die.Lancer();
                     game.scoreDes = diceScore1 + diceScore2;
                     DiceAnim(diceScore1, diceScore2);
+                    historique += "\nScore lancé : " + diceScore1 + " + " + diceScore2 + " = " + game.scoreDes ;
                 }
 
                 await Task.Delay(2000); //Petite attente pour les dés
@@ -1048,7 +1108,8 @@ namespace MiniVille_GraphiqueWF
                         }
 
                         game.playerList[game.tourJoueur - 1].Pieces -= MonuCost[1]; //On actualise le score du joueur
-                        UpdateLabels(); //Actualisation de l'affichage du score
+                        historique += "\nAchat de la Gare";
+                        UpdateLabels(); //Actualisation de l'affichage du score                
                     }
 
                     //Même chose que ci-dessus mais pour le Centre Commercial --> en terme de prioté il faut d'abord avoir une gare pour que l'IA achete le centre
@@ -1080,7 +1141,8 @@ namespace MiniVille_GraphiqueWF
                         }
 
                         game.playerList[game.tourJoueur - 1].Pieces -= MonuCost[2];
-                        UpdateLabels();
+                        historique += "\nAchat du Centre Commercial";
+                        UpdateLabels();                       
                     }
 
                     //Même chose que ci-dessus mais pour la tour radio --> nécessite la gare + le centre commercial
@@ -1112,6 +1174,7 @@ namespace MiniVille_GraphiqueWF
                         }
 
                         game.playerList[game.tourJoueur - 1].Pieces -= MonuCost[3];
+                        historique += "\nAchat de la Tour Radio";
                         UpdateLabels();
                     }
 
@@ -1144,8 +1207,8 @@ namespace MiniVille_GraphiqueWF
                         }
 
                         game.playerList[game.tourJoueur - 1].Pieces -= MonuCost[4];
+                        historique += "\nAchat du Parc d'Attraction";
                         UpdateLabels();
-
                         if (isEnded().Count != 0)
                         {
                             List<int> vainqueurs = isEnded();
@@ -1210,6 +1273,8 @@ namespace MiniVille_GraphiqueWF
                                     }
                                 }
                             };
+
+                            historique += "\nAchat de la carte " + temp.Name;
                             break; //On sort de la boucle directement si une carte est achetée
                         }
                         else if (CheckCarteAcquises[i] == 0 && game.CartesDisponibles[i].PileCartes.TryPeek(out temp) && game.playerList[game.tourJoueur - 1].Pieces < temp.Cost) 
@@ -1220,7 +1285,7 @@ namespace MiniVille_GraphiqueWF
                     }
 
                     UpdateLabels(); //Update des label des scores
-
+                    
                     //Check sur la condition de victoire
                     if (game.playerList[game.tourJoueur - 1].CarteAcquisesUniques.Count == 15 && game.playerList[game.tourJoueur - 1].Pieces >= 20)
                     {
@@ -1303,15 +1368,18 @@ namespace MiniVille_GraphiqueWF
                                     }
                                 }
                             };
-                            UpdateLabels(); //Update de l'affiche graphique des scores
+                            historique += "\nAchat de la carte " + temp.Name;
+                            UpdateLabels(); //Update de l'affiche graphique des scores    
+                            hasBuy = true;
                             break; //Si une carte est achetée on sort de la boucle directement
                         }
                     }
                 }
                 #endregion
-
+                UpdateLabels();
                 await Task.Delay(1500);
             }
+
             TourNext();
         }
         private void ZoomCardStart() //Création des cartes zoomées que l'on utilisera tout le long de la partie en cas de Hover
@@ -1368,9 +1436,9 @@ namespace MiniVille_GraphiqueWF
             {
                 ZoomPicture.Visible = true; //On affiche la carte zoomé, et on la positionne en faisant attention qu'elle ne sorte pas du terrain
                 if (thisPicture.Location.X > this.Width - thisPicture.Width - (ZoomPicture.Width + 30)) ZoomPicture.Location = new Point(thisPicture.Location.X - (ZoomPicture.Width + 30),
-                    this.Height - thisPicture.Location.Y > ZoomPicture.Height ? thisPicture.Location.Y : thisPicture.Location.Y + thisPicture.Height - ZoomPicture.Height);
+                    this.Height - thisPicture.Location.Y - 10 > ZoomPicture.Height ? thisPicture.Location.Y : thisPicture.Location.Y + thisPicture.Height - ZoomPicture.Height);
                 else ZoomPicture.Location = new Point(thisPicture.Location.X + thisPicture.Width + 10,
-                    this.Height - thisPicture.Location.Y > ZoomPicture.Height ? thisPicture.Location.Y : thisPicture.Location.Y + thisPicture.Height - ZoomPicture.Height);
+                    this.Height - thisPicture.Location.Y - 10 > ZoomPicture.Height ? thisPicture.Location.Y : thisPicture.Location.Y + thisPicture.Height - ZoomPicture.Height);
 
                 if (ZoomPicture.Location.Y < -5) ZoomPicture.Location = new Point(ZoomPicture.Location.X, (this.Height - ZoomPicture.Height) / 2);
                 ZoomPicture.BringToFront(); //On la met en 1er plan
@@ -1430,6 +1498,7 @@ namespace MiniVille_GraphiqueWF
                 picture.Visible = false;
                 picture.Enabled = false;
             };
+            historique += "\nAchat de la carte " + (NomCarte)numberCard;
             UpdateLabels(); //Update des labels des scores
         }
         private void MonumentBuy(object sender, EventArgs e) //Event pour l'achat de Monument
@@ -1474,10 +1543,11 @@ namespace MiniVille_GraphiqueWF
             {
                 game.playerList[0].hasGare = true; //booléen en console
                 this.Controls.Find("CheckBoxDe", true).FirstOrDefault().Enabled = true; //Le bouton checkbox devient utilisable pour lancer deux dés
+                historique += "\nAchat de la Gare";
             }
-            if (numberMonu == 2) game.playerList[0].hasCentre = true;
-            if (numberMonu == 3) game.playerList[0].hasTour = true;
-            if (numberMonu == 4) game.playerList[0].hasParc = true;
+            if (numberMonu == 2) { game.playerList[0].hasCentre = true; historique += "\nAchat du Centre Commercial"; }
+            if (numberMonu == 3) { game.playerList[0].hasTour = true; historique += "\nAchat de la Tour Radio"; }
+            if (numberMonu == 4) { game.playerList[0].hasParc = true; historique += "\nAchat du Parc d'Attraction"; }
             UpdateLabels(); //Update des labels des scores
             if (EndingChoice == 4 && isEnded().Count != 0) //S'il y a un vainqueur (dans le cas où c'est la fin nb 4)
             {
@@ -1505,6 +1575,11 @@ namespace MiniVille_GraphiqueWF
             MoneyJoueur2.Text = game.playerList[1].Pieces.ToString();
             if (nbJoueur >= 3) MoneyJoueur3.Text = game.playerList[2].Pieces.ToString();
             if (nbJoueur >= 4) MoneyJoueur4.Text = game.playerList[3].Pieces.ToString();
+            if(game.tourJoueur == 1) HistoriqueLabel1.Text = historique;
+            else if (game.tourJoueur == 2) HistoriqueLabel2.Text = historique;
+            else if (game.tourJoueur == 3) HistoriqueLabel3.Text = historique;
+            else if (game.tourJoueur == 4) HistoriqueLabel4.Text = historique;
+
         }
         private List<int> isEnded() //Check si quelqu'un à gagner et nous renvoie la liste des vainqueurs
         {
@@ -2662,7 +2737,7 @@ namespace MiniVille_GraphiqueWF
             Fornite2.Paint += new PaintEventHandler((sender, e) =>
             {
                 e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                e.Graphics.DrawString("DIANE", FontName, Brushes.Black, 40, 40);
+                e.Graphics.DrawString("DIANE", FontName, Brushes.Black, 0, 40);
             });
             Controls.Add(Fornite2);
             Timer Time2 = new Timer();
@@ -2749,7 +2824,9 @@ namespace MiniVille_GraphiqueWF
             Time4.Start();
             while (Time4.Enabled == true) await Task.Delay(1000);
             #endregion
-
+            readerButtonHover = new NAudio.Wave.Mp3FileReader("Sound Design & SFX/SUIII.mp3");
+            waveOutButtonHover.Init(readerButtonHover);
+            waveOutButtonHover.Play();
             //On remet leur pos ensemble à 4 pour la fin
             Fornite1.Location = new Point(this.Width / 2 - (Fornite1.Width * 2), Fornite1.Location.Y);
             Fornite2.Location = new Point(this.Width / 2 - Fornite2.Width, Fornite2.Location.Y);
