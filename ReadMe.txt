@@ -38,6 +38,9 @@ Océane s'est occupée de la classe Player et Dice puis à travaillé en parall�
 Bao à entièrement travaillé sur l'interface graphique après avoir fait le code de base (une première ébauche).
 Diane s'est occupée de la classe Cards et Monument puis du son et ensuite du ReadMe (yup je parle de moi à la 3ème personne du coup #rip).
 
+Toutes les améliorations pour ce projet qui étaient listé par Mme Emma PRUDENT ont été faite (voir PDF énoncé du Jeu du Miniville).
+
+
 Les règles du jeu peuvent être trouvé en format PDF ici : https://github.com/makazemafuu/Miniville - vous aurez aussi accès aux sons, images, et notre travail en entier.
 Les règles du Miniville n'ont pas été changé pour ce projet !
 
