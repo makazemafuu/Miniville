@@ -79,8 +79,8 @@ namespace MiniVille_GraphiqueWF
                 CarteAcquisesUniques.Add(temp); 
                 ToAdd = true; }
             MessageBox.Show("To add = " + ToAdd + " to remove = " + toRemove);
-            return new bool[] {ToAdd,toRemove };
             #endregion
+            return new bool[] { ToAdd, toRemove };
         }
     }
 }
