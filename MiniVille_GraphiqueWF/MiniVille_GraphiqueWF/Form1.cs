@@ -801,7 +801,7 @@ namespace MiniVille_GraphiqueWF
             Time.Interval = 3; //Définition de l'interval en MS pour la distribution de carte
             DistributionCard_StartGame(); //Animation de distribution
 
-            TesteurFonction(); // Fonction pour le debugging et play test des scénarios
+            //TesteurFonction(); // Fonction pour le debugging et play test des scénarios
 
         }
         private async Task UpdateGame(int scoreDes, int tourJoueur) //Fonction pour Update des scores (anciennement dans la classe game mais re implémenté dans la classe form pour polus de maniabilité des controls)
@@ -2767,16 +2767,28 @@ namespace MiniVille_GraphiqueWF
             if (indexPlayer == 2) tempList = CarteJoueur3;
             if (indexPlayer == 3) tempList = CarteJoueur4;
 
+            if (CarteTobeRemoved == CarteToBeReceived) return; //Il ne se passe rien dans ce cas
             if (toAdd && toRemove) //Si on ajoute et on enleve une carte ==> on fait l'action de supprimer + ajouter (voir les commentaires ci-dessous)
             {
                 Point LocationToRemove = new Point();
-                int Maxwidth = Int32.MinValue, indexToMove = -1, indexToRemove = -1;
+                int Maxwidth = tempList[0].Location.X, indexToMove = 0, indexToRemove = 0;
                 for (int i = 0; i < tempList.Count; i++)
                 {
-                    if (Maxwidth < tempList[i].Location.X)
+                    if (indexPlayer == 0 || (indexPlayer == 1 && nbJoueur > 2)) //Si c'est le joueur 1 ou alors le joueur 2 (dans le cas 3+ joueurs)
                     {
-                        indexToMove = i;
-                        Maxwidth = tempList[i].Location.X;
+                        if (Maxwidth < tempList[i].Location.X) //Cette condition permet de trouver la carte la plus à droite de son deck
+                        {
+                            indexToMove = i; //On récupère l'index de la carte la plus à droite
+                            Maxwidth = tempList[i].Location.X;
+                        }
+                    }
+                    else //Sinon on check la carte la plus à gauche de son deck
+                    {
+                        if (Maxwidth > tempList[i].Location.X)
+                        {
+                            indexToMove = i;
+                            Maxwidth = tempList[i].Location.X;
+                        }
                     }
                     int CarteNumber;
                     if (tempList[i].Name.Length == 6) CarteNumber = tempList[i].Name[5] - '0';
@@ -2792,27 +2804,37 @@ namespace MiniVille_GraphiqueWF
                 tempList.RemoveAt(indexToRemove);
 
                 if (indexPlayer == 0) tempList.Add(Spawn_Card(BoardSizeHeight - CardHeight - 5, 11 + (CardWidth + 5) * (tempList.Count), CarteToBeReceived));
-                else if (indexPlayer == 1 && nbJoueur == 2) tempList.Add(Spawn_Card(9, BoardSizeWidth - (CardWidth + 5) * (tempList.Count), CarteToBeReceived, 2));
+                else if (indexPlayer == 1 && nbJoueur == 2) tempList.Add(Spawn_Card(9, BoardSizeWidth - (CardWidth + 5) * (tempList.Count+1), CarteToBeReceived, 2));
                 else if (indexPlayer == 1) tempList.Add(Spawn_Card(10, 11 + (CardWidth + 5) * (tempList.Count), CarteToBeReceived, 2));
-                else if (indexPlayer == 2) tempList.Add(Spawn_Card(10, BoardSizeWidth - (CardWidth + 5) * (tempList.Count), CarteToBeReceived, 3));
-                else if (indexPlayer == 3) tempList.Add(Spawn_Card(BoardSizeHeight - CardHeight - 5, BoardSizeWidth - (CardWidth + 5) * (tempList.Count), CarteToBeReceived, 4));
+                else if (indexPlayer == 2) tempList.Add(Spawn_Card(10, BoardSizeWidth - (CardWidth + 5) * (tempList.Count+1), CarteToBeReceived, 3));
+                else if (indexPlayer == 3) tempList.Add(Spawn_Card(BoardSizeHeight - CardHeight - 5, BoardSizeWidth - (CardWidth + 5) * (tempList.Count+1), CarteToBeReceived, 4));
             }
-            else if (toAdd) //Si on ajoute une carte il suffit de faire spawn une carte à la suite des cartes déjà existentes
+            else if (toAdd && !toRemove) //Si on ajoute une carte il suffit de faire spawn une carte à la suite des cartes déjà existentes
             {
                 if (indexPlayer == 0) tempList.Add(Spawn_Card(BoardSizeHeight - CardHeight - 5, 11 + (CardWidth + 5) * (tempList.Count), CarteToBeReceived));
-                else if (indexPlayer == 1 && nbJoueur == 2) tempList.Add(Spawn_Card(9, BoardSizeWidth - (CardWidth + 5) * (tempList.Count), CarteToBeReceived, 2));
+                else if (indexPlayer == 1 && nbJoueur == 2) tempList.Add(Spawn_Card(9, BoardSizeWidth - (CardWidth + 5) * (tempList.Count+1), CarteToBeReceived, 2));
                 else if (indexPlayer == 1) tempList.Add(Spawn_Card(10, 11 + (CardWidth + 5) * (tempList.Count), CarteToBeReceived, 2));
-                else if (indexPlayer == 2) tempList.Add(Spawn_Card(10, BoardSizeWidth - (CardWidth + 5) * (tempList.Count), CarteToBeReceived, 3));
-                else if (indexPlayer == 3) tempList.Add(Spawn_Card(BoardSizeHeight - CardHeight - 5, BoardSizeWidth - (CardWidth + 5) * (tempList.Count), CarteToBeReceived, 4));
+                else if (indexPlayer == 2) tempList.Add(Spawn_Card(10, BoardSizeWidth - (CardWidth + 5) * (tempList.Count+1), CarteToBeReceived, 3));
+                else if (indexPlayer == 3) tempList.Add(Spawn_Card(BoardSizeHeight - CardHeight - 5, BoardSizeWidth - (CardWidth + 5) * (tempList.Count+1), CarteToBeReceived, 4));
+
+                for (int i = 0; i < tempList.Count; i++) //Idem que pour add mais avec -
+                {
+                    if ((tempList[i].Name.Length == 6 && tempList[i].Name[5] - '0' == CarteTobeRemoved) || (tempList[i].Name.Length == 7 && (tempList[i].Name[5] - '0') * 10 + (tempList[i].Name[6] - '0') == CarteTobeRemoved))
+                    {
+                        Label temp = tempList[i].Controls.OfType<Label>().First();
+                        temp.Text = "x" + (temp.Text[1] - '0' - 1);
+                        temp.Visible = true;
+                        if (temp.Text[1] == 1) temp.Visible = false;
+                    }
+                }
             }
-            else if (toRemove) // Si on enlève un carte
-            {
-                
+            else if (toRemove && !toAdd) // Si on enlève un carte
+            {              
                 Point LocationToRemove = new Point();
-                int Maxwidth = tempList[0].Width, indexToMove = 0, indexToRemove = 0;
+                int Maxwidth = tempList[0].Location.X, indexToMove = 0, indexToRemove = 0;
                 for (int i = 0; i < tempList.Count; i++) //On itère à travers les cartes du joueur
                 {
-                    if (indexPlayer == 0 || (indexPlayer == 1 && nbJoueur != 2)) //Si c'est le joueur 1 ou alors le joueur 2 (dans le cas 3+ joueurs)
+                    if (indexPlayer == 0 || (indexPlayer == 1 && nbJoueur > 2)) //Si c'est le joueur 1 ou alors le joueur 2 (dans le cas 3+ joueurs)
                     {
                         if (Maxwidth < tempList[i].Location.X) //Cette condition permet de trouver la carte la plus à droite de son deck
                         {
@@ -2841,29 +2863,15 @@ namespace MiniVille_GraphiqueWF
                 }
                 tempList[indexToMove].Location = new Point(LocationToRemove.X, LocationToRemove.Y); //On place la carte à l'extrémité du deck à l'endroit de la carte supprimée
                 tempList.RemoveAt(indexToRemove); //On delete du deck la carte à delete
-            }
-            if (!toAdd) //Si on ajoute rien, cela signifie qu'on possède déjà la carte
-            {
+
+
                 for (int i = 0; i < tempList.Count; i++) //Boucle pour itérer à travers le deck et trouver la carte à incrémenter pour son label
                 {
-                    if ((CarteJoueur1[i].Name.Length == 6 && tempList[i].Name[5] - '0' == CarteToBeReceived) || (tempList[i].Name.Length == 7 && (tempList[i].Name[5] - '0') * 10 + (tempList[i].Name[6] - '0') == CarteToBeReceived))
+                    if ((tempList[i].Name.Length == 6 && tempList[i].Name[5] - '0' == CarteToBeReceived) || (tempList[i].Name.Length == 7 && (tempList[i].Name[5] - '0') * 10 + (tempList[i].Name[6] - '0') == CarteToBeReceived))
                     {
                         Label temp = tempList[i].Controls.OfType<Label>().First();
                         temp.Text = "x" + (temp.Text[1] - '0' + 1);
                         temp.Visible = true;
-                    }
-                }
-            }
-            if (!toRemove) //Si on enleve rien, on a un stack de carte qui a perdu une carte
-            {
-                for (int i = 0; i < tempList.Count; i++) //Idem que pour add mais avec -
-                {
-                    if ((CarteJoueur1[i].Name.Length == 6 && tempList[i].Name[5] - '0' == CarteTobeRemoved) || (tempList[i].Name.Length == 7 && (tempList[i].Name[5] - '0') * 10 + (tempList[i].Name[6] - '0') == CarteTobeRemoved))
-                    {
-                        Label temp = tempList[i].Controls.OfType<Label>().First();
-                        temp.Text = "x" + (temp.Text[1] - '0' - 1);
-                        temp.Visible = true;
-                        if (temp.Text[1] == 1) temp.Visible = false;
                     }
                 }
             }

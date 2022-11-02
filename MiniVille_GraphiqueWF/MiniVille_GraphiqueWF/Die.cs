@@ -15,8 +15,8 @@ namespace MiniVille_GraphiqueWF
         }
         public virtual int Lancer()
         {
-            face = 6 ; // pour faire des tests
-            //face = random.Next(1, 7);
+            //face = 6 ; // pour faire des tests
+            face = random.Next(1, 7);
             return face;
         }
     }
