@@ -12,10 +12,11 @@ namespace Miniville
 		protected int coinsAvailable;
 		protected Game game;
         protected Dictionary<string, Pile> cardsAvailable;
-		private Pile pile = new Pile();
+		private Pile pile;
 
         public Bank(Game Game, int money)
 		{
+			pile = new Pile();
 			this.coinsAvailable = money;
 			this.game = Game;
 			cardsAvailable = pile.InitPile(game);

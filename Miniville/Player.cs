@@ -33,6 +33,8 @@ namespace Miniville
             this.game = game;
             this.coinsAvailable = money;
             this.theBank = TheBank;
+            foreach (Pile pile in cardsAvailable.Values)
+                pile.PileCards.Clear();
         }
 
         public void Shop(int choixPile)

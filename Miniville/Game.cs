@@ -50,13 +50,13 @@ namespace Miniville
                 string namePlayer = Console.ReadLine();
                 listPlayer.Add(new Player(namePlayer, false, this, 3, Bank));
             }
-			foreach (Player player in listPlayer)
+			/*foreach (Player player in listPlayer) //Display Ressources for tests.
 			{
 				player.DisplayRessources(player.NamePlayer);
 				player.Trade(player, Bank, "Coin", "3");
 				Bank.DisplayRessources("Bank");
 				player.DisplayRessources(player.NamePlayer);
-			}
+			}*/
 			Console.ReadLine();
             for (int i = nbJoueurReel; i < nbJoueurMax; i++)
             {
