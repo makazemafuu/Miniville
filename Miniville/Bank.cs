@@ -42,10 +42,10 @@ namespace Miniville
 
 		public void DisplayRessources(string from)
 		{
-			Console.WriteLine("There is {0} coins remaining in {1}.", CoinsAvailable, from);
+			Console.WriteLine("{1} dispose de {0} pièces.", CoinsAvailable, from);
 			foreach (var card in cardsAvailable)
 			{
-				Console.WriteLine("There is {0} cards of the type {1} remaining in {2}", card.Value.PileCards.Count, card.Key, from);
+				Console.WriteLine("Il y a {0} cartes {1} restantes dans la réserve de {2}.", card.Value.PileCards.Count, card.Key, from);
             }
 		}
 
@@ -54,7 +54,7 @@ namespace Miniville
             foreach (var card in cardsAvailable)
             {
 				if (card.Value.PileCards.Peek().Type != 3)
-					Console.WriteLine("{2} have {0} cards of the type {1}.", card.Value.PileCards.Count, card.Key, from);
+					Console.WriteLine("{2} a {0} cartes {1}.", card.Value.PileCards.Count, card.Key, from);
             }
         }
 		public void ChooseCardOtherPlayer(string from)
@@ -64,7 +64,7 @@ namespace Miniville
             {
 				if (card.Value.PileCards.Peek().Type != 3)
 				{
-					Console.WriteLine("There is {0} cards of the type {1} remaining in {2}, enter \"{3}\" if you want to pick this one.", card.Value.PileCards.Count, card.Key, from, i);
+					Console.WriteLine("Il y a {0} cartes {1} restantes dans la réserve de {2}, entrez \"{3}\" si vous voulez choisir celle là.", card.Value.PileCards.Count, card.Key, from, i);
 					i++;
 				}
             }
@@ -77,7 +77,7 @@ namespace Miniville
             {
                 if (card.Value.PileCards.Peek().Type != 3)
 				{
-                    Console.WriteLine("You have {0} cards of the type {1} remaining, enter \"{3}\" if you want to give this one", card.Value.PileCards.Count, card.Key, i);
+                    Console.WriteLine("Vous disposez de {0} carte(s) {1} , entrez \"{3}\" si vous voulez donner celle là", card.Value.PileCards.Count, card.Key, i);
 					i++;
 				}
 			}
@@ -85,7 +85,7 @@ namespace Miniville
 
 		public void DisplayMoney(string from)
 		{
-			Console.WriteLine(from + "have {0} coins, do you want to rob him ?", CoinsAvailable);
+			Console.WriteLine(from + "a {0} pièces, voulez-vous le dépouiller ?", CoinsAvailable);
 		}
 
         public void Trade(Bank from, Bank to, string type, string value)
@@ -97,8 +97,8 @@ namespace Miniville
 			}
 			else if (type == "Coin")
 			{
-				to.CoinsAvailable += int.Parse(value);
-				from.CoinsAvailable -= int.Parse(value);
+				to.CoinsAvailable = to.CoinsAvailable + int.Parse(value);
+				from.CoinsAvailable = from.CoinsAvailable - int.Parse(value);
 			}
 		}
     }
