@@ -26,6 +26,12 @@ namespace Miniville
         public List<Monument> Monuments { get { return monuments; } }
         public bool IsAI { get { return isAI; } }
         public string NamePlayer { get { return namePlayer; } }
+
+        public bool IsPlaying
+        {
+            get { return isPlaying; }
+            set { isPlaying = value; }
+        }
         public Player(string namePlayer, bool isAI, Game game, int money, Bank TheBank) : base(game, money)
         {
             this.namePlayer = namePlayer;

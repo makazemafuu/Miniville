@@ -20,6 +20,8 @@ namespace Miniville
 		public Bank Bank { get { return bank; } }
 
 		public Dice Dice { get { return dice; } }
+
+		public List<Player> ListPlayer { get { return listPlayer; } }
 		public Game()
 		{
 			listPlayer = new List<Player>();
@@ -50,14 +52,13 @@ namespace Miniville
                 string namePlayer = Console.ReadLine();
                 listPlayer.Add(new Player(namePlayer, false, this, 3, Bank));
             }
-			/*foreach (Player player in listPlayer) //Display Ressources for tests.
+		/*	foreach (Player player in listPlayer) //Display Ressources for tests. 
 			{
 				player.DisplayRessources(player.NamePlayer);
-				player.Trade(player, Bank, "Coin", "3");
+				player.Trade(Bank, player, "Card", "Mine");
 				Bank.DisplayRessources("Bank");
 				player.DisplayRessources(player.NamePlayer);
 			}*/
-			Console.ReadLine();
             for (int i = nbJoueurReel; i < nbJoueurMax; i++)
             {
                 listPlayer.Add(new Player("IA " + (nbJoueurReel - 1 - i), true, this, 3, Bank));
@@ -73,6 +74,7 @@ namespace Miniville
         }
 		private void Round(int PlayerRound)
 		{
+			listPlayer[playerRound].IsPlaying = true;
 			if (!listPlayer[PlayerRound].IsAI)
 			{
 				#region Lancé de dé
@@ -92,12 +94,12 @@ namespace Miniville
 					}
 				}
 
-				int ScoreDesTotal = 0, ScoreDes1 = 0, scoreDes2 = 0;
+				int ScoreDesTotal, ScoreDes1 = 0, scoreDes2 = 0;
 
 				if (nbDesChoice == 1)
 				{
 					ScoreDesTotal = dice.Roll();
-					Console.WriteLine("Les dés ont fait un score de {0}", ScoreDesTotal);
+					Console.WriteLine("Le dés a fait un score de {0}", ScoreDesTotal);
 				}
 				else
 				{
@@ -150,15 +152,16 @@ namespace Miniville
 				{
 					foreach (var Cards in listPlayer[i].CardsAvailable)
 					{
-						if (Cards.Value.PileCards.Peek().ActivationValue.Item1 == ScoreDesTotal || Cards.Value.PileCards.Peek().ActivationValue.Item2 == ScoreDesTotal)
-						{
-							/*  if (Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Blue) 
-								  Cards.Value.PileCards.Peek().ActiveEffect();
-							  else if ((Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Purple || Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Green) && PlayerRound == i) 
-								  Cards.Value.PileCards.Peek().ActiveEffect();
-							  else if (Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Red && PlayerRound != i) 
-								  Cards.Value.PileCards.Peek().ActiveEffect();*/
-						}
+						if (Cards.Value.PileCards.Count != 0)
+							if (Cards.Value.PileCards.Peek().ActivationValue.Item1 == ScoreDesTotal || Cards.Value.PileCards.Peek().ActivationValue.Item2 == ScoreDesTotal)
+							{
+								if (Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Blue)
+									Cards.Value.PileCards.Peek().ActiveEffect();
+								else if ((Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Purple || Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Green) && PlayerRound == i)
+									Cards.Value.PileCards.Peek().ActiveEffect();
+								else if (Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Red && PlayerRound != i)
+									Cards.Value.PileCards.Peek().ActiveEffect();
+							}
 					}
 				}
 
@@ -184,7 +187,7 @@ namespace Miniville
 			else
 			{
 				#region Lancé de dé
-				int nbDesChoice = random.Next(1, 3);
+				int nbDesChoice = hasGare(listPlayer[playerRound]) ? random.Next(1, 3) : 1;
 				int ScoreDesTotal, ScoreDes1 = 0, scoreDes2 = 0;
 				if (nbDesChoice == 1)
 				{
@@ -226,15 +229,16 @@ namespace Miniville
 				{
 					foreach (var Cards in listPlayer[i].CardsAvailable)
 					{
-						if (Cards.Value.PileCards.Peek().ActivationValue.Item1 == ScoreDesTotal || Cards.Value.PileCards.Peek().ActivationValue.Item2 == ScoreDesTotal)
-						{
-						  /*  if (Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Blue)
-								Cards.Value.PileCards.Peek().ActiveEffect();
-							else if ((Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Purple || Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Green) && PlayerRound == i) 
-								Cards.Value.PileCards.Peek().ActiveEffect();
-							else if (Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Red && PlayerRound != i) 
-								Cards.Value.PileCards.Peek().ActiveEffect();*/
-						}
+                        if (Cards.Value.PileCards.Count != 0)
+                            if (Cards.Value.PileCards.Peek().ActivationValue.Item1 == ScoreDesTotal || Cards.Value.PileCards.Peek().ActivationValue.Item2 == ScoreDesTotal)
+							{
+								if (Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Blue)
+									Cards.Value.PileCards.Peek().ActiveEffect();
+								else if ((Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Purple || Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Green) && PlayerRound == i) 
+									Cards.Value.PileCards.Peek().ActiveEffect();
+								else if (Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Red && PlayerRound != i) 
+									Cards.Value.PileCards.Peek().ActiveEffect();
+							}
 					}
 				}
 
@@ -249,40 +253,32 @@ namespace Miniville
 				//rejoue si parc d'attraction
 				if (hasParc(listPlayer[PlayerRound]) && ScoreDes1 == scoreDes2 && ScoreDes1 != 0) Round(PlayerRound);
 			}
-
+			listPlayer[playerRound].IsPlaying = false;
 		}
 		private bool hasGare(Player player)
 		{
 			foreach (var item in player.Monuments)
-			{
-				if (item.Name == "Gare" && item.IsActive /*Liste de monuments qu'on mettra plus tard j'sais pas*/) return true;
-			}
+				if (item.Name == "Gare" && item.IsActive) return true;
 			return false;
 		}
 		private bool hasTour(Player player)
 		{
 			foreach (var item in player.Monuments)
-			{
 				if (item.Name == "Tour" && item.IsActive) return true;
-			}
 			return false;
 		}
 		private bool hasParc(Player player)
 		{
 			foreach (var item in player.Monuments)
-			{
 				if (item.Name == "Parc" && item.IsActive)
 					return true;
-			}
 			return false;
 		}
 		private bool hasCentre(Player player)
 		{
 			foreach (var item in player.Monuments)
-			{
 				if (item.Name == "Centre Commercial" && item.IsActive)
 					return true;
-			}
 			return false;
 		}
 		private int isEndgame(bool TrueEnding)
@@ -290,13 +286,11 @@ namespace Miniville
 			if (!TrueEnding)
 			{
 				for (int i = 0; i < listPlayer.Count; i++)
-				{
 					if (hasGare(listPlayer[i]) && hasTour(listPlayer[i]) && hasParc(listPlayer[i]) && hasCentre(listPlayer[i]))
 					{
 						isGameOver = true;
 						return i;
 					}
-				}
 			}
 			else
 			{

@@ -44,13 +44,35 @@ namespace Miniville
 		{
 			Console.WriteLine("There is {0} coins remaining in {1}.", CoinsAvailable, from);
 			foreach (var card in cardsAvailable)
-				Console.WriteLine("There is {0} cards of the type {1} remaining of the type in {2}", card.Value.PileCards.Count, card.Key, from);
+			{
+				Console.Write("There is {0} cards of the type {1} remaining of the type in {2}", card.Value.PileCards.Count, card.Key, from);
+				if (card.Value.PileCards.Count > 0 && from != "Bank")
+					Console.Write("the player owner is " + card.Value.PileCards.Peek().Owner.NamePlayer);
+				else
+					Console.WriteLine();
+            }
 		}
 
-		public void Trade(Bank from, Bank to, string type, string value)
+        public void DisplayCards(string from)
+        {
+            Console.WriteLine("There is {0} coins remaining in {1}.", CoinsAvailable, from);
+            foreach (var card in cardsAvailable)
+            {
+                Console.Write("There is {0} cards of the type {1} remaining of the type in {2}", card.Value.PileCards.Count, card.Key, from);
+                if (card.Value.PileCards.Count > 0 && from != "Bank")
+                    Console.Write("the player owner is " + card.Value.PileCards.Peek().Owner.NamePlayer);
+                else
+                    Console.WriteLine();
+            }
+        }
+
+        public void Trade(Bank from, Bank to, string type, string value)
 		{
 			if (type == "Card")
+			{
+				from.CardsAvailable[value].PileCards.Peek().Owner = (Player)to;
 				to.CardsAvailable[value].PileCards.Push(from.CardsAvailable[value].PileCards.Pop());
+			}
 			else if (type == "Coin")
 			{
 				to.CoinsAvailable += int.Parse(value);
