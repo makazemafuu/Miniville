@@ -32,7 +32,7 @@ namespace MiniVille_GraphiqueWF
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ScrollBar;
-            this.ClientSize = new System.Drawing.Size(1493, 677);
+            this.Size = new System.Drawing.Size(1493, 677);
             this.Name = "MINIVILLES";
             this.Text = "MINIVILLES";
             this.ResumeLayout(false);

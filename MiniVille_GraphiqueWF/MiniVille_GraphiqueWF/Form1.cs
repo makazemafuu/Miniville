@@ -70,7 +70,7 @@ namespace MiniVille_GraphiqueWF
             PictureBox StartMenu = new PictureBox
             {
                 Anchor = AnchorStyles.None,
-                Size = new Size(this.Width, this.Height), //Le cadre sera de la taille du Form
+                Size = new Size(this.ClientSize.Width, this.ClientSize.Height), //Le cadre sera de la taille du Form
                 Name = "StartMenu",
                 AutoSize = true,
                 BackColor = Color.Transparent, //Même couleur que le fonds du Form (ce n'est pas un vrai transparent)
@@ -85,7 +85,7 @@ namespace MiniVille_GraphiqueWF
                 ImageLocation = "Images/Sun.gif",
                 Name = "Sun",
                 SizeMode = PictureBoxSizeMode.CenterImage, //Centre le Soleil 
-                Size = new Size(this.Width, this.Height / 2),  //Hauteur de cette picture box  / 2 afin de placer le soleil à hauteur du titre (possible de changer juste Location si besoin)
+                Size = new Size(this.ClientSize.Width, this.ClientSize.Height / 2),  //Hauteur de cette picture box  / 2 afin de placer le soleil à hauteur du titre (possible de changer juste Location si besoin)
                 BackColor = Color.Transparent,
                 Location = new Point(0, 0),
                 WaitOnLoad = true,
@@ -97,7 +97,7 @@ namespace MiniVille_GraphiqueWF
                 ImageLocation = "Images/MV_Title.png",
                 Name = "Title",
                 SizeMode = PictureBoxSizeMode.CenterImage,
-                Size = new Size(this.Width, this.Height / 2),
+                Size = new Size(this.ClientSize.Width, this.ClientSize.Height / 2),
                 BackColor = Color.Transparent,
                 WaitOnLoad = true,
             };
@@ -113,7 +113,7 @@ namespace MiniVille_GraphiqueWF
                 SizeMode = PictureBoxSizeMode.CenterImage,
                 Size = new Size(500, 400),
                 BackColor = Color.Transparent,
-                Location = new Point(this.Width / 8, this.Height / 2),
+                Location = new Point(this.ClientSize.Width / 8, this.ClientSize.Height / 2),
             };
             //Gif de droite
             StartMenu.Controls.Add(CityGif);
@@ -124,7 +124,7 @@ namespace MiniVille_GraphiqueWF
                 SizeMode = PictureBoxSizeMode.CenterImage,
                 Size = new Size(500, 400),
                 BackColor = Color.Transparent,
-                Location = new Point(this.Width / 2, this.Height / 2),
+                Location = new Point(this.ClientSize.Width / 2, this.ClientSize.Height / 2),
             };
             StartMenu.Controls.Add(MinesGif);
 
@@ -185,7 +185,7 @@ namespace MiniVille_GraphiqueWF
             var NewFonds = new PictureBox()
             {
                 BackColor = this.BackColor, //On prend la couleur du fonds
-                Size = new Size(this.Width, this.Height),
+                Size = new Size(this.ClientSize.Width, this.ClientSize.Height),
                 Anchor = AnchorStyles.None,
             };
 
@@ -301,9 +301,9 @@ namespace MiniVille_GraphiqueWF
                 Text = "20 pièces pour gagner",
                 Anchor = AnchorStyles.None,
                 BackColor = Color.White,
-                Font = new Font("COMIC SANS MS", 12f),
                 ForeColor = Color.DarkBlue,
             };
+            Ending1.Font = new Font("COMIC SANS MS", Ending1.Width/22f);
             //Ajout des events du bouton
             Ending1.MouseEnter += new EventHandler(MenuStart_Button_OnEnter);
             Ending1.MouseHover += new EventHandler(MenuStart_Button_OnHover_SFX);
@@ -317,10 +317,9 @@ namespace MiniVille_GraphiqueWF
                 Text = "30 pièces pour gagner",
                 Anchor = AnchorStyles.None,
                 BackColor = Color.White,
-                Font = new Font("COMIC SANS MS", 12f),
                 ForeColor = Color.DarkBlue,
             };
-
+            Ending2.Font = new Font("COMIC SANS MS", Ending2.Width / 22f);
             //Ajout des events du bouton
             Ending2.MouseEnter += new EventHandler(MenuStart_Button_OnEnter);
             Ending2.MouseHover += new EventHandler(MenuStart_Button_OnHover_SFX);
@@ -331,13 +330,12 @@ namespace MiniVille_GraphiqueWF
             {
                 Size = new Size(200, 60),
                 Location = new Point(Ending2.Location.X, Ending2.Location.Y + Ending2.Height + 20), //Placé sous le bouton de la fin 2 + 20 de marge
-                Text = "20 pièces + toutes les cartes (1 fois)",
+                Text = "20 pièces + toutes les\ncartes (1 fois)",
                 Anchor = AnchorStyles.None,
                 BackColor = Color.White,
-                Font = new Font("COMIC SANS MS", 12f),
                 ForeColor = Color.DarkBlue,
             };
-
+            Ending3.Font = new Font("COMIC SANS MS", Ending3.Width / 22f);
             //Ajout des events du bouton
             Ending3.MouseEnter += new EventHandler(MenuStart_Button_OnEnter);
             Ending3.MouseHover += new EventHandler(MenuStart_Button_OnHover_SFX);
@@ -348,13 +346,12 @@ namespace MiniVille_GraphiqueWF
             {
                 Size = new Size(200, 60),
                 Location = new Point(Ending3.Location.X, Ending3.Location.Y + Ending3.Height + 20), //Sous le bouton de la 3e fin + 20 de marge
-                Text = "Vraies règles du jeux (4 Monuments)",
+                Text = "Vraies règles du jeux \n(4 Monuments)",
                 Anchor = AnchorStyles.None,
                 BackColor = Color.White,
-                Font = new Font("COMIC SANS MS", 12f),
                 ForeColor = Color.DarkBlue,
             };
-
+            Ending3.Font = new Font("COMIC SANS MS", Ending3.Width / 22f);
             //Ajout des events du bouton
             TrueEnding.MouseEnter += new EventHandler(MenuStart_Button_OnEnter);
             TrueEnding.MouseHover += new EventHandler(MenuStart_Button_OnHover_SFX);
@@ -538,9 +535,8 @@ namespace MiniVille_GraphiqueWF
                 Anchor = (AnchorStyles.Top | AnchorStyles.Right),
                 Location = new Point(25, NewGame.Location.Y + 60),
                 Text = "Retour choix nb \nJoueurs",
-                Font = new Font("COMIC SANS MS", 10),
             };
-
+            ChangeMode.Font = new Font("COMIC SANS MS", ChangeMode.Width/20f);
             //Event du bouton modif
             ChangeMode.Click += new EventHandler(buttonChangeMode_Click);
             ChangeMode.MouseEnter += new EventHandler(Menu_Game_Button_OnEnter);
@@ -587,11 +583,11 @@ namespace MiniVille_GraphiqueWF
                 Size = new Size(200, 50),
                 Location = new Point(25, LancerDe.Location.Y + 60),
                 Anchor = (AnchorStyles.Right | AnchorStyles.Bottom),
-                Text = "Cocher pour lancer deux dés",
+                Text = "Cocher pour lancer deux\n dés",
                 Name = "CheckBoxDe",
-                Font = new Font("COMIC SANS MS", 10),
                 Enabled = false,
             };
+            CheckBoxDe.Font = new Font("COMIC SANS MS", CheckBoxDe.Width/23f);
             //Event du checkbox
             CheckBoxDe.CheckedChanged += new EventHandler(CheckBox_CheckedChanged);
 
@@ -607,7 +603,6 @@ namespace MiniVille_GraphiqueWF
                 Enabled = false,
                 Font = new Font("COMIC SANS MS", 10),
             };
-
             //Event fin de tour
             FinDuTour.Click += new EventHandler(buttonFinTour_Click);
             FinDuTour.MouseEnter += new EventHandler(Menu_Game_Button_OnEnter);
@@ -627,11 +622,11 @@ namespace MiniVille_GraphiqueWF
             {
                 Size = new Size(MenuBackGround.Width - 5, 50),
                 Text = "Tour du joueur 1",
-                Location = new Point(5, LeaveButton.Location.Y + LeaveButton.Height + 5),
-                Font = new Font("COMIC SANS MS", 9f),
+                Location = new Point(5, LeaveButton.Location.Y + LeaveButton.Height + 5),            
                 ForeColor = Color.Yellow,
                 Anchor = AnchorStyles.Right,
             };
+            HistoriqueLabel1.Font = new Font("COMIC SANS MS", HistoriqueLabel1.Height / 6f) ;
             HistoriqueLabel2 = new Label
             {
                 Size = new Size(MenuBackGround.Width-5, 50),
@@ -640,6 +635,7 @@ namespace MiniVille_GraphiqueWF
                 Font = new Font("COMIC SANS MS", 9f),
                 Anchor = AnchorStyles.Right,
             };
+            HistoriqueLabel2.Font = new Font("COMIC SANS MS", HistoriqueLabel2.Height / 6f);
             HistoriqueLabel3 = new Label
             {
                 Size = new Size(MenuBackGround.Width-5, 50),
@@ -649,6 +645,7 @@ namespace MiniVille_GraphiqueWF
                 Font = new Font("COMIC SANS MS", 9f),
                 Anchor = AnchorStyles.Right,
             };
+            HistoriqueLabel3.Font = new Font("COMIC SANS MS", HistoriqueLabel3.Height / 6f);
             HistoriqueLabel4 = new Label
             {
                 Size = new Size(MenuBackGround.Width-5, 50),
@@ -658,6 +655,7 @@ namespace MiniVille_GraphiqueWF
                 Font = new Font("COMIC SANS MS", 9f),
                 Anchor = AnchorStyles.Right,
             };
+            HistoriqueLabel4.Font = new Font("COMIC SANS MS", HistoriqueLabel4.Height / 6f);
             MenuBackGround.Controls.Add(HistoriqueLabel1);
             MenuBackGround.Controls.Add(HistoriqueLabel2);
             if (nbJoueur >= 3) { HistoriqueLabel3.Visible = true; MenuBackGround.Controls.Add(HistoriqueLabel3); }
@@ -1094,12 +1092,12 @@ namespace MiniVille_GraphiqueWF
 
                         if (ZoomPictureNew != null) //Pour que l'image ne dépasse pas de l'écran, on check si son coté gauche et sa hauteur soit OK par rapport à la taille de la carte zoomé
                         {
-                            if (MonuToChange.Location.X > this.Width - MonuToChange.Width - (ZoomPictureNew.Width + 30)) ZoomPictureNew.Location = new Point(MonuToChange.Location.X - (ZoomPictureNew.Width + 30),
-                                this.Height - MonuToChange.Location.Y > ZoomPictureNew.Height ? MonuToChange.Location.Y : MonuToChange.Location.Y + MonuToChange.Height - ZoomPictureNew.Height);
+                            if (MonuToChange.Location.X > this.ClientSize.Width - MonuToChange.Width - (ZoomPictureNew.Width + 30)) ZoomPictureNew.Location = new Point(MonuToChange.Location.X - (ZoomPictureNew.Width + 30),
+                                this.ClientSize.Height - MonuToChange.Location.Y > ZoomPictureNew.Height ? MonuToChange.Location.Y : MonuToChange.Location.Y + MonuToChange.Height - ZoomPictureNew.Height);
                             else ZoomPictureNew.Location = new Point(MonuToChange.Location.X + MonuToChange.Width + 10,
-                                this.Height - MonuToChange.Location.Y > ZoomPictureNew.Height ? MonuToChange.Location.Y : MonuToChange.Location.Y + MonuToChange.Height - ZoomPictureNew.Height);
+                                this.ClientSize.Height - MonuToChange.Location.Y > ZoomPictureNew.Height ? MonuToChange.Location.Y : MonuToChange.Location.Y + MonuToChange.Height - ZoomPictureNew.Height);
 
-                            if (ZoomPictureNew.Location.Y < -5) ZoomPictureNew.Location = new Point(ZoomPictureNew.Location.X, (this.Height - ZoomPictureNew.Height) / 2);
+                            if (ZoomPictureNew.Location.Y < -5) ZoomPictureNew.Location = new Point(ZoomPictureNew.Location.X, (this.ClientSize.Height - ZoomPictureNew.Height) / 2);
                         }
                         if (ZoomPictureOld != null) //On cache l'ancienne image (image locked)
                         {
@@ -1127,12 +1125,12 @@ namespace MiniVille_GraphiqueWF
                         var ZoomPictureNew = this.Controls.Find("Zoom" + MonuToChange.Name, true).FirstOrDefault();
                         if (ZoomPictureNew != null)
                         {
-                            if (MonuToChange.Location.X > this.Width - MonuToChange.Width - (ZoomPictureNew.Width + 30)) ZoomPictureNew.Location = new Point(MonuToChange.Location.X - (ZoomPictureNew.Width + 30),
-                                this.Height - MonuToChange.Location.Y > ZoomPictureNew.Height ? MonuToChange.Location.Y : MonuToChange.Location.Y + MonuToChange.Height - ZoomPictureNew.Height);
+                            if (MonuToChange.Location.X > this.ClientSize.Width - MonuToChange.Width - (ZoomPictureNew.Width + 30)) ZoomPictureNew.Location = new Point(MonuToChange.Location.X - (ZoomPictureNew.Width + 30),
+                                this.ClientSize.Height - MonuToChange.Location.Y > ZoomPictureNew.Height ? MonuToChange.Location.Y : MonuToChange.Location.Y + MonuToChange.Height - ZoomPictureNew.Height);
                             else ZoomPictureNew.Location = new Point(MonuToChange.Location.X + MonuToChange.Width + 10,
-                                this.Height - MonuToChange.Location.Y > ZoomPictureNew.Height ? MonuToChange.Location.Y : MonuToChange.Location.Y + MonuToChange.Height - ZoomPictureNew.Height);
+                                this.ClientSize.Height - MonuToChange.Location.Y > ZoomPictureNew.Height ? MonuToChange.Location.Y : MonuToChange.Location.Y + MonuToChange.Height - ZoomPictureNew.Height);
 
-                            if (ZoomPictureNew.Location.Y < -5) ZoomPictureNew.Location = new Point(ZoomPictureNew.Location.X, (this.Height - ZoomPictureNew.Height) / 2);
+                            if (ZoomPictureNew.Location.Y < -5) ZoomPictureNew.Location = new Point(ZoomPictureNew.Location.X, (this.ClientSize.Height - ZoomPictureNew.Height) / 2);
                         }
                         if (ZoomPictureOld != null)
                         {
@@ -1160,12 +1158,12 @@ namespace MiniVille_GraphiqueWF
                         var ZoomPictureNew = this.Controls.Find("Zoom" + MonuToChange.Name, true).FirstOrDefault();
                         if (ZoomPictureNew != null)
                         {
-                            if (MonuToChange.Location.X > this.Width - MonuToChange.Width - (ZoomPictureNew.Width + 30)) ZoomPictureNew.Location = new Point(MonuToChange.Location.X - (ZoomPictureNew.Width + 30),
-                                this.Height - MonuToChange.Location.Y > ZoomPictureNew.Height ? MonuToChange.Location.Y : MonuToChange.Location.Y + MonuToChange.Height - ZoomPictureNew.Height);
+                            if (MonuToChange.Location.X > this.ClientSize.Width - MonuToChange.Width - (ZoomPictureNew.Width + 30)) ZoomPictureNew.Location = new Point(MonuToChange.Location.X - (ZoomPictureNew.Width + 30),
+                                this.ClientSize.Height - MonuToChange.Location.Y > ZoomPictureNew.Height ? MonuToChange.Location.Y : MonuToChange.Location.Y + MonuToChange.Height - ZoomPictureNew.Height);
                             else ZoomPictureNew.Location = new Point(MonuToChange.Location.X + MonuToChange.Width + 10,
-                                this.Height - MonuToChange.Location.Y > ZoomPictureNew.Height ? MonuToChange.Location.Y : MonuToChange.Location.Y + MonuToChange.Height - ZoomPictureNew.Height);
+                                this.ClientSize.Height - MonuToChange.Location.Y > ZoomPictureNew.Height ? MonuToChange.Location.Y : MonuToChange.Location.Y + MonuToChange.Height - ZoomPictureNew.Height);
 
-                            if (ZoomPictureNew.Location.Y < -5) ZoomPictureNew.Location = new Point(ZoomPictureNew.Location.X, (this.Height - ZoomPictureNew.Height) / 2);
+                            if (ZoomPictureNew.Location.Y < -5) ZoomPictureNew.Location = new Point(ZoomPictureNew.Location.X, (this.ClientSize.Height - ZoomPictureNew.Height) / 2);
                         }
                         if (ZoomPictureOld != null)
                         {
@@ -1193,12 +1191,12 @@ namespace MiniVille_GraphiqueWF
                         var ZoomPictureNew = this.Controls.Find("Zoom" + MonuToChange.Name, true).FirstOrDefault();
                         if (ZoomPictureNew != null)
                         {
-                            if (MonuToChange.Location.X > this.Width - MonuToChange.Width - (ZoomPictureNew.Width + 30)) ZoomPictureNew.Location = new Point(MonuToChange.Location.X - (ZoomPictureNew.Width + 30),
-                                this.Height - MonuToChange.Location.Y > ZoomPictureNew.Height ? MonuToChange.Location.Y : MonuToChange.Location.Y + MonuToChange.Height - ZoomPictureNew.Height);
+                            if (MonuToChange.Location.X > this.ClientSize.Width - MonuToChange.Width - (ZoomPictureNew.Width + 30)) ZoomPictureNew.Location = new Point(MonuToChange.Location.X - (ZoomPictureNew.Width + 30),
+                                this.ClientSize.Height - MonuToChange.Location.Y > ZoomPictureNew.Height ? MonuToChange.Location.Y : MonuToChange.Location.Y + MonuToChange.Height - ZoomPictureNew.Height);
                             else ZoomPictureNew.Location = new Point(MonuToChange.Location.X + MonuToChange.Width + 10,
-                                this.Height - MonuToChange.Location.Y > ZoomPictureNew.Height ? MonuToChange.Location.Y : MonuToChange.Location.Y + MonuToChange.Height - ZoomPictureNew.Height);
+                                this.ClientSize.Height - MonuToChange.Location.Y > ZoomPictureNew.Height ? MonuToChange.Location.Y : MonuToChange.Location.Y + MonuToChange.Height - ZoomPictureNew.Height);
 
-                            if (ZoomPictureNew.Location.Y < -5) ZoomPictureNew.Location = new Point(ZoomPictureNew.Location.X, (this.Height - ZoomPictureNew.Height) / 2);
+                            if (ZoomPictureNew.Location.Y < -5) ZoomPictureNew.Location = new Point(ZoomPictureNew.Location.X, (this.ClientSize.Height - ZoomPictureNew.Height) / 2);
                         }
                         if (ZoomPictureOld != null)
                         {
@@ -1434,12 +1432,12 @@ namespace MiniVille_GraphiqueWF
             if (ZoomPicture != null) //Condition pour le debugging mais non nécessaire sinon
             {
                 ZoomPicture.Visible = true; //On affiche la carte zoomé, et on la positionne en faisant attention qu'elle ne sorte pas du terrain
-                if (thisPicture.Location.X > this.Width - thisPicture.Width - (ZoomPicture.Width + 30)) ZoomPicture.Location = new Point(thisPicture.Location.X - (ZoomPicture.Width + 30),
-                    this.Height - thisPicture.Location.Y - 10 > ZoomPicture.Height ? thisPicture.Location.Y : thisPicture.Location.Y + thisPicture.Height - ZoomPicture.Height);
+                if (thisPicture.Location.X > this.ClientSize.Width - thisPicture.Width - (ZoomPicture.Width + 30)) ZoomPicture.Location = new Point(thisPicture.Location.X - (ZoomPicture.Width + 30),
+                    this.ClientSize.Height - thisPicture.Location.Y - 10 > ZoomPicture.Height ? thisPicture.Location.Y : thisPicture.Location.Y + thisPicture.Height - ZoomPicture.Height);
                 else ZoomPicture.Location = new Point(thisPicture.Location.X + thisPicture.Width + 10,
-                    this.Height - thisPicture.Location.Y - 10 > ZoomPicture.Height ? thisPicture.Location.Y : thisPicture.Location.Y + thisPicture.Height - ZoomPicture.Height);
+                    this.ClientSize.Height - thisPicture.Location.Y - 10 > ZoomPicture.Height ? thisPicture.Location.Y : thisPicture.Location.Y + thisPicture.Height - ZoomPicture.Height);
 
-                if (ZoomPicture.Location.Y < -5) ZoomPicture.Location = new Point(ZoomPicture.Location.X, (this.Height - ZoomPicture.Height) / 2);
+                if (ZoomPicture.Location.Y < -5) ZoomPicture.Location = new Point(ZoomPicture.Location.X, (this.ClientSize.Height - ZoomPicture.Height) / 2);
                 ZoomPicture.BringToFront(); //On la met en 1er plan
             }
         }
@@ -1522,12 +1520,12 @@ namespace MiniVille_GraphiqueWF
             if (ZoomPictureNew != null) //Pour le debugging
             {
                 ZoomPictureNew.Visible = true; //La grosse carte unlocked est affichée
-                if (picturebox.Location.X > this.Width - picturebox.Width - (ZoomPictureNew.Width + 30)) ZoomPictureNew.Location = new Point(picturebox.Location.X - (ZoomPictureNew.Width + 30),
-                    this.Height - picturebox.Location.Y > ZoomPictureNew.Height ? picturebox.Location.Y : picturebox.Location.Y + picturebox.Height - ZoomPictureNew.Height);
+                if (picturebox.Location.X > this.ClientSize.Width - picturebox.Width - (ZoomPictureNew.Width + 30)) ZoomPictureNew.Location = new Point(picturebox.Location.X - (ZoomPictureNew.Width + 30),
+                    this.ClientSize.Height - picturebox.Location.Y > ZoomPictureNew.Height ? picturebox.Location.Y : picturebox.Location.Y + picturebox.Height - ZoomPictureNew.Height);
                 else ZoomPictureNew.Location = new Point(picturebox.Location.X + picturebox.Width + 10,
-                    this.Height - picturebox.Location.Y > ZoomPictureNew.Height ? picturebox.Location.Y : picturebox.Location.Y + picturebox.Height - ZoomPictureNew.Height);
+                    this.ClientSize.Height - picturebox.Location.Y > ZoomPictureNew.Height ? picturebox.Location.Y : picturebox.Location.Y + picturebox.Height - ZoomPictureNew.Height);
 
-                if (ZoomPictureNew.Location.Y < -5) ZoomPictureNew.Location = new Point(ZoomPictureNew.Location.X, (this.Height - ZoomPictureNew.Height) / 2);
+                if (ZoomPictureNew.Location.Y < -5) ZoomPictureNew.Location = new Point(ZoomPictureNew.Location.X, (this.ClientSize.Height - ZoomPictureNew.Height) / 2);
                 ZoomPictureNew.BringToFront(); //Mise en premier plan
             }
             if (ZoomPictureOld != null) //Debugging
@@ -2547,7 +2545,7 @@ namespace MiniVille_GraphiqueWF
                         BackColor = Color.Transparent,
                         Location = new Point(Gold.Width / 2 - 15, Gold.Height / 2),
                         Anchor = AnchorStyles.None,
-                        Font = new Font("COMIC SANS MS", 15),
+                        Font = new Font("COMIC SANS MS", 10),
                     };
                     Gold.Controls.Add(MoneyJoueur1);
                 }
@@ -2559,7 +2557,7 @@ namespace MiniVille_GraphiqueWF
                         BackColor = Color.Transparent,
                         Location = new Point(Gold.Width / 2 - 15, Gold.Height / 2),
                         Anchor = AnchorStyles.None,
-                        Font = new Font("COMIC SANS MS", 15),
+                        Font = new Font("COMIC SANS MS", 10),
                     };
                     if (this.nbJoueur == 2) //Toujours le cas où s'il y a que deux joueurs ou 3+
                     {
@@ -2581,7 +2579,7 @@ namespace MiniVille_GraphiqueWF
                         BackColor = Color.Transparent,
                         Location = new Point(Gold.Width / 2 - 15, Gold.Height / 2),
                         Anchor = AnchorStyles.None,
-                        Font = new Font("COMIC SANS MS", 15),
+                        Font = new Font("COMIC SANS MS", 10),
                     };
                     Gold.Anchor = AnchorStyles.Top | AnchorStyles.Right;
                     Gold.Location = new Point(BoardSizeWidth - (CardWidth + 20), 2 * CardHeight + 50);
@@ -2595,7 +2593,7 @@ namespace MiniVille_GraphiqueWF
                         BackColor = Color.Transparent,
                         Location = new Point(Gold.Width / 2 - 15, Gold.Height / 2),
                         Anchor = AnchorStyles.None,
-                        Font = new Font("COMIC SANS MS", 15),
+                        Font = new Font("COMIC SANS MS", 10),
                     };
                     Gold.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
                     Gold.Location = new Point(BoardSizeWidth - (CardWidth + 20), BoardSizeHeight - (CardHeight * 3) - 50);
@@ -2608,7 +2606,7 @@ namespace MiniVille_GraphiqueWF
                 {
                     Size = new Size(100, 30),
                     Text = "Joueur " + i,
-                    Font = new Font("COMIC SANS MS", 12f),
+                    Font = new Font("COMIC SANS MS", 10),
                 };
 
                 //Placement des noms + ancrages selon le joueur
@@ -2679,7 +2677,7 @@ namespace MiniVille_GraphiqueWF
                 Size = new Size(400, 150),
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 Anchor = AnchorStyles.Top,
-                Location = new Point(this.Width / 2 - 200, this.Height / 2 - 300),
+                Location = new Point(this.ClientSize.Width / 2 - 200, this.ClientSize.Height / 2 - 300),
                 WaitOnLoad = true,
             };
             this.Controls.Add(thanks);
@@ -2694,7 +2692,7 @@ namespace MiniVille_GraphiqueWF
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 Anchor = AnchorStyles.None,
                 BackColor = Color.Transparent,
-                Location = new Point(-200, this.Height / 2 - 350 / 2),
+                Location = new Point(-200, this.ClientSize.Height / 2 - 350 / 2),
                 WaitOnLoad = true,
             };
 
@@ -2709,7 +2707,7 @@ namespace MiniVille_GraphiqueWF
             Time1.Interval = 20;
             Time1.Tick += new EventHandler((sender, e) =>
             {
-                if (Fornite1.Location.X > this.Width)
+                if (Fornite1.Location.X > this.ClientSize.Width)
                 {
                     Time1.Stop();
                 }
@@ -2730,7 +2728,7 @@ namespace MiniVille_GraphiqueWF
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 BackColor = Color.Transparent,
                 Anchor = AnchorStyles.None,
-                Location = new Point(this.Width + 200, this.Height / 2 - 350 / 2),
+                Location = new Point(this.ClientSize.Width + 200, this.ClientSize.Height / 2 - 350 / 2),
                 WaitOnLoad = true,
             };
             Fornite2.Paint += new PaintEventHandler((sender, e) =>
@@ -2764,7 +2762,7 @@ namespace MiniVille_GraphiqueWF
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 BackColor = Color.Transparent,
                 Anchor = AnchorStyles.None,
-                Location = new Point(-200, this.Height / 2 - 350 / 2),
+                Location = new Point(-200, this.ClientSize.Height / 2 - 350 / 2),
                 WaitOnLoad = true,
             };
             Fornite3.Paint += new PaintEventHandler((sender, e) =>
@@ -2777,7 +2775,7 @@ namespace MiniVille_GraphiqueWF
             Time3.Interval = 20;
             Time3.Tick += new EventHandler((sender, e) =>
             {
-                if (Fornite3.Location.X > this.Width)
+                if (Fornite3.Location.X > this.ClientSize.Width)
                 {
                     Time3.Stop();
                 }
@@ -2798,7 +2796,7 @@ namespace MiniVille_GraphiqueWF
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 BackColor = Color.Transparent,
                 Anchor = AnchorStyles.None,
-                Location = new Point(this.Width + 200, this.Height / 2 - 350 / 2),
+                Location = new Point(this.ClientSize.Width + 200, this.ClientSize.Height / 2 - 350 / 2),
                 WaitOnLoad = true,
             };
             Fornite4.Paint += new PaintEventHandler((sender, e) =>
@@ -2827,10 +2825,10 @@ namespace MiniVille_GraphiqueWF
             waveOutButtonHover.Init(readerButtonHover);
             waveOutButtonHover.Play();
             //On remet leur pos ensemble à 4 pour la fin
-            Fornite1.Location = new Point(this.Width / 2 - (Fornite1.Width * 2), Fornite1.Location.Y);
-            Fornite2.Location = new Point(this.Width / 2 - Fornite2.Width, Fornite2.Location.Y);
-            Fornite3.Location = new Point(this.Width / 2, Fornite3.Location.Y);
-            Fornite4.Location = new Point(this.Width / 2 + Fornite4.Width, Fornite4.Location.Y);
+            Fornite1.Location = new Point(this.ClientSize.Width / 2 - (Fornite1.Width * 2), Fornite1.Location.Y);
+            Fornite2.Location = new Point(this.ClientSize.Width / 2 - Fornite2.Width, Fornite2.Location.Y);
+            Fornite3.Location = new Point(this.ClientSize.Width / 2, Fornite3.Location.Y);
+            Fornite4.Location = new Point(this.ClientSize.Width / 2 + Fornite4.Width, Fornite4.Location.Y);
             await Task.Delay(8000); //Petite attente de 8s pour profiter des crédits
             Application.Exit(); //Sortie systeme
         }
