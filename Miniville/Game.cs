@@ -49,7 +49,6 @@ namespace Miniville
 					while (!int.TryParse(Console.ReadLine(), out nbJoueurMax))
 						Console.WriteLine("Combien de joueurs voulez-vous être au total ? Vous pouvez être ajouter jusqu'à {0} joueurs pour être au maximum 4.", nbIA - nbJoueurReel);
             }
-
             for (int i = 0; i < nbJoueurReel; i++)
             {
                 Console.WriteLine("Joueur " + (i + 1) + " veuillez écrire votre nom : ");
@@ -337,5 +336,4 @@ namespace Miniville
 			return -1;
 		}
 	}
-
 }
