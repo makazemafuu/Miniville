@@ -40,8 +40,12 @@ namespace Miniville
 			nbIA = 4;
             Console.WriteLine("Combien de joueurs êtes-vous ? Vous pouvez jouer de 1 à 4 joueurs. Dans le cas où vous joueriez seul, il y aura au minimum une IA.");
 			while(nbJoueurReel < 1 || nbJoueurReel > 4)
+			{
 				while (!int.TryParse(Console.ReadLine(), out nbJoueurReel))
+				{
 					Console.WriteLine("Combien de joueurs êtes-vous ?");
+				}
+			}
 			if (nbJoueurReel < 4)
 			{
 				Console.WriteLine("Combien de joueurs voulez-vous ajouter ? Vous pouvez être ajouter jusqu'à {0} joueurs pour être au maximum 4.", nbIA - nbJoueurReel);
@@ -255,7 +259,6 @@ namespace Miniville
                         if (Cards.Value.PileCards.Count != 0)
                             if (Cards.Value.PileCards.Peek().ActivationValue1 == ScoreDesTotal || Cards.Value.PileCards.Peek().ActivationValue2 == ScoreDesTotal)
 							{
-								Console.WriteLine("ça marche");
 								if (Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Blue)
 									Cards.Value.PileCards.Peek().ActiveEffect(listPlayer[i]);
 								else if ((Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Purple || Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Green) && PlayerRound == i) 
@@ -275,7 +278,8 @@ namespace Miniville
 				listPlayer[PlayerRound].ShopIA(nbPileChoice, cards);
 				#endregion
 				//rejoue si parc d'attraction
-				if (hasParc(listPlayer[PlayerRound]) && ScoreDes1 == scoreDes2 && ScoreDes1 != 0) Round(PlayerRound);
+				if (hasParc(listPlayer[PlayerRound]) && ScoreDes1 == scoreDes2 && ScoreDes1 != 0) 
+					Round(PlayerRound);
 			}
 			listPlayer[playerRound].IsPlaying = false;
 		}

@@ -14,12 +14,12 @@ namespace Miniville
         protected Dictionary<string, Pile> cardsAvailable;
 		private Pile pile;
 
-        public Bank(Game Game, int money)
+        public Bank(Game Game, int money) // Constructeur de Bank.
 		{
 			pile = new Pile();
 			this.coinsAvailable = money;
 			this.game = Game;
-			cardsAvailable = pile.InitPile(game);
+			cardsAvailable = pile.InitPile(game); // On déclare et instancie les piles de carte tout en leur donnant l'instance de la partie dans laquelle nous nous trouvons et on l'attribue à bank.
 		}
 
         public void DisplayCards()
@@ -92,7 +92,7 @@ namespace Miniville
 		{
 			if (type == "Card")
 			{
-				from.CardsAvailable[value].PileCards.Peek().Owner = (Player)to;
+				from.CardsAvailable[value].PileCards.Peek().Owner = (Player)to; // (nom du type) devant une variable, c'est un cast, ce qui permet de traiter la variable comme si elle appartenait à un autre type.
 				to.CardsAvailable[value].PileCards.Push(from.CardsAvailable[value].PileCards.Pop());
 			}
 			else if (type == "Coin")

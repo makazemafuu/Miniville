@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 
 namespace Miniville
 {
-	internal class Card
+	internal class Card // 
 	{
 		public enum Colorcard
 		{
@@ -88,7 +88,7 @@ namespace Miniville
 				foreach (Player player in game.ListPlayer)
 					if (player.IsPlaying && player.NamePlayer != Owner.NamePlayer) // obtenez 1 pièce par le joueur qui a lancé les dés
 					{
-						game.Bank.Trade(player, Owner, "Coin", "1");
+						game.Bank.Trade(player, Owner, "Coin", owner.Monuments[1].IsActive ? "2" : "1");
 						Console.WriteLine(player.NamePlayer + " donne " + (owner.Monuments[1].IsActive? "deux pièces ": "une pièce ") + "à " + Owner.NamePlayer + " pour avoir activé sa carte café.");
 					}
 			}
@@ -196,9 +196,10 @@ namespace Miniville
                 foreach (Player player in game.ListPlayer)
                     if (player.IsPlaying && player.NamePlayer != Owner.NamePlayer) // obtenez 1 pièce par le joueur qui a lancé les dés
 					{
-						game.Bank.Trade(player, Owner, "Coin", "2");
-						Console.WriteLine(player.NamePlayer + "donne deux pièces à " + owner.NamePlayer);
-					}
+						game.Bank.Trade(player, Owner, "Coin", owner.Monuments[1].IsActive ? "3" : "2");
+						Console.WriteLine(player.NamePlayer + " donne " + (owner.Monuments[1].IsActive? "deux pièces ": "une pièce ") + "à " + Owner.NamePlayer + " pour avoir activé sa carte café.");
+                        Console.WriteLine(player.NamePlayer + " donne " + (owner.Monuments[1].IsActive ? "trois pièces" : "deux pièces") + " à " + owner.NamePlayer + " pour avoir activé sa carte restaurant.");
+                    }
                 // obtenez 2 pièces par un autre joueur
             }
 			else if (name == "Verger")
