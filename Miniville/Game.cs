@@ -62,13 +62,6 @@ namespace Miniville
 				listPlayer[i].CardsAvailable["Boulangerie"].PileCards.Push(tmp);
                 Console.WriteLine();
             }
-		/*	foreach (Player player in listPlayer) //Display Ressources for tests. 
-			{
-				player.DisplayRessources(player.NamePlayer);
-				player.Trade(Bank, player, "Card", "Mine");
-				Bank.DisplayRessources("Bank");
-				player.DisplayRessources(player.NamePlayer);
-			}*/
             for (int i = nbJoueurReel; i < nbJoueurMax; i++)
             {
                 listPlayer.Add(new Player("IA " + (nbJoueurReel - 1 - i), true, this, 3, Bank));
@@ -86,7 +79,8 @@ namespace Miniville
 		{
 			Console.WriteLine("Vos ressources sont les suivantes :");
 			listPlayer[PlayerRound].DisplayRessources(listPlayer[PlayerRound].NamePlayer);
-			Console.WriteLine("\n");
+			listPlayer[PlayerRound].DisplayMonuments();
+            Console.WriteLine("\n");
 			Thread.Sleep(2500);
 			listPlayer[playerRound].IsPlaying = true;
 			
@@ -97,7 +91,7 @@ namespace Miniville
 				int nbDesChoice = 1;
 				if (hasGare(listPlayer[PlayerRound]))
 				{
-					Console.WriteLine("Voulez vous lancer un ou deux dés ? ");
+					Console.WriteLine("Voulez vous lancer un ou deux dés ? Entre soit '1', soit '2'.");
 					nbDes = Console.ReadLine();
 					//Tant que l'input n'est pas un chiffre valide on redemande à l'utilisateur de taper.
 					while (!int.TryParse(nbDes, out nbDesChoice) || !(nbDesChoice == 1 || nbDesChoice == 2))

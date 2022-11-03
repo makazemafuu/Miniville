@@ -89,7 +89,7 @@ namespace Miniville
 					if (player.IsPlaying && player.NamePlayer != Owner.NamePlayer) // obtenez 1 pièce par le joueur qui a lancé les dés
 					{
 						game.Bank.Trade(player, Owner, "Coin", "1");
-						Console.WriteLine(player.NamePlayer + "donne" + (owner.Monuments[1].IsActive? "deux pièces ": "une pièce ") + "à " + Owner.NamePlayer + "pour avoir activé sa carte café.");
+						Console.WriteLine(player.NamePlayer + " donne " + (owner.Monuments[1].IsActive? "deux pièces ": "une pièce ") + "à " + Owner.NamePlayer + " pour avoir activé sa carte café.");
 					}
 			}
 			else if (name == "Supérette")
