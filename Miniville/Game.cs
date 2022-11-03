@@ -171,7 +171,6 @@ namespace Miniville
 
 						if (Cards.PileCards.Count > 0)
 						{
-							//Console.WriteLine("carte {0} propriété de {1} présente dans la liste des carte de {2}",Cards.PileCards.Peek().Name, Cards.PileCards.Peek().Owner.NamePlayer, listPlayer[i].NamePlayer);
 							if (Cards.PileCards.Peek().ActivationValue1 == ScoreDesTotal || Cards.PileCards.Peek().ActivationValue2 == ScoreDesTotal)
 							{
 								if (Cards.PileCards.Peek().Type == 0)
