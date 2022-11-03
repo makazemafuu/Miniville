@@ -42,25 +42,18 @@ namespace Miniville
             foreach (Pile pile in cardsAvailable.Values)
                 pile.PileCards.Clear();
         }
-
-        public void Shop(int choixPile)
-        {
-            // il reçoit la carte à acheter en argument
-            // on ajoute la carte à la main
-            Trade(theBank, this, "Card", theBank.CardsAvailable.ElementAt(choixPile).Key);
-            // on retire au joueur le coût de la carte
-            // on rend l'argent à la banque
-            Trade(this, theBank, "Coin", theBank.CardsAvailable.ElementAt(choixPile).Value.PileCards.Peek().Cost.ToString());    
-        }
         
         public void ShopIA(int choixPile, List<Card> cards)
         {
+            if (choixPile == 42)
+                return;
             // il reçoit la carte à acheter en argument
             // on ajoute la carte à la main
             Trade(theBank, this, "Card", cards[choixPile].Name);
             // on retire au joueur le coût de la carte
             // on rend l'argent à la banque
-            Trade(this, theBank, "Coin", cards[choixPile].Cost.ToString());    
+            Trade(this, theBank, "Coin", cards[choixPile].Cost.ToString());
+            Console.WriteLine("\n" + NamePlayer + " a acheté " + cards[choixPile].Name + " pour la somme de " + cards[choixPile].Cost.ToString() + " pièce(s).\n\n");
         }
 
         public List<Card> DisplayChoice()
@@ -74,7 +67,7 @@ namespace Miniville
                 if (game.Bank.CardsAvailable.ElementAt(i).Value.PileCards.Count > 0)
                     if (game.Bank.CardsAvailable.ElementAt(i).Value.PileCards.Peek().Cost <= CoinsAvailable)
                     { 
-                        Console.WriteLine("{0} : {4} \n Coût : {1} pièce(s), {3} restantes en banque, entrez {2} pour l'acheter.\n", game.Bank.CardsAvailable.ElementAt(i).Key,
+                        Console.WriteLine("{0} : {4} \n Coût : {1} pièce(s). {3} restantes en banque, entrez {2} pour l'acheter.\n", game.Bank.CardsAvailable.ElementAt(i).Key,
                             game.Bank.CardsAvailable.ElementAt(i).Value.PileCards.Peek().Cost, t, game.Bank.CardsAvailable.ElementAt(i).Value.PileCards.Count, 
                             game.Bank.CardsAvailable.ElementAt(i).Value.PileCards.Peek().EffectDescription);
                         aled.Add(game.Bank.CardsAvailable.ElementAt(i).Value.PileCards.Peek());
@@ -94,6 +87,7 @@ namespace Miniville
                     }
                 j++;
             }
+            Console.WriteLine("Si vous ne souhaitez pas acheter de batiment, entrez '42'");
             return aled;
         }
     }

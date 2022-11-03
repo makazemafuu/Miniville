@@ -13,11 +13,6 @@ namespace Miniville
         {
             Game game = new Game();
             game.Run();
-          /*  Bank bank = new Bank();
-            bank.DisplayRessources();
-            bank.CardsAvailable["Verger"].PileCards.Pop();
-            bank.DisplayRessources();*/
-
         }
     }
 }
