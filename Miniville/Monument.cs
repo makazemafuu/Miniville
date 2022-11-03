@@ -18,16 +18,14 @@ namespace Miniville
         }
 
 
-        public Monument(string Name, int Type) 
+
+        public Monument(string Name, int Cost, int Type, string Description) 
 
         {
             this.name = Name;
             this.cost = Cost;
             this.IsActive = false;
-        }
-        public void PassiveEffect()
-        {
-            // Display passive effect of the Monument cards.
+            this.effectDescription = Description;
         }
     }
 }

@@ -42,29 +42,51 @@ namespace Miniville
 
 		public void DisplayRessources(string from)
 		{
-			Console.WriteLine("There is {0} coins remaining in {1}.", CoinsAvailable, from);
+			Console.WriteLine("{1} dispose de {0} pièces.", CoinsAvailable, from);
 			foreach (var card in cardsAvailable)
 			{
-				Console.Write("There is {0} cards of the type {1} remaining of the type in {2}", card.Value.PileCards.Count, card.Key, from);
-				if (card.Value.PileCards.Count > 0 && from != "Bank")
-					Console.Write("the player owner is " + card.Value.PileCards.Peek().Owner.NamePlayer);
-				else
-					Console.WriteLine();
+				Console.WriteLine("Il y a {0} cartes {1} restantes dans la réserve de {2}.", card.Value.PileCards.Count, card.Key, from);
             }
 		}
 
-        public void DisplayCards(string from)
+        public void DisplayCardsOtherPLayer(string from)
         {
-            Console.WriteLine("There is {0} coins remaining in {1}.", CoinsAvailable, from);
             foreach (var card in cardsAvailable)
             {
-                Console.Write("There is {0} cards of the type {1} remaining of the type in {2}", card.Value.PileCards.Count, card.Key, from);
-                if (card.Value.PileCards.Count > 0 && from != "Bank")
-                    Console.Write("the player owner is " + card.Value.PileCards.Peek().Owner.NamePlayer);
-                else
-                    Console.WriteLine();
+				if (card.Value.PileCards.Peek().Type != 3)
+					Console.WriteLine("{2} a {0} cartes {1}.", card.Value.PileCards.Count, card.Key, from);
             }
         }
+		public void ChooseCardOtherPlayer(string from)
+        {
+			int i = 0;
+            foreach (var card in cardsAvailable)
+            {
+				if (card.Value.PileCards.Peek().Type != 3)
+				{
+					Console.WriteLine("Il y a {0} cartes {1} restantes dans la réserve de {2}, entrez \"{3}\" si vous voulez choisir celle là.", card.Value.PileCards.Count, card.Key, from, i);
+					i++;
+				}
+            }
+        }
+
+        public void DisplayYourCards()
+        {
+            int i = 0;
+            foreach (var card in cardsAvailable)
+            {
+                if (card.Value.PileCards.Peek().Type != 3)
+				{
+                    Console.WriteLine("Vous disposez de {0} carte(s) {1} , entrez \"{3}\" si vous voulez donner celle là", card.Value.PileCards.Count, card.Key, i);
+					i++;
+				}
+			}
+        }
+
+		public void DisplayMoney(string from)
+		{
+			Console.WriteLine(from + "a {0} pièces, voulez-vous le dépouiller ?", CoinsAvailable);
+		}
 
         public void Trade(Bank from, Bank to, string type, string value)
 		{
@@ -75,8 +97,8 @@ namespace Miniville
 			}
 			else if (type == "Coin")
 			{
-				to.CoinsAvailable += int.Parse(value);
-				from.CoinsAvailable -= int.Parse(value);
+				to.CoinsAvailable = to.CoinsAvailable + int.Parse(value);
+				from.CoinsAvailable = from.CoinsAvailable - int.Parse(value);
 			}
 		}
     }

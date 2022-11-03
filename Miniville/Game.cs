@@ -11,11 +11,14 @@ namespace Miniville
 
 		private List<Player> listPlayer;
 		private bool isGameOver = false;
-		private bool TrueEnding = true;
+		private bool TrueEnding = false;
 		private int playerRound = 0;
 		private Bank bank;
 		private Dice dice;
 		private Random random = new Random();
+		private int nbJoueurReel;
+		private int nbJoueurMax;
+		private int nbIA;
 
 		public Bank Bank { get { return bank; } }
 
@@ -31,9 +34,9 @@ namespace Miniville
 
 		public void Run()
 		{
-			int nbJoueurReel = 0;
-			int nbJoueurMax = -1;
-			int nbIA = 4;
+			nbJoueurReel = 0;
+			nbJoueurMax = -1;
+			nbIA = 4;
             Console.WriteLine("Combien de joueurs êtes-vous ? Vous pouvez jouer de 1 à 4 joueurs. Dans le cas où vous joueriez seul, il y aura au minimum une IA.");
 			while(nbJoueurReel < 1 || nbJoueurReel > 4)
 				while (!int.TryParse(Console.ReadLine(), out nbJoueurReel))
@@ -51,6 +54,7 @@ namespace Miniville
                 Console.WriteLine("Joueur " + (i + 1) + " veuillez écrire votre nom : ");
                 string namePlayer = Console.ReadLine();
                 listPlayer.Add(new Player(namePlayer, false, this, 3, Bank));
+				Console.WriteLine();
             }
 		/*	foreach (Player player in listPlayer) //Display Ressources for tests. 
 			{
@@ -66,15 +70,29 @@ namespace Miniville
             while (!isGameOver)
             {
                 Console.WriteLine("Tour du joueur {0}", playerRound + 1);
+				foreach (Player player in listPlayer)
+				{
+					foreach (var piles in player.CardsAvailable)
+					{
+						if (piles.Value.PileCards.Count > 0)
+							piles.Value.PileCards.Peek().Owner = player;
+					}
+				}
                 Round(playerRound);
-                playerRound = (playerRound + 1) % nbJoueurMax;
+				Thread.Sleep(2000);
+                playerRound = (playerRound + 1) % nbJoueurReel;
             }
 
             Console.WriteLine("Le joueur {0} gagne la partie.", isEndgame(TrueEnding) + 1);
         }
 		private void Round(int PlayerRound)
 		{
+			Console.WriteLine("Vos ressources sont les suivantes :");
+			listPlayer[PlayerRound].DisplayRessources(listPlayer[PlayerRound].NamePlayer);
+			Console.WriteLine("\n");
+			Thread.Sleep(2500);
 			listPlayer[playerRound].IsPlaying = true;
+			
 			if (!listPlayer[PlayerRound].IsAI)
 			{
 				#region Lancé de dé
@@ -99,7 +117,7 @@ namespace Miniville
 				if (nbDesChoice == 1)
 				{
 					ScoreDesTotal = dice.Roll();
-					Console.WriteLine("Le dés a fait un score de {0}", ScoreDesTotal);
+					Console.WriteLine("Le(s) dé(s) a/ont fait un score de {0}", ScoreDesTotal);
 				}
 				else
 				{
@@ -150,39 +168,52 @@ namespace Miniville
 				#region Activation des cartes
 				for (int i = 0; i < listPlayer.Count; i++)
 				{
-					foreach (var Cards in listPlayer[i].CardsAvailable)
+					foreach (var Cards in listPlayer[i].CardsAvailable.Values)
 					{
-						if (Cards.Value.PileCards.Count != 0)
-							if (Cards.Value.PileCards.Peek().ActivationValue.Item1 == ScoreDesTotal || Cards.Value.PileCards.Peek().ActivationValue.Item2 == ScoreDesTotal)
+
+						if (Cards.PileCards.Count > 0)
+						{
+							Console.WriteLine("carte {0} propriété de {1} présente dans la liste des carte de {2}",Cards.PileCards.Peek().Name, Cards.PileCards.Peek().Owner.NamePlayer, listPlayer[i].NamePlayer);
+							if (Cards.PileCards.Peek().ActivationValue1 == ScoreDesTotal || Cards.PileCards.Peek().ActivationValue2 == ScoreDesTotal)
 							{
-								if (Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Blue)
-									Cards.Value.PileCards.Peek().ActiveEffect();
-								else if ((Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Purple || Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Green) && PlayerRound == i)
-									Cards.Value.PileCards.Peek().ActiveEffect();
-								else if (Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Red && PlayerRound != i)
-									Cards.Value.PileCards.Peek().ActiveEffect();
+								if (Cards.PileCards.Peek().Type == 0)
+								{
+									Console.WriteLine("Activation de " + Cards.PileCards.Peek().Name);
+									Cards.PileCards.Peek().ActiveEffect(listPlayer[i]);
+								}
+								else if ((Cards.PileCards.Peek().Type == 3 || Cards.PileCards.Peek().Type == 1) && PlayerRound == i)
+								{
+									Console.WriteLine("Activation de " + Cards.PileCards.Peek().Name);
+									Cards.PileCards.Peek().ActiveEffect(listPlayer[i]);
+								}
+								else if (Cards.PileCards.Peek().Type == 2 && PlayerRound != i)
+								{
+									Console.WriteLine("Activation de " + Cards.PileCards.Peek().Name);
+									Cards.PileCards.Peek().ActiveEffect(listPlayer[i]);
+								}
 							}
+						}
 					}
 				}
 
 				#endregion
-				if (isEndgame(TrueEnding) != -1) return;
+				if (isEndgame(TrueEnding) != -1) 
+					return;
 				#region Achat
-				Console.WriteLine("Voici les cartes que vous pouvez acheter, veuillez taper le numéro de la pile que vous souhaitez acheter");
-				listPlayer[PlayerRound].DisplayChoice();
-				string PlayerChoice = Console.ReadLine();
-				int nbPileChoice;
-				while (!int.TryParse(PlayerChoice, out nbPileChoice) || !(nbPileChoice > 0 && nbPileChoice < 16))
-				{
-					Console.WriteLine();
-					Console.WriteLine("'{0}' n'est pas un choix valide. Merci de taper une pile valide", nbPileChoice);
-					PlayerChoice = Console.ReadLine();
-					Console.WriteLine();
-				}
-				listPlayer[PlayerRound].Shop(nbPileChoice);
+				Console.WriteLine("Voici les cartes que vous pouvez acheter, veuillez taper le numéro de la pile que vous souhaitez acheter :\n");
+				List<Card> listCards = listPlayer[PlayerRound].DisplayChoice();
+				int nbPileChoice = -1;
+				if ( listCards.Count > 0)
+					while (!int.TryParse(Console.ReadLine(), out nbPileChoice) || nbPileChoice < 0 && nbPileChoice > listCards.Count && nbPileChoice != 42)
+					{
+						Console.WriteLine("'{0}' n'est pas un choix valide. Merci de taper une pile valide", nbPileChoice);
+						Console.WriteLine();
+					}
+				listPlayer[PlayerRound].ShopIA(nbPileChoice, listCards);
 				#endregion
 				//rejoue si parc d'attraction
-				if (hasParc(listPlayer[PlayerRound]) && ScoreDes1 == scoreDes2 && ScoreDes1 != 0) Round(PlayerRound);
+				if (hasParc(listPlayer[PlayerRound]) && ScoreDes1 == scoreDes2 && ScoreDes1 != 0)
+					Round(PlayerRound);
 			}
 			else
 			{
@@ -230,25 +261,26 @@ namespace Miniville
 					foreach (var Cards in listPlayer[i].CardsAvailable)
 					{
                         if (Cards.Value.PileCards.Count != 0)
-                            if (Cards.Value.PileCards.Peek().ActivationValue.Item1 == ScoreDesTotal || Cards.Value.PileCards.Peek().ActivationValue.Item2 == ScoreDesTotal)
+                            if (Cards.Value.PileCards.Peek().ActivationValue1 == ScoreDesTotal || Cards.Value.PileCards.Peek().ActivationValue2 == ScoreDesTotal)
 							{
+								Console.WriteLine("ça marche");
 								if (Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Blue)
-									Cards.Value.PileCards.Peek().ActiveEffect();
+									Cards.Value.PileCards.Peek().ActiveEffect(listPlayer[i]);
 								else if ((Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Purple || Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Green) && PlayerRound == i) 
-									Cards.Value.PileCards.Peek().ActiveEffect();
+									Cards.Value.PileCards.Peek().ActiveEffect(listPlayer[i]);
 								else if (Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Red && PlayerRound != i) 
-									Cards.Value.PileCards.Peek().ActiveEffect();
+									Cards.Value.PileCards.Peek().ActiveEffect(listPlayer[i]);
 							}
 					}
 				}
 
 				#endregion
-				if (isEndgame(TrueEnding) != -1) return;
+				if (isEndgame(TrueEnding) != -1)
+					return;
 				#region Achat
-				Console.WriteLine("Voici les cartes que vous pouvez acheter, veuillez taper le numéro de la pile que vous souhaitez acheter");
-				listPlayer[PlayerRound].DisplayChoice();
-				int nbPileChoice = random.Next(1, 16); // a modifié car pas convaincu par le displayChoice de la banque
-				listPlayer[PlayerRound].Shop(nbPileChoice);
+				List<Card> cards = listPlayer[PlayerRound].DisplayChoice();
+				int nbPileChoice = random.Next(1, cards.Count);
+				listPlayer[PlayerRound].ShopIA(nbPileChoice, cards);
 				#endregion
 				//rejoue si parc d'attraction
 				if (hasParc(listPlayer[PlayerRound]) && ScoreDes1 == scoreDes2 && ScoreDes1 != 0) Round(PlayerRound);
@@ -303,7 +335,6 @@ namespace Miniville
 					}
 				}
 			}
-
 			return -1;
 		}
 	}
