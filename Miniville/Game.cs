@@ -115,7 +115,7 @@ namespace Miniville
 					ScoreDes1 = dice.Roll();
 					scoreDes2 = dice.Roll();
 					ScoreDesTotal = ScoreDes1 + scoreDes2;
-					Console.WriteLine("Les dés ont fait un score de {0} + {1} = {3} ", ScoreDes1, scoreDes2, ScoreDesTotal);
+					Console.WriteLine("Les dés ont fait un score de {0} + {1} = {2} ", ScoreDes1, scoreDes2, ScoreDesTotal);
 				}
 
 				if (hasTour(listPlayer[PlayerRound]))
