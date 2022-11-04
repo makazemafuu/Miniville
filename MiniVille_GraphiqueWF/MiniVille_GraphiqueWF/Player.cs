@@ -30,7 +30,7 @@ namespace MiniVille_GraphiqueWF
             #region Carte A donner 
             if (indexToReceive == indexToGive) //Si on recoit la même carte qu'on donne, il ne se passe rien
             {
-                MessageBox.Show("To add = " + false + " to remove = " + false); //Pour le debugging
+                //MessageBox.Show("To add = " + false + " to remove = " + false); //Pour le debugging
                 return new bool[] { false, false }; //false, false
             }
             int count = 0;
@@ -62,7 +62,7 @@ namespace MiniVille_GraphiqueWF
             if (!CarteAcquisesUniques.Any(Cards => Cards.Name == temp.Name)) {  //Si on ne possède pas la carte alors on devra l'ajouter, ToAdd = true
                 CarteAcquisesUniques.Add(temp); 
                 ToAdd = true; }
-            MessageBox.Show("To add = " + ToAdd + " to remove = " + toRemove); //Pour le debugging
+            //MessageBox.Show("To add = " + ToAdd + " to remove = " + toRemove); //Pour le debugging
             #endregion
             return new bool[] { ToAdd, toRemove }; //Retour pour l'affichage
         }
