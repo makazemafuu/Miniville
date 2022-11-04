@@ -57,7 +57,7 @@ namespace Miniville
             {
                 Console.WriteLine("Joueur " + (i + 1) + " veuillez écrire votre nom : ");
                 string namePlayer = Console.ReadLine();
-                listPlayer.Add(new Player(namePlayer, false, this, 3, Bank));
+                listPlayer.Add(new Player(namePlayer, false, this, 20, Bank));
 				Card tmp = Bank.CardsAvailable["Champs de Blé"].PileCards.Peek();
 				tmp.Owner = listPlayer[i];
 				listPlayer[i].CardsAvailable["Champs de Blé"].PileCards.Push(tmp);
@@ -69,12 +69,18 @@ namespace Miniville
             for (int i = nbJoueurReel; i < nbJoueurMax; i++)
             {
                 listPlayer.Add(new Player("IA " + (nbJoueurReel - 1 - i), true, this, 3, Bank));
+                Card tmp = Bank.CardsAvailable["Champs de Blé"].PileCards.Peek();
+                tmp.Owner = listPlayer[i];
+                listPlayer[i].CardsAvailable["Champs de Blé"].PileCards.Push(tmp);
+                tmp = Bank.CardsAvailable["Boulangerie"].PileCards.Peek();
+                tmp.Owner = listPlayer[i];
+                listPlayer[i].CardsAvailable["Boulangerie"].PileCards.Push(tmp);
             }
             while (!isGameOver)
             {
                 Round(playerRound);
 				Thread.Sleep(2000);
-                playerRound = (playerRound + 1) % nbJoueurReel;
+                playerRound = (playerRound + 1) % (nbJoueurMax + nbJoueurReel);
             }
 
             Console.WriteLine("Le joueur {0} gagne la partie.", isEndgame(TrueEnding) + 1);
@@ -155,7 +161,7 @@ namespace Miniville
 							ScoreDes1 = dice.Roll();
 							scoreDes2 = dice.Roll();
 							ScoreDesTotal = ScoreDes1 + scoreDes2;
-							Console.WriteLine("Les dés ont fait un score de {0} + {1} = {3} ", ScoreDes1, scoreDes2, ScoreDesTotal);
+							Console.WriteLine("Les dés ont fait un score de {0} + {1} = {2} ", ScoreDes1, scoreDes2, ScoreDesTotal);
 						}
 					}
 				}
@@ -168,22 +174,25 @@ namespace Miniville
 
 						if (Cards.PileCards.Count > 0)
 						{
-							if (Cards.PileCards.Peek().ActivationValue1 == ScoreDesTotal || Cards.PileCards.Peek().ActivationValue2 == ScoreDesTotal)
+							for (int j = 0; j < Cards.PileCards.Count; j++)
 							{
-								if (Cards.PileCards.Peek().Type == 0)
+								if (Cards.PileCards.Peek().ActivationValue1 == ScoreDesTotal || Cards.PileCards.Peek().ActivationValue2 == ScoreDesTotal)
 								{
-									Console.WriteLine("Activation de " + Cards.PileCards.Peek().Name);
-									Cards.PileCards.Peek().ActiveEffect(listPlayer[i]);
-								}
-								else if ((Cards.PileCards.Peek().Type == 3 || Cards.PileCards.Peek().Type == 1) && PlayerRound == i)
-								{
-									Console.WriteLine("Activation de " + Cards.PileCards.Peek().Name);
-									Cards.PileCards.Peek().ActiveEffect(listPlayer[i]);
-								}
-								else if (Cards.PileCards.Peek().Type == 2 && PlayerRound != i)
-								{
-									Console.WriteLine("Activation de " + Cards.PileCards.Peek().Name);
-									Cards.PileCards.Peek().ActiveEffect(listPlayer[i]);
+									if (Cards.PileCards.Peek().Type == 0)
+									{
+										Console.WriteLine("Activation de " + Cards.PileCards.Peek().Name);
+										Cards.PileCards.Peek().ActiveEffect(listPlayer[i]);
+									}
+									else if ((Cards.PileCards.Peek().Type == 3 || Cards.PileCards.Peek().Type == 1) && PlayerRound == i)
+									{
+										Console.WriteLine("Activation de " + Cards.PileCards.Peek().Name);
+										Cards.PileCards.Peek().ActiveEffect(listPlayer[i]);
+									}
+									else if (Cards.PileCards.Peek().Type == 2 && PlayerRound != i)
+									{
+										Console.WriteLine("Activation de " + Cards.PileCards.Peek().Name);
+										Cards.PileCards.Peek().ActiveEffect(listPlayer[i]);
+									}
 								}
 							}
 						}
