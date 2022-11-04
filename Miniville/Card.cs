@@ -81,7 +81,7 @@ namespace Miniville
 			else if (name == "Boulangerie")
 			{
 				game.Bank.Trade(game.Bank, owner, "Coin", owner.Monuments[1].IsActive ? "2" : "1");  // obtenez 1 pièce par la banque
-				Console.WriteLine(owner.NamePlayer + " obtient une pièce de la banque grâce à une carte " + name);
+				Console.WriteLine(owner.NamePlayer + " obtient" + (owner.Monuments[1].IsActive ? " 2 pièces " : " 1 pièce ") + " de la banque grâce à une carte " + name);
 			}
 			else if (name == "Café")
 			{
@@ -95,7 +95,7 @@ namespace Miniville
 			else if (name == "Supérette")
 			{
 				game.Bank.Trade(game.Bank, owner, "Coin", owner.Monuments[1].IsActive ? "4" : "3");  // obtenez 3 pièces par la banque
-				Console.WriteLine(owner.NamePlayer + " obtient trois pièces de la banque grâce à une carte " + Name);
+				Console.WriteLine(owner.NamePlayer + " obtient " + (owner.Monuments[1].IsActive ? " 4 pièces " : " 3 pièces ") + " de la banque grâce à une carte " + Name);
 			}
             else if (name == "Forêt")
 			{
@@ -230,7 +230,7 @@ namespace Miniville
             else if (name == "Restaurant")
 			{
                 foreach (Player player in game.ListPlayer)
-                    if (player.IsPlaying && player != Owner) // obtenez 1 pièce par le joueur qui a lancé les dés
+                    if (player.IsPlaying && player != Owner) 
 					{
 						game.Bank.Trade(player, Owner, "Coin", owner.Monuments[1].IsActive ? "3" : "2");
                         Console.WriteLine(player.NamePlayer + " donne " + (owner.Monuments[1].IsActive ? "trois pièces" : "deux pièces") + " à " + owner.NamePlayer + " pour avoir activé sa carte restaurant.");
