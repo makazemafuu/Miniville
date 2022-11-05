@@ -49,7 +49,10 @@ namespace Miniville
                 return;
             // il reçoit la carte à acheter en argument
             // on ajoute la carte à la main
-            Trade(theBank, this, "Card", cards[choixPile].Name);
+            if (cards[choixPile].GetType() != typeof(Monument))
+                Trade(theBank, this, "Card", cards[choixPile].Name);
+            else
+                Monuments[Monuments.IndexOf((Monument)cards[choixPile])].IsActive = true;
             // on retire au joueur le coût de la carte
             // on rend l'argent à la banque
             Trade(this, theBank, "Coin", cards[choixPile].Cost.ToString());
@@ -89,6 +92,15 @@ namespace Miniville
             }
             Console.WriteLine("Si vous ne souhaitez pas acheter de batiment, entrez '42'");
             return aled;
+        }
+
+        public void DisplayMonuments()
+        {
+            foreach (Monument monument in Monuments)
+            {
+                if (monument.IsActive)
+                    Console.WriteLine("Vous possédez le monument : " + monument.Name + ".");
+            }
         }
     }
 }

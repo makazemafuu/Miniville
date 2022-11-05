@@ -40,8 +40,12 @@ namespace Miniville
 			nbIA = 4;
             Console.WriteLine("Combien de joueurs êtes-vous ? Vous pouvez jouer de 1 à 4 joueurs. Dans le cas où vous joueriez seul, il y aura au minimum une IA.");
 			while(nbJoueurReel < 1 || nbJoueurReel > 4)
+			{
 				while (!int.TryParse(Console.ReadLine(), out nbJoueurReel))
+				{
 					Console.WriteLine("Combien de joueurs êtes-vous ?");
+				}
+			}
 			if (nbJoueurReel < 4)
 			{
 				Console.WriteLine("Combien de joueurs voulez-vous ajouter ? Vous pouvez être ajouter jusqu'à {0} joueurs pour être au maximum 4.", nbIA - nbJoueurReel);
@@ -53,7 +57,7 @@ namespace Miniville
             {
                 Console.WriteLine("Joueur " + (i + 1) + " veuillez écrire votre nom : ");
                 string namePlayer = Console.ReadLine();
-                listPlayer.Add(new Player(namePlayer, false, this, 3, Bank));
+                listPlayer.Add(new Player(namePlayer, false, this, 20, Bank));
 				Card tmp = Bank.CardsAvailable["Champs de Blé"].PileCards.Peek();
 				tmp.Owner = listPlayer[i];
 				listPlayer[i].CardsAvailable["Champs de Blé"].PileCards.Push(tmp);
@@ -62,22 +66,21 @@ namespace Miniville
 				listPlayer[i].CardsAvailable["Boulangerie"].PileCards.Push(tmp);
                 Console.WriteLine();
             }
-		/*	foreach (Player player in listPlayer) //Display Ressources for tests. 
-			{
-				player.DisplayRessources(player.NamePlayer);
-				player.Trade(Bank, player, "Card", "Mine");
-				Bank.DisplayRessources("Bank");
-				player.DisplayRessources(player.NamePlayer);
-			}*/
             for (int i = nbJoueurReel; i < nbJoueurMax; i++)
             {
                 listPlayer.Add(new Player("IA " + (nbJoueurReel - 1 - i), true, this, 3, Bank));
+                Card tmp = Bank.CardsAvailable["Champs de Blé"].PileCards.Peek();
+                tmp.Owner = listPlayer[i];
+                listPlayer[i].CardsAvailable["Champs de Blé"].PileCards.Push(tmp);
+                tmp = Bank.CardsAvailable["Boulangerie"].PileCards.Peek();
+                tmp.Owner = listPlayer[i];
+                listPlayer[i].CardsAvailable["Boulangerie"].PileCards.Push(tmp);
             }
             while (!isGameOver)
             {
                 Round(playerRound);
 				Thread.Sleep(2000);
-                playerRound = (playerRound + 1) % nbJoueurReel;
+                playerRound = (playerRound + 1) % (nbJoueurMax + nbJoueurReel);
             }
 
             Console.WriteLine("Le joueur {0} gagne la partie.", isEndgame(TrueEnding) + 1);
@@ -86,7 +89,8 @@ namespace Miniville
 		{
 			Console.WriteLine("Vos ressources sont les suivantes :");
 			listPlayer[PlayerRound].DisplayRessources(listPlayer[PlayerRound].NamePlayer);
-			Console.WriteLine("\n");
+			listPlayer[PlayerRound].DisplayMonuments();
+            Console.WriteLine("\n");
 			Thread.Sleep(2500);
 			listPlayer[playerRound].IsPlaying = true;
 			
@@ -97,7 +101,7 @@ namespace Miniville
 				int nbDesChoice = 1;
 				if (hasGare(listPlayer[PlayerRound]))
 				{
-					Console.WriteLine("Voulez vous lancer un ou deux dés ? ");
+					Console.WriteLine("Voulez vous lancer un ou deux dés ? Entre soit '1', soit '2'.");
 					nbDes = Console.ReadLine();
 					//Tant que l'input n'est pas un chiffre valide on redemande à l'utilisateur de taper.
 					while (!int.TryParse(nbDes, out nbDesChoice) || !(nbDesChoice == 1 || nbDesChoice == 2))
@@ -121,7 +125,7 @@ namespace Miniville
 					ScoreDes1 = dice.Roll();
 					scoreDes2 = dice.Roll();
 					ScoreDesTotal = ScoreDes1 + scoreDes2;
-					Console.WriteLine("Les dés ont fait un score de {0} + {1} = {3} ", ScoreDes1, scoreDes2, ScoreDesTotal);
+					Console.WriteLine("Les dés ont fait un score de {0} + {1} = {2} ", ScoreDes1, scoreDes2, ScoreDesTotal);
 				}
 
 				if (hasTour(listPlayer[PlayerRound]))
@@ -157,7 +161,7 @@ namespace Miniville
 							ScoreDes1 = dice.Roll();
 							scoreDes2 = dice.Roll();
 							ScoreDesTotal = ScoreDes1 + scoreDes2;
-							Console.WriteLine("Les dés ont fait un score de {0} + {1} = {3} ", ScoreDes1, scoreDes2, ScoreDesTotal);
+							Console.WriteLine("Les dés ont fait un score de {0} + {1} = {2} ", ScoreDes1, scoreDes2, ScoreDesTotal);
 						}
 					}
 				}
@@ -170,22 +174,25 @@ namespace Miniville
 
 						if (Cards.PileCards.Count > 0)
 						{
-							if (Cards.PileCards.Peek().ActivationValue1 == ScoreDesTotal || Cards.PileCards.Peek().ActivationValue2 == ScoreDesTotal)
+							for (int j = 0; j < Cards.PileCards.Count; j++)
 							{
-								if (Cards.PileCards.Peek().Type == 0)
+								if (Cards.PileCards.Peek().ActivationValue1 == ScoreDesTotal || Cards.PileCards.Peek().ActivationValue2 == ScoreDesTotal)
 								{
-									Console.WriteLine("Activation de " + Cards.PileCards.Peek().Name);
-									Cards.PileCards.Peek().ActiveEffect(listPlayer[i]);
-								}
-								else if ((Cards.PileCards.Peek().Type == 3 || Cards.PileCards.Peek().Type == 1) && PlayerRound == i)
-								{
-									Console.WriteLine("Activation de " + Cards.PileCards.Peek().Name);
-									Cards.PileCards.Peek().ActiveEffect(listPlayer[i]);
-								}
-								else if (Cards.PileCards.Peek().Type == 2 && PlayerRound != i)
-								{
-									Console.WriteLine("Activation de " + Cards.PileCards.Peek().Name);
-									Cards.PileCards.Peek().ActiveEffect(listPlayer[i]);
+									if (Cards.PileCards.Peek().Type == 0)
+									{
+										Console.WriteLine("Activation de " + Cards.PileCards.Peek().Name);
+										Cards.PileCards.Peek().ActiveEffect(listPlayer[i]);
+									}
+									else if ((Cards.PileCards.Peek().Type == 3 || Cards.PileCards.Peek().Type == 1) && PlayerRound == i)
+									{
+										Console.WriteLine("Activation de " + Cards.PileCards.Peek().Name);
+										Cards.PileCards.Peek().ActiveEffect(listPlayer[i]);
+									}
+									else if (Cards.PileCards.Peek().Type == 2 && PlayerRound != i)
+									{
+										Console.WriteLine("Activation de " + Cards.PileCards.Peek().Name);
+										Cards.PileCards.Peek().ActiveEffect(listPlayer[i]);
+									}
 								}
 							}
 						}
@@ -261,7 +268,6 @@ namespace Miniville
                         if (Cards.Value.PileCards.Count != 0)
                             if (Cards.Value.PileCards.Peek().ActivationValue1 == ScoreDesTotal || Cards.Value.PileCards.Peek().ActivationValue2 == ScoreDesTotal)
 							{
-								Console.WriteLine("ça marche");
 								if (Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Blue)
 									Cards.Value.PileCards.Peek().ActiveEffect(listPlayer[i]);
 								else if ((Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Purple || Cards.Value.PileCards.Peek().Type == (int)Card.Colorcard.Green) && PlayerRound == i) 
@@ -281,7 +287,8 @@ namespace Miniville
 				listPlayer[PlayerRound].ShopIA(nbPileChoice, cards);
 				#endregion
 				//rejoue si parc d'attraction
-				if (hasParc(listPlayer[PlayerRound]) && ScoreDes1 == scoreDes2 && ScoreDes1 != 0) Round(PlayerRound);
+				if (hasParc(listPlayer[PlayerRound]) && ScoreDes1 == scoreDes2 && ScoreDes1 != 0) 
+					Round(PlayerRound);
 			}
 			listPlayer[playerRound].IsPlaying = false;
 		}

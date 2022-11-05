@@ -14,12 +14,12 @@ namespace Miniville
         protected Dictionary<string, Pile> cardsAvailable;
 		private Pile pile;
 
-        public Bank(Game Game, int money)
+        public Bank(Game Game, int money) // Constructeur de Bank.
 		{
 			pile = new Pile();
 			this.coinsAvailable = money;
 			this.game = Game;
-			cardsAvailable = pile.InitPile(game);
+			cardsAvailable = pile.InitPile(game); // On déclare et instancie les piles de carte tout en leur donnant l'instance de la partie dans laquelle nous nous trouvons et on l'attribue à bank.
 		}
 
         public void DisplayCards()
@@ -45,20 +45,25 @@ namespace Miniville
 			Console.WriteLine("{1} dispose de {0} pièces.", CoinsAvailable, from);
 			foreach (var card in cardsAvailable)
 			{
-				Console.WriteLine("Il y a {0} cartes {1} restantes dans la réserve de {2}.", card.Value.PileCards.Count, card.Key, from);
+				if (card.Value.PileCards.Count > 0)
+					Console.WriteLine("Il y a {0} cartes {1} restantes dans la réserve de {2}.", card.Value.PileCards.Count, card.Key, from);
             }
 		}
 
-        public void DisplayCardsOtherPLayer(string from)
+        public List<Player> DisplayCardsOtherPLayer(string from)
         {
+			List<Player> result = new List<Player>();
             foreach (var card in cardsAvailable)
             {
+				result.Add(card.Value.PileCards.Peek().Owner);
 				if (card.Value.PileCards.Peek().Type != 3)
 					Console.WriteLine("{2} a {0} cartes {1}.", card.Value.PileCards.Count, card.Key, from);
             }
+			return result;
         }
-		public void ChooseCardOtherPlayer(string from)
+		public List<Card> ChooseCardOtherPlayer(string from)
         {
+			List<Card> result = new List<Card>();
 			int i = 0;
             foreach (var card in cardsAvailable)
             {
@@ -66,12 +71,15 @@ namespace Miniville
 				{
 					Console.WriteLine("Il y a {0} cartes {1} restantes dans la réserve de {2}, entrez \"{3}\" si vous voulez choisir celle là.", card.Value.PileCards.Count, card.Key, from, i);
 					i++;
+					result.Add(card.Value.PileCards.Peek());
 				}
             }
+			return result;
         }
 
-        public void DisplayYourCards()
+        public List<Card> DisplayYourCards()
         {
+			List<Card> list = new List<Card>();
             int i = 0;
             foreach (var card in cardsAvailable)
             {
@@ -79,20 +87,22 @@ namespace Miniville
 				{
                     Console.WriteLine("Vous disposez de {0} carte(s) {1} , entrez \"{3}\" si vous voulez donner celle là", card.Value.PileCards.Count, card.Key, i);
 					i++;
+					list.Add(card.Value.PileCards.Peek());
 				}
 			}
+			return list;
         }
 
-		public void DisplayMoney(string from)
+		public void DisplayMoney(Player from)
 		{
-			Console.WriteLine(from + "a {0} pièces, voulez-vous le dépouiller ?", CoinsAvailable);
+			Console.WriteLine(from.NamePlayer + "a {0} pièces, voulez-vous le dépouiller ?", from.CoinsAvailable);
 		}
 
         public void Trade(Bank from, Bank to, string type, string value)
 		{
 			if (type == "Card")
 			{
-				from.CardsAvailable[value].PileCards.Peek().Owner = (Player)to;
+				from.CardsAvailable[value].PileCards.Peek().Owner = (Player)to; // (nom du type) devant une variable, c'est un cast, ce qui permet de traiter la variable comme si elle appartenait à un autre type.
 				to.CardsAvailable[value].PileCards.Push(from.CardsAvailable[value].PileCards.Pop());
 			}
 			else if (type == "Coin")
